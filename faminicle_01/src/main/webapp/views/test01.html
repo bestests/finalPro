@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../lib/jquery/dist/jquery.js"></script>
+<script src="../js/common.js"></script>
+<script>
+	$(function () {
+		$.getJSON(contextRoot + "/chronicle/list.do", function (data) {
+			console.dir(data);
+			console.log(data.chronicleList[0]);
+			var html = "";
+			for(var i in data.chronicleList) {
+				html += "<div>" + data.chronicleList[i].no + "</div>"
+				      + "<div>" + data.chronicleList[i].content + "</div>"
+				      + "<div>" + data.chronicleList[i].regDate + "</div>"
+				      + "<div>" + data.chronicleList[i].picDate + "</div>"
+				      + "<div><img src='" + data.chronicleList[i].filePath + "'></div>";
+			}
+			$("#result").append(html);
+		});
+	});
+	
+	
+
+</script>
+</head>
+<body>
+	<div id="result">
+		
+	</div>
+
+</body>
+</html>
