@@ -20,4 +20,7 @@ public class ChronicleController {
 	public List<Chronicle> list () {
 		return service.selectList();
 	}
+	public static void main(String[] args) {
+		System.out.println("ddd");
+	}
 }
