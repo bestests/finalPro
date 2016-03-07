@@ -1,0 +1,390 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Slide</title>
+<!--[if IE]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="../css/slide.css" >
+<link rel="stylesheet" type="text/css" href="../lib/bootstrap/dist/css/bootstrap.css" >
+<script src="../lib/jquery/dist/jquery.min.js"></script>
+<script src="../lib/bootstrap/js/modal.js"></script>
+<script src="../js/jquery.mousewheel.min.js"></script>
+
+</head>
+<body onselectstart="return false" id="body">
+	<input id="calender" type="image" src="" 
+		style="width: 400px; float: left; font-size: 150px; display:none;" />
+	<div id="view">
+		<ul id="stack" >
+			<li>
+				<div class="imageInfo" >
+						<div class="imageView" align="center">
+							<img src="../images/1.jpg"/>
+						</div>
+						<div class="imageContent">							
+									<p class="imageTitle">역삼역에서</p>
+									<p class="imageDate">2015-02-23<p>								 
+								<div id="icon">
+									<button class="update"><img src="../images/slide/modify.png" /></button> 									
+									<button class="delete"><img src="../images/slide/delete.png" /></button>
+								</div>
+								<div id="map">
+									<iframe id="sildemap" src="Sildemap.html"></iframe>
+								</div>	 
+						</div>
+				</div>
+			</li>
+			<li>
+				<div class="imageInfo" >
+						<div class="imageView"  align="center">
+							<img src="../images/3.jpg"/>
+						</div>
+							<div class="imageContent">
+									<p class="imageTitle">강남역에서</p>
+									<p class="imageDate">2015-10-33</p>
+								<div id="icon">
+									<button class="update"><img src="../images/slide/modify.png" /></button>  
+									<button class="delete"><img src="../images/slide/delete.png" /></button> 
+								</div>
+								<div id="map">
+									<iframe id="sildemap" src="Sildemap.html"></iframe>
+								</div>
+						</div>
+				</div>
+			</li>
+			<li>
+				<div class="imageInfo" >
+						<div class="imageView" align="center">
+							<img src="../images/5.jpg"/>
+						</div>
+						<div class="imageContent">							
+									<p class="imageTitle">삼성역에서</p>
+									<p class="imageDate">2016-02-15<p>								 
+								<div id="icon">
+									<button class="update"><img src="../images/slide/modify.png" /></button> 									
+									<button class="delete"><img src="../images/slide/delete.png" /></button>
+								</div>
+								<div id="map">
+									<iframe id="sildemap" src="Sildemap.html"></iframe>
+								</div>	 
+						</div>
+				</div>
+			</li>
+			<li>
+				<div class="imageInfo" >
+						<div class="imageView" align="center">
+							<img src="../images/7.jpg"/>
+						</div>
+						<div class="imageContent">							
+									<p class="imageTitle">혜화역에서</p>
+									<p class="imageDate">2015-01-23<p>								 
+								<div id="icon">
+									<button class="update"><img  src="../images/slide/modify.png" /></button> 									
+									<button class="delete"><img  src="../images/slide/delete.png" /></button>
+								</div>
+								<div id="map">
+									<iframe id="sildemap" src="Sildemap.html"></iframe>
+								</div>	 
+						</div>
+				</div>
+			</li>
+			<li>
+				<div class="imageInfo" >
+						<div class="imageView" align="center">
+							<img src="../images/5.jpg"/>
+						</div>
+						<div class="imageContent">							
+									<p class="imageTitle">역삼역에서</p>
+									<p class="imageDate">2015-02-23<p>								 
+								<div id="icon">
+									<button class="update"><img src="../images/slide/modify.png" /></button> 									
+									<button class="delete"><img src="../images/slide/delete.png" /></button>
+								</div>
+								<div id="map">
+									<iframe id="sildemap" src="Sildemap.html"></iframe>
+								</div>	 
+						</div>
+				</div>
+			</li>
+		</ul>
+		
+			</div>
+			
+	<!-- Modal  Start-->		
+			<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Update</h4>
+			      </div>
+			      <div class="modal-body">
+			         <h1>수정할 Title</h1>
+			         <input type="date">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary">등록</button>			        			        
+			      </div>
+			    </div>
+			  </div>
+			</div>	
+			
+		
+	<!-- Modal  End-->		
+		<div id="controls">
+			<div id="select_front" align="center">	
+			<img class="prev" src="../images/slide/prev.png" disabled="disabled" >
+				<img id="play" src="../images/slide/play.png" /> 
+		 		<img class="next" src="../images/slide/next.png">			
+			<div id="select_back" align="center">	
+				<select id="speed">
+						<option value="1" selected="selected">1초</option>
+						<option value="2">2초</option>
+						<option value="3">3초</option>
+					</select>
+			</div>	
+	</div>
+	
+	</div>
+
+	<div id="rotate_controls">
+		다른 각도에서 보기
+		<button class="left">Left</button>
+		<button class="centre">Center</button>
+		<button class="right">Right</button>
+	</div>
+
+
+	<script>
+		(function($) {			
+			//사이즈 조정
+			/*
+			var divs = $("div .imageView");
+			 for (var i = 0; i < divs.length; ++i) {
+				    var div = divs[i];
+				    var divAspect = div.offsetHeight / div.offsetWidth;
+				    div.style.overflow = 'hidden';
+				    
+				    var img = div.querySelector('img');
+				    var imgAspect = img.height / img.width;
+					console.log(imgAspect+":"+divAspect);
+					
+				    if (imgAspect <= divAspect) {
+				    	console.log(i+"번 납작");
+// 				    	div.style.cssText='left:30%;';
+// 				    	alert(i+"번 이미지 납짝함");
+				      // 이미지가 div보다 납작한 경우 세로를 div에 맞추고 가로는 잘라낸다
+				    	  var imgWidthActual = div.offsetHeight / imgAspect;
+					      var imgWidthToBe = div.offsetHeight / divAspect;
+					      var marginLeft = -Math.round((imgWidthActual - imgWidthToBe) / 2)
+					      img.style.cssText = 'width: auto; height: 100%; margin-left: '
+					                      + marginLeft + 'px;';
+				    } 
+				    else {
+				    	console.log(i+"번 길쭉");
+// 				    	alert(i+"번 이미지 길쭉함");
+// 				      // 이미지가 div보다 길쭉한 경우 가로를 div에 맞추고 세로를 잘라낸다
+				      var imgHeightActual = div.offsetWidth / imgAspect;
+				      var imgHeightToBe = div.offsetWidth / divAspect;
+				      var marginBottom = -Math.round((imgHeightActual - imgHeightToBe) / 2)
+				      
+				      img.style.cssText = 'width: 100%; height: auto; margin-Top:-'
+				      					+ marginBottom + 'px;';
+				    }
+			 }
+			*/
+			
+			
+			
+			$(".update").click(function(){
+				// 못찾겠다.
+// 				console.log($(this).prevAll().html());
+// 				console.log($(this).parentsUntil("[class='imageTitle']").html());
+// 				var title = $(this).parents("[class='imageTitle']").html();
+				$("#myModal").modal();
+			})
+			$(".delete").click(function(){
+				var result = confirm("정말 삭제하시겠습니까?");
+				alert(result);
+			})
+			
+			
+			//자동재생 클릭했을때 효과
+			var controlsStatus = true;
+			var slide;
+			$("#play").click(function(event) {
+				if (controlsStatus) {
+					$("#controls,#rotate_controls").hide("slow");
+					//재생버튼과 다른각도에서보기 버튼 숨김적용
+					$("#view * li").hide();
+					lis.filter(':nth-child(' + current_index + ')').show();
+					//자동재생시 이미지 크기 크게
+					
+					$(".imageView img").css({
+									transform: "scale(1.5)"
+									});
+					$(".imageContent").hide();	
+					
+					$("#stack").css("margin-top","25%");
+					
+					
+					//$("img[src=1]").css("width","500px");
+					//$(":nth-child("+ current_index + ")").css();//높낮이조절 실험
+					//$("#view *li").css("height","100%");
+					//$("#calender").attr("src", "images/slide/Calender.jpg");//클릭했을때 달력 이미지출력
+					
+					
+					controlsStatus = false;
+					slide = setInterval(showImg, $("#speed").val() * 1000);
+					//이벤트 전파막기
+					event.stopPropagation();
+				}
+			})
+			$("body").dblclick(function() {
+				if (!controlsStatus) {
+// 					$("#calender").attr("src", "");//더블클릭했을때 이미지 취소			
+					$("#controls,#rotate_controls").show("slow");
+					$("#view * li").show();
+					clearInterval(slide);
+					controlsStatus = true;
+					
+					$(".imageView img").css({
+								transform: "scale(1)"
+								});	
+					$(".imageContent").show();	
+					$("#stack").css("margin-top","20%");				
+
+				}
+			})
+
+			function showImg(event) {
+				next.bind();
+				next.trigger('click');
+				//event.stopPropagation();
+			}
+
+			var y_space = 200, z_space = 200;
+
+			var view = $('#view'), lis = $('#stack li'), prev = $('#controls .prev'), next = $('#controls .next'), left = $('#rotate_controls .left'), centre = $('#rotate_controls .centre'), right = $('#rotate_controls .right');
+
+			var z_index = lis.length, current_index = 1, translate_y = y_space
+					* -1, translate_z = z_space * -1;
+
+			lis.each(function() {
+
+				this.style['-webkit-transform'] = 'translate3d(0px, '
+						+ translate_y + 'px, ' + translate_z + 'px)';
+				this.style['z-index'] = z_index;
+
+				$(this).data('translate_y', translate_y);
+				$(this).data('translate_z', translate_z);
+
+				z_index--;
+				translate_y -= y_space;
+				translate_z -= z_space;
+
+			});
+
+			next.bind('click', function(event) {
+
+				if ($(this).attr('disabled'))
+					return false;
+				lis.each(function() {
+					animate_stack(this, y_space, z_space);
+				});
+				lis.filter(':nth-child(' + current_index + ')').css('top',
+						-3000);
+				current_index++;
+				lis.filter(':nth-child(' + current_index + ')').show();
+				check_buttons(); // prev, next 활성/비활성화
+				// event.stopPropagation();
+			});
+
+			prev.bind('click', function() {
+				if ($(this).attr('disabled'))
+					return false;
+				lis.each(function() {
+					animate_stack(this, -y_space, -z_space);
+				});
+				lis.filter(':nth-child(' + (current_index - 1) + ')').css(
+						'top', 0);
+				current_index--;
+				check_buttons();
+			});
+
+			$(document).bind('mousewheel',
+					function(event, delta, deltaX, deltaY) {
+						if (deltaY >= 0) {
+							next.trigger('click');
+						} else {
+							prev.trigger('click');
+						}
+					});
+
+			function check_buttons() {
+				if (current_index == 1) {
+					prev.attr('disabled', true);
+				} else {
+					prev.attr('disabled', false);
+				}
+
+				if (current_index == lis.length) {
+					next.attr('disabled', true);
+				} else {
+					next.attr('disabled', false);
+				}
+			}
+
+			left.bind('click', function() {
+				view.get(0).style['-webkit-perspective-origin-x'] = '-200px';
+				view.get(0).style['left'] = '100px';
+			});
+
+			centre.bind('click', function() {
+				view.get(0).style['-webkit-perspective-origin-x'] = '400px';
+				view.get(0).style['left'] = '0'
+			});
+
+			right.bind('click', function() {
+				view.get(0).style['-webkit-perspective-origin-x'] = '1000px';
+				view.get(0).style['left'] = '-200px'
+			});
+
+			function animate_stack(obj, y, z) {
+
+				var new_y = $(obj).data('translate_y') + y;
+				var new_z = $(obj).data('translate_z') + z;
+
+				obj.style['-webkit-transform'] = 'translate3d(0px, ' + new_y
+						+ 'px, ' + new_z + 'px)';
+
+				$(obj).data('translate_y', new_y).data('translate_z', new_z);
+
+			}
+
+		})(jQuery);
+	</script>
+
+	<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl."
+				: "http://www.");
+		document
+				.write(unescape("%3Cscript src='"
+						+ gaJsHost
+						+ "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		try {
+			var pageTracker = _gat._getTracker("UA-138384-13");
+			pageTracker._trackPageview();
+		} catch (err) {
+		}
+	</script>
+
+</body>
+</html>
