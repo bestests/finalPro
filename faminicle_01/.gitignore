@@ -3,5 +3,6 @@
 /.settings/
 /.classpath
 /.project
+/src/main/webapp/lib/
 /build/
 /bower_components/
