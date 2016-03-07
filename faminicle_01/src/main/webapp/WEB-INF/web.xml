@@ -29,10 +29,20 @@
     </init-param>
   </filter>
   
+  <filter>
+  	<filter-name>cors</filter-name>
+  	<filter-class>chronicle.filter.SimpleCORSFilter</filter-class>
+  </filter>
+  
 <!-- URL에 필터 적용하기 -->
   <filter-mapping>
     <filter-name>CharacterEncodingFilter</filter-name>
     <url-pattern>*</url-pattern>
+  </filter-mapping>
+  
+  <filter-mapping>
+  	<filter-name>cors</filter-name>
+  	<url-pattern>*</url-pattern>
   </filter-mapping>
   
   <servlet>
