@@ -5,8 +5,8 @@ import java.util.Date;
 public class Chronicle {
 	private int no;
 	private String content;
-	private Date regDate;
-	private Date picDate;
+	private String regDate;
+	private String picDate;
 	private String filePath;
 	
 	public int getNo() {
@@ -21,16 +21,16 @@ public class Chronicle {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public Date getRegDate() {
+	public String getRegDate() {
 		return regDate;
 	}
-	public void setRegDate(Date regDate) {
+	public void setRegDate(String regDate) {
 		this.regDate = regDate;
 	}
-	public Date getPicDate() {
+	public String getPicDate() {
 		return picDate;
 	}
-	public void setPicDate(Date picDate) {
+	public void setPicDate(String picDate) {
 		this.picDate = picDate;
 	}
 	public String getFilePath() {

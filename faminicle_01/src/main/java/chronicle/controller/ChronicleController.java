@@ -16,11 +16,9 @@ public class ChronicleController {
 	@Autowired
 	ChronicleService service;
 	
-	@RequestMapping("list")
+	@RequestMapping("list.do")
 	public List<Chronicle> list () {
+		
 		return service.selectList();
-	}
-	public static void main(String[] args) {
-		System.out.println("ddd");
 	}
 }
