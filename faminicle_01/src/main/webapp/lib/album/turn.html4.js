@@ -307,7 +307,7 @@ turnMethods = {
             css(prop);
 
           // Append to this
-          this.append(data.pageWrap[page]);
+          this.appendchild(data.pageWrap[page]);
 
           // Move element to wrapper
           data.pageWrap[page].prepend(data.pageObjs[page]);

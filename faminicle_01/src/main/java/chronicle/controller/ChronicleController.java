@@ -21,4 +21,5 @@ public class ChronicleController {
 		
 		return service.selectList();
 	}
+	
 }

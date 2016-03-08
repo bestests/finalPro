@@ -1,16 +1,21 @@
 /* Documentation sample */
 // 사진 탭관련 소스 라인 31번
+var index = -3;
 function loadPage(page) {
-
 	var img = $('<img />');
+	var img2 = $('<img />');
 	img.load(function() {
 		var container = $('.sample-docs .p'+ page);
-		img.css({width: container.width(), height: container.height()});
+		img.css({width: "auto", height: "50%", display: "block", margin: "auto"});
 		img.appendTo($('.sample-docs .p'+ page));
+		img2.css({width: "auto", height: "50%", display: "block", margin: "auto"});
+		img2.appendTo($('.sample-docs .p'+ page));
 		container.find('.loader').remove();
 	});
-	
-	img.attr('src', '../images/' +  (page-2) + '.jpg');
+	img.attr('src', '../images/' + (page + index) + '.jpg');
+	index += 1;
+	img2.attr('src', '../images/' + (page + index) + '.jpg');
+
 }
 
 function addPage(page, book) {
@@ -22,6 +27,7 @@ function addPage(page, book) {
 	if (book.turn('addPage', element, page)) {
 		if (page<28) {
 			element.html('<div class="gradient"></div><div class="loader"></div>');
+			
 			loadPage(page);
 		}
 	}
@@ -59,12 +65,12 @@ function updateTabs() {
 
 
 function numberOfViews(book) {
-	return book.turn('pages') / 2 + 1;
+	return book.turn('pages') + 1;
 }
 
 
 function getViewNumber(book, page) {
-	return parseInt((page || book.turn('page'))/2 + 1, 10);
+	return parseInt((page || book.turn('page')) + 1, 10);
 }
 
 
@@ -73,9 +79,9 @@ function moveBar(yes) {
 		$('#slider .ui-slider-handle').css({zIndex: yes ? -1 : 10000});
 	}
 }
-
+/*
 function setPreview(view) {
-
+	
 	var previewWidth = 115,
 		previewHeight = 73,
 		previewSrc = '../images/album/move.jpg',
@@ -110,4 +116,4 @@ function setPreview(view) {
 	preview.css({backgroundPosition:
 		'0px -'+((view-1)*previewHeight)+'px'
 	});
-}
+}*/
