@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="Generator" content="EditPlus®">
+<meta name="Author" content="">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+  	<!-- Bootstrap -->
+    <link href="../lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+    <!-- Custom style -->
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/style.css" media="screen" title="no title" charset="utf-8">
+<title>faminicle</title>
+</head>
+<style>
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+body, html {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+}
+
+#main-container {
+	width:  100%;
+	height: 100%;
+}
+
+#title {
+	margin: auto;
+	height: 11%;
+	width: 99%; 
+}
+#logo > img{
+	width: 26%;
+	height: 8%;
+	position: absolute;
+	left: 37%;	
+	margin-top: 1%;
+}
+
+#main {
+	margin: auto;
+	height: 64%;
+	width: 99%;
+}
+
+#main-left{
+	margin-top: 0%;
+	float: left;	
+	height: 86%;
+	width: 50%;
+	
+}
+
+#main-right{
+	margin-top: 0%;
+	float: left;	
+	height: 86%;
+	width: 50%;
+}
+
+#slider {
+	height: 100%;
+}
+
+#slidy {
+	height: 100%;
+}
+
+
+#footer {
+	height: 19%;
+	width: 34%;
+	position: absolute;
+	left: 30%;
+}
+
+#login {
+	position: absolute;
+	left: 103%;
+	top: 19%;
+	
+}	
+
+#join {
+	position: absolute;
+	left: 102%;
+	top: 69%;
+}	
+
+/* left slide */	
+@keyframes slidy {
+0% { left: 0%; }
+30% { left: 0%; }
+35% { left: -100%; }
+65% { left: -100%; }
+70% { left: -200%; }
+100% { left: -200%; }
+}
+/* right slide */
+@keyframes slider {
+0% { left: -200%; }
+30% { left: -200%; }
+35% { left: -100%; }
+65% { left: -100%; }
+70% { left: 0%; }
+100% { left: 0%; }
+}
+/* left */	
+body { margin: 0; } 
+div#slidy { overflow: hidden;}
+div#slidy figure img { width: 20%; float: left; }
+div#slidy figure { 
+  position: relative;
+    width: 500%;
+  margin: 0;
+  left: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 20s slidy infinite; 
+}
+/* right */
+div#slider { overflow: hidden;}
+div#slider figure img { width: 20%; float: left; }
+div#slider figure { 
+  position: relative;
+  width: 500%;
+  margin: 0;
+  right: 0;
+  text-align: left;
+  font-size: 0;
+  animation: 20s slider infinite; 
+}
+
+	
+</style>
+<body>
+	<div id="main-container">
+		<div id="title">
+			<div id="logo">
+				<img alt="" src="../images/faminicle.jpg">
+			</div>
+		</div>
+		<div id="main">
+			<div id="main-left">
+				<div id="slider">
+					<figure>
+						<img src="../images/main/가족앨범.jpg" alt="">
+						<img src="../images/main/슬라이드.jpg" alt="">
+						<img src="../images/main/연대기.jpg" alt="">
+					</figure>
+				</div>
+			</div>
+			<div id="main-right">
+				<div id="slidy">
+					<figure>
+						<!-- <img src="../images/main/가족앨범.jpg" alt=""> -->
+						<!-- <img src="../images/main/슬라이드.jpg" alt=""> -->
+						<!-- <img src="../images/main/연대기.jpg" alt=""> -->
+					</figure>
+				</div>
+			</div>
+		</div>
+		<div id="footer">
+			<form>
+				<div class="form-group">
+					<label for="InputId" class="control-label">아이디</label>
+					<input type="text" size="15" class="form-control" id="InputId" />
+					<label for="InputPassword" class="control-label">비밀번호</label>
+					<input type="text" size="15" class="form-control" id="InputPassword" />
+				</div>
+				<div class="form-group text-center">
+					<button id="login" type="submit" class="btn btn-login">로그인</button>
+					<button id="join" type="submit" class="btn btn-info">회원가입</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
