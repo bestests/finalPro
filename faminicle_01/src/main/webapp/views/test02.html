@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="../lib/jquery/dist/jquery.min.js"></script>
+</head>
+<body>
+
+
+<script>
+// 	$.ajax(contextRoot+'list.do'){  //url
+// 		dataType:'json',		//서버에서보내는데이터타입
+// 		method:'GET',
+// 		success:function(data){	//자바스크립트객체로넘어온다.
+// 			for(var  board of data.data){
+				
+// 			}
+// 		},
+// 		error:function(jqXHR,textStatus,errorThrown){
+// 			alert("에러");
+// 			console.log(textStatus);
+// 			console.log(errorThrown;)
+// 		}
+		
+// 	}
+
+//get은 dataType 404
+	$.get(
+			contextRoot + 'board/ajax/list.do',
+		function(data){	//자바스크립트객체로넘어온다.(성공시)
+			for(var  board of data.data){
+				
+			}
+		}
+		
+		}
+		
+	)}
+//getJSON
+	$.getJSON(
+			contextRoot + 'board/ajax/list.do',
+		function(data){	//자바스크립트객체로넘어온다.(성공시)
+			for(var  board of data.data){
+				
+			}
+		}
+		
+		}
+		
+	)}
+	
+	
+	$
+	
+</script>
+</body>
+</html>

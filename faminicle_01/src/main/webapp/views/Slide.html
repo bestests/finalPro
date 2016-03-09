@@ -13,103 +13,15 @@
 <script src="../lib/jquery/dist/jquery.min.js"></script>
 <script src="../lib/bootstrap/js/modal.js"></script>
 <script src="../js/jquery.mousewheel.min.js"></script>
-
+ 
 </head>
 <body onselectstart="return false" id="body">
 	<input id="calender" type="image" src="" 
 		style="width: 400px; float: left; font-size: 150px; display:none;" />
 	<div id="view">
 		<ul id="stack" >
-			<li>
-				<div class="imageInfo" >
-						<div class="imageView" align="center">
-							<img src="../images/1.jpg"/>
-						</div>
-						<div class="imageContent">							
-									<p class="imageTitle">역삼역에서</p>
-									<p class="imageDate">2015-02-23<p>								 
-								<div id="icon">
-									<button class="update"><img src="../images/slide/modify.png" /></button> 									
-									<button class="delete"><img src="../images/slide/delete.png" /></button>
-								</div>
-								<div id="map">
-									<iframe id="sildemap" src="Sildemap.html"></iframe>
-								</div>	 
-						</div>
-				</div>
-			</li>
-			<li>
-				<div class="imageInfo" >
-						<div class="imageView"  align="center">
-							<img src="../images/3.jpg"/>
-						</div>
-							<div class="imageContent">
-									<p class="imageTitle">강남역에서</p>
-									<p class="imageDate">2015-10-33</p>
-								<div id="icon">
-									<button class="update"><img src="../images/slide/modify.png" /></button>  
-									<button class="delete"><img src="../images/slide/delete.png" /></button> 
-								</div>
-								<div id="map">
-									<iframe id="sildemap" src="Sildemap.html"></iframe>
-								</div>
-						</div>
-				</div>
-			</li>
-			<li>
-				<div class="imageInfo" >
-						<div class="imageView" align="center">
-							<img src="../images/5.jpg"/>
-						</div>
-						<div class="imageContent">							
-									<p class="imageTitle">삼성역에서</p>
-									<p class="imageDate">2016-02-15<p>								 
-								<div id="icon">
-									<button class="update"><img src="../images/slide/modify.png" /></button> 									
-									<button class="delete"><img src="../images/slide/delete.png" /></button>
-								</div>
-								<div id="map">
-									<iframe id="sildemap" src="Sildemap.html"></iframe>
-								</div>	 
-						</div>
-				</div>
-			</li>
-			<li>
-				<div class="imageInfo" >
-						<div class="imageView" align="center">
-							<img src="../images/7.jpg"/>
-						</div>
-						<div class="imageContent">							
-									<p class="imageTitle">혜화역에서</p>
-									<p class="imageDate">2015-01-23<p>								 
-								<div id="icon">
-									<button class="update"><img  src="../images/slide/modify.png" /></button> 									
-									<button class="delete"><img  src="../images/slide/delete.png" /></button>
-								</div>
-								<div id="map">
-									<iframe id="sildemap" src="Sildemap.html"></iframe>
-								</div>	 
-						</div>
-				</div>
-			</li>
-			<li>
-				<div class="imageInfo" >
-						<div class="imageView" align="center">
-							<img src="../images/5.jpg"/>
-						</div>
-						<div class="imageContent">							
-									<p class="imageTitle">역삼역에서</p>
-									<p class="imageDate">2015-02-23<p>								 
-								<div id="icon">
-									<button class="update"><img src="../images/slide/modify.png" /></button> 									
-									<button class="delete"><img src="../images/slide/delete.png" /></button>
-								</div>
-								<div id="map">
-									<iframe id="sildemap" src="Sildemap.html"></iframe>
-								</div>	 
-						</div>
-				</div>
-			</li>
+				<div id="slideInfo">				
+				</div>			
 		</ul>
 		
 			</div>
@@ -162,6 +74,79 @@
 
 	<script>
 		(function($) {			
+			//처음 이미지 리스트 가져오기
+			var html="";
+			
+			for(var i=1;i<6;i++){
+				html+=	
+					'<li>                                                                                          '
+					+'	<div class="imageInfo" >                                                                    '
+					+'			<div class="imageView" align="center">                                              '
+					+'				<img id="'+i+'" src="../images/'+i+'.jpg"/>                                                    '
+					+'			</div>                                                                              '
+					+'			<div class="imageContent" id="pic'+i+'">							                                '
+					+'						<div class="leftContent"> '
+					+'						<p class="imageTitle'+i+'">444역삼역에서</p>                                    '
+					+'						<p class="imageDate'+i+'">2015-02-23<p>								        '
+					+'					<div id="icon">                                                             '
+					+'						<button class="update"><img src="../images/slide/modify.png" /></button>' 									
+					+'						<button class="delete"><img src="../images/slide/delete.png" /></button>'
+					+'					</div>                                                                      '
+					+' 						</div>'
+					+'					<div id="map">                                                              '
+					+'						<iframe id="sildemap" src="Sildemap.html"></iframe>                     '
+					+'					</div>	                                                                    '
+					+'			</div>                                                                              '
+					+'	</div>                                                                                      '
+					+'</li>																							';
+			}			
+			$("#slideInfo").append(html);
+			
+			//클릭버튼누를때 content내용 내려오게 수정
+			var contentCk=true;
+			$(".imageView").click(function(){
+				var numCk = $(this).children().attr("id");
+				console.log(numCk);
+				if(contentCk){
+					$("#pic"+numCk).css({				
+						opacity:"1",
+						top:"0"
+					});
+					/////////여기까지함*****************
+					/*
+					$(".leftContent").css({
+						position:"absolute",
+						left:"0px",
+						top:"0px"
+					})
+					*/
+					contentCk=false;
+				}
+			})
+			$(".imageContent").click(function(){
+				if(!contentCk){
+					$(".imageContent").css({
+						opacity:"0",
+						top:"-100%"
+					});
+					contentCk=true;
+				}
+			})
+			$("body").on("mousewheel",function(){
+					$(".imageContent").css({
+						opacity:"0",
+						top:"-100%"
+					});
+					contentCk=true;
+			})
+			
+			
+			
+			//************************
+			
+			
+			
+			
 			//사이즈 조정
 			/*
 			var divs = $("div .imageView");
@@ -201,6 +186,9 @@
 			
 			
 			
+			
+			
+			
 			$(".update").click(function(){
 				// 못찾겠다.
 // 				console.log($(this).prevAll().html());
@@ -232,6 +220,10 @@
 					
 					$("#stack").css("margin-top","25%");
 					
+					$(".imageInfo").css({
+						overflow:"visible"
+					});
+					
 					
 					//$("img[src=1]").css("width","500px");
 					//$(":nth-child("+ current_index + ")").css();//높낮이조절 실험
@@ -259,6 +251,10 @@
 					$(".imageContent").show();	
 					$("#stack").css("margin-top","20%");				
 
+					// 짜르기 사용
+					$(".imageInfo").css({
+						overflow:"hidden"
+					});
 				}
 			})
 
