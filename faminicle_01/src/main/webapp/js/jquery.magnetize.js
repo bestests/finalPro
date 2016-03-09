@@ -22,6 +22,7 @@
 				hover_color : "rgba(0, 0, 0, .35)" //entire image roll-over color and opacity
 		};
 		
+		var  isAnimation = false;
 		/*------ Control over correct source image feed ------*/		
 		var Plane = [], //image layers collection
 			$all_images = $([]), //images collection
@@ -30,6 +31,30 @@
 			fixed_ratio,
 			fixed_width,
 			fixed_height; 
+		
+//		if (options.$navi != undefined) {
+			
+			$('body').bind('mousewheel', function(e){
+				e.preventDefault();
+				if (isAnimation == true) return;
+				//보여지는 판넬 수 10장씩 3판넬
+				//판넬수.length 
+				// 판넬 셀렉터로 가져와서 length 동적으로
+				flags.useNavig = 3;
+			        if(e.originalEvent.wheelDelta /120 > 0) {
+			        	layersNavigCustom(0);
+			        }
+			        else{
+			        	layersNavigCustom(1);
+			        }
+			    });
+			 
+//			options.$navi.change(function(){
+//				flags.useNavig = options.$navi.find("option").length; 
+//				$navig = options.$navi;
+//				layersNavig($(this).find('option:selected'));
+//			});
+//		}
 			
 		function checkOptions() { //make sure images[] array is set up correctly
 			var source; //never mix up custom sets of images with default ones
@@ -696,7 +721,7 @@
 		}	
 		
 		//bring chosen image container to the top
-		function bringToTheFront(img) { 
+		function bringToTheFront(img) {
 			if (!flags.useNavig) { //if layers reordering started after a click on an image 
 				var $this = $(img),
 					$self = $this.parent('div.container');
@@ -712,6 +737,8 @@
 					dif = length - 1 - current,
 					reOrderCont = [];				
 				main.addClass('scale-me').removeClass('slide-me');//disallow "right-left" and "top-buttom" animation
+				
+				isAnimation = true;
 				for (var i = 0; i < current+1; i++) { //determine new order of layers, which only moves forward
 					var ind = (i + dif) % length,
 					duration = (ind - i) * time.layer;
@@ -721,6 +748,9 @@
 						timer2 = setTimeout(function() { 
 							flags.allowParallax++;
 							flags.useNavig--;
+							if (flags.useNavig == 0) {
+								isAnimation = false;
+							}
 						}, 1.25 * (duration - time.layer));
 					}
 				}
@@ -736,6 +766,9 @@
 							flags.allowParallax++;
 							flags.useNavig--;
 							Math.floor(flags.allowParallax/length) * main.removeClass('scale-me').addClass('slide-me');
+							if (flags.useNavig == 0) {
+								isAnimation = false;
+							}
 						}, durBefore + time.scrn + time.delay + 300 + durAfter + time.invis);
 					}
 				}
@@ -1073,6 +1106,11 @@
 			}
 		}	
 		
+		function layersNavigCustom(index) { 
+			animateLayersMobile();
+			Container = bringToTheFront($(Container[index]));//bring the appropriate layer to teh front
+		}	
+		
 		//destroy the slideshow
 		function totalDestroy () {
 			clearTimeout(timer1);
@@ -1096,9 +1134,11 @@
 			$caption.remove();
 			Container.remove();
 		}	
-		return start();	//run the slideshow script and return "main" - slideshow viewport element 		
+		return start();	//run the slideshow script and return "main" - slideshow viewport element
+		
+		
 	}
-
+	
 	/* external sub-plugin for image loading */
 	$.fn.loaded = function(callback, jointCallback, ensureCallback){
 		var len	= this.length;
