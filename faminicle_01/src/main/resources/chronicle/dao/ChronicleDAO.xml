@@ -16,4 +16,18 @@
 			   date_format(pic_date,'%Y-%m-%d') pic_date, file_path 
 		  from test01
 	</select>
+	
+	<select id="insertMember" parameterType="members">
+		insert into fam_member(id,pass,e_mail,name,birthday,tel)
+		values('${id}','${pass}','${eMail}','${name}','${birthday}',${tel})
+	</select>
+	
+	<select id="checkId" parameterType="members" resultType="int">
+		select count(*)
+		from fam_member
+		where id = '${id}'
+	</select>
+	
+	
+	
 </mapper>
