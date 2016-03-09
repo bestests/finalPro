@@ -1,7 +1,5 @@
 package chronicle.domain;
 
-import java.util.Date;
-
 public class Chronicle {
 	private int no;
 	private String content;
