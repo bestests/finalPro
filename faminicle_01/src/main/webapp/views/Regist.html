@@ -8,22 +8,21 @@
 <script src="../jquery_ui/jquery-ui.js"></script>
 <script src="../js/h5utils.js"></script>
 <style>
-   
    *{
       margin: 0px;
       padding: 0px;
       box-sizing: border-box;
+     /*  border: 1px solid tomato; */
     }   
-  
     html, body,#picContainer {
       width: 100%;
       height: 100%;
     }
-    #picContainer::after {
+    #picContainer:after {
 		  content: "";
 	      background: url('../images/등록폼배경2.jpg');
 	      background-size: 100%;
-		  opacity: 0.4;
+		  opacity: 0.3;
 		  top: 0;
 		  left: 0;
 		  bottom: 0;
@@ -31,18 +30,30 @@
 		  position: absolute;
 		  z-index: -1;   
 	}
-
    #image{
         width:25%;
-        height: 100%; 
+        height: 80%; 
         overflow: auto;
         text-align: center;
         padding-top: 10px;
-          
+    	overflow: auto;
    }
-    #image > img{
-    	display: block;
-    	text-align: center;
+    #image img{
+    	display: inline;
+    	overflow: hidden;
+    	float: right;
+    	margin: 1%;
+    	border: 1px solid green;
+    }
+    #image>img:first-child {
+    	border: 1px solid red;
+    }
+    
+    #delete{
+    	position:absolute;
+    	height: 20%;
+    	width: 25%;
+    	bottom: 0;
     }
    #reg {
           width:75%;
@@ -51,61 +62,52 @@
           right: 0px;
           top: 0px;
    }
- 
- 
    #reg > img {
-         width: 70px;
-         height: 70px;
-         border-radius: 20px;
+         width: 10%;
+         height: 10%;
+         border-radius: 50%;
          position: absolute;
          text-align: center;
-         
    }
-    
- 
    /*  사진 등록 레이아웃   */
-	#upload, #file { 
-		width:180px;
-		height: 180px;
+	#upload { 
+		width:24%;
+		height: 25%;
 		position: absolute;
 		top: 20%;
 		left: 25%;
-		border-radius: 20px;
+		border-radius: 15%;
    }
     #in {
           position: absolute;
-          left: 20%;
+          left: 5%;
           bottom: 37%;
-          width: 35%;
+          width: 50%;
           height: 5%;
     }    
-
-    #date {
+    #equal {
           top: 68%;
-          left: 20%;
+          left: 10%;
+          opacity: 0.3;
     }    
- 
     #map {
           top: 68%;
           left: 40%;
-    }    
-
-    #cbox {
-         position: absolute;
-         top: 64%;
-         left : 20%          
-    } 
-    #text{
-		position: absolute;
-		top: 63%;
-		left: 22%;
-		    	
+    }   
+    #addr{
+    	width: 39%;
+    	position: absolute;
+ 		right: 2%;
+ 		bottom:39%;
     }
+    #addr1{
+    	width: 100%;
+    }
+    
     #check {
           top: 83%;
-          left: 20%;
+          left: 10%;
     }    
- 
     #cancel {
           top: 83%;
           left: 40%;
@@ -114,27 +116,21 @@
 		width: 100%;
 		height: 100%;
 	}
-	#droppic{
-		width: 500px;
-		height: 350px;
+	#droppic, #file {
+		width: 100%;
+		height: 50%;
 		position: absolute;
-		left: 20%;
 		top: 5%;	
 		text-align: center;
 	}
-	#image img{
-		width: 200px;
-		height: auto;
-	}
- 	#datepicker, #map_canvas, #addr {
+ 	#datepicker, #map_canvas {
  		position: absolute;
- 		right: 30px;
- 		bottom: 40px; 
- 		
+ 		right: 2%;
+ 		bottom: 6%; 
  	}
  	#datepicker, #map_canvas{
- 		width: 300px;
- 		height: 240px;
+ 		width: 39%;
+ 		height: 36%;
  	}
  	#file{
  		opacity: 0;
@@ -142,17 +138,29 @@
  	#datepicker{
  		z-index:1;
  	}
+ 	#image img{
+ 		width: 40%;
+ 		height: 10%;
+ 	}
 </style>
 <script src = "http://maps.googleapis.com/maps/api/js"></script>
 <script>
 	var index = 0;
 	var dropBox;
 	var flagMap=true;
+	var flagequal=false;
 	$(function () {
 		$("#map_canvas").hide(2000);
     	$("#addr").hide(2000);
 		dropBox = document.getElementById("droppic");
-	    $("#datepicker").datepicker();
+	    $("#datepicker").datepicker({
+	    	altField: ".date",
+	    	dayNamesMin:['월','화','수','목','금','토','일'],
+	    	monthNames:['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
+	    	changeMonth:true,
+	    	changeYear:true,
+	    	dateFormat: 'yy-mm-dd'
+	    });
 	    $("#map").click(function(){
     	if(!flagMap){
 	    	$("#map_canvas").hide("slow");
@@ -168,6 +176,19 @@
     		flagMap=false;
     	}
        });	
+	   $("#equal").click(function(){
+		   if(flagequal){
+			   $("#equal").css('opacity','1');
+			   $("#in").attr('readonly', true);
+			   $("#in").css('backgroundColor',"rgba(255,0,0,0.1)");
+			   flagequal=false;
+		   }else{
+		  	   $("#equal").css('opacity','0.3');
+			   $("#in").attr('readonly', false);
+			   $("#in").css('backgroundColor',"white");
+		  	   flagequal=true;
+			}
+	   });
 	});
 	var dropImage = document.createElement("img");
 	
@@ -178,7 +199,7 @@
 		event.dataTransfer.setData("text", event.target.id);
 	}
 	function drop(event) {	
-		var file = event.dataTransfer.files[0];
+		var file = event.files;
 		var imageType = /image.*/;
 	    var textType = /text.*/;
 		var isImage;
@@ -189,12 +210,11 @@
 			isImage = false;
 		}
 		var reader = new FileReader();
-		
+		if(isImage){
 		reader.onload = (function (aFile) {
 			return function (event) {
-				var result = event.target.result;
 				if(isImage) {
-					dropImage.src = result;
+					dropImage.src = event.target.result;
 					dropBox.appendChild(dropImage);
 					size(dropImage);
 					$("#upload").hide();
@@ -203,7 +223,7 @@
 				}
 			};
 		})(file);
-		
+		}
 		if(isImage) { reader.readAsDataURL(file); }
 		else { reader.readAsText(file, "UTF-8"); }
 		
@@ -216,14 +236,29 @@
 		target.setAttribute("id", "img_" + index);
 	}, true);
 	
-	function imageUp () {
+	function imageUp ($item) {
 		indexImg = "img_"+ index
 		var image = document.getElementById(indexImg);
-		document.getElementById("image").appendChild(image);
-		$('#image > img').css({width: '200px', height: 'auto'})
+		$("#image").prepend(image)/*.fadeIn(function() {
+			$("#image img")
+	            .animate({ width: "40%", height: "10%" })
+	            
+	        })*/;
+		$("#image img").css({ width: "40%", height: "20%" })
 		$("#upload").show();
 		index++
 	};
+	
+	function size(dropImage){
+		var divAspect = document.getElementById('droppic').offsetHeight/document.getElementById('droppic').offsetWidth ; 
+		var imgAspect = dropImage.naturalHeight/dropImage.naturalWidth;
+		if(imgAspect <= divAspect){
+			$('#droppic > img').css({width: '100%', height: 'auto'})
+		}else{
+			$('#droppic > img').css({width: 'auto', height: '100%'})
+		}
+	}
+	
 	// map
 	var map;
 	var infowindow = new google.maps.InfoWindow();
@@ -241,6 +276,8 @@
 	 var myOptions = {
 	  zoom: 15,
 	  center:latlng,
+	  streetViewControl: false, 
+	  mapTypeControl: false, 
 	  mapTypeId: google.maps.MapTypeId.ROADMAP   
 	 };
 	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
@@ -254,13 +291,12 @@
 	        {
 	  marker[0].setMap(null); 
 	  }
+	  
 	// marker.length는 marker라는 배열의 원소의 개수입니다.
-	// 만약 이 개수가 0이 아니라면 marker를 map에 표시되지 않게 합니다.
 	// 이는 다른 지점을 클릭할 때 기존의 마커를 제거하기 위함입니다.
 	  marker = [];
 	  marker.length = 0;
-	// marker를 빈 배열로 만들고, marker 배열의 개수를 0개로 만들어 marker 배열을 초기화합니
-	// 다.
+	// marker를 빈 배열로 만들고, marker 배열의 개수를 0개로 만들어 marker 배열을 초기화합니다.
 	   marker.push(new google.maps.Marker({
 	   position: latLng,
 	   map: map
@@ -268,10 +304,7 @@
 	// marker 배열에 새 marker object를 push 함수로 추가합니다.
 
 	}
-	/*클릭한 지점에 마커를 표시하는 함수입니다.
-	   그런데 이 함수를 잘 봐야 하는 것이 바로 marker를 생성하지 않고 marker라는 배열 안에 Marker 
-	   obejct  원소를 계속 추가하고 있습니다. 이는 매번 클릭할 때마다 새로운 마커를 생성하기 위함입니
-	   다. */
+	
 	//입력 받은 주소를 지오코딩 요청하고 결과를 마커로 지도에 표시합니다.
 	function codeAddress(event) {
 	 if (geocodemarker.length > 0)
@@ -287,12 +320,11 @@
 	        //다.
 	 var address = document.getElementById("addr1").value;
 	        //아래의 주소 입력창에서 받은 정보를 address 변수에 저장합니다.
-
 	        //지오코딩하는 부분입니다.
 	 geocoder.geocode( {'address': address}, function(results, status) {
 	  if (status == google.maps.GeocoderStatus.OK)  //Geocoding이 성공적이라면,
 	  {
-	   //결과의 개수를 표시하는 창을 띄웁니다. alert 함수는 알림창 함수입니다.
+	   //결과의 개수를 표시하는 창을 띄웁니다.
 	   for(var i=0;i<results.length;i++)
 	   {
 	    map.setCenter(results[i].geometry.location);
@@ -303,16 +335,13 @@
 	     map: map
 	    }));
 	   } 
-	                        //결과가 여러 개일 수 있기 때문에 모든 결과를 지도에 marker에 표시합니다.
 	  }
 	 });
 	}
 	//클릭 이벤트 발생 시 그 좌표를 주소로 변환하는 함수입니다.
 	function codeCoordinate(event) {
-	        
 	 Setmarker(event.latLng);
 	        //이벤트 발생 시 그 좌표에 마커를 생성합니다.
-
 	        // 좌표를 받아 reverse geocoding(좌표를 주소로 바꾸기)를 실행합니다.
 	 geocoder.geocode({'latLng' : event.latLng}, function(results, status) {
 	  if (status == google.maps.GeocoderStatus.OK)  {
@@ -320,26 +349,20 @@
 	   {
 	    infowindow.setContent(results[1].formatted_address);
 	    infowindow.open(map,marker[0]);
-	                                //infowindow로 주소를 표시합니다.
 	   }
 	  }
 	 });
 	}
-	function size(dropImage){
-			var divAspect = document.getElementById('droppic').offsetHeight/document.getElementById('droppic').offsetWidth ; 
-			var imgAspect = dropImage.naturalHeight/dropImage.naturalWidth;
-			if(imgAspect <= divAspect){
-				$('#droppic > img').css({width: '100%', height: 'auto'})
-			}else{
-				$('#droppic > img').css({width: 'auto', height: '100%'})
-			}
-	}
+	
+
 </script>
 </head>
 <body onload="initialize()">
 	<div id="picContainer">
 		<div id="image" dir="rtl">
 		</div>
+		<div id="delete"></div>
+		<form>
 		<div id="reg" ondrop="drop(event)" ondragover="allowDrop(event)"> 
 				<div id="droppic" align="center">
 				</div>
@@ -348,15 +371,15 @@
 			<input type="file" id="file" name="file" accept="image/*"/>
 			</div>
 			<input id="in" title="사진의 제목을 입력하세요" type="text">
-			<img id="date" title="날짜 선택^^  " src="../images/달력.jpg">
-			<img id="map" title="사진 주소^^" src="../images/지도.png">
-			<input id="cbox" type="checkbox" title="이전과 동일"><p id="text">이전과 동일</p>
-			<img id="check" title="사진 등록^^" src="../images/확인.jpg" onclick="imageUp()">
-			<img id="cancel" title="사진등록 취소^^" src="../images/취소.jpg">
-			<div id="datepicker" ></div>
+			<img id="equal" title="이 전과 같음" src="../images/등호2.png">
+			<img id="map" title="사진 주소" src="../images/지도.png">
+			<img id="check" title="사진 등록" src="../images/확인.jpg" onclick="imageUp()">
+			<img id="cancel" title="사진등록 취소" src="../images/취소.jpg">
+			<div id="datepicker"><input type="hidden" class='date'></div>
 			<div id="map_canvas"></div>
-			<p id="addr"><input type="text" size="30" id="addr1" name="address" onkeyup='codeAddress(); return false;'/></p>
+			<p id="addr"><input class="form-control" type="text" id="addr1" placeholder="search" name="address" onkeyup='codeAddress(); return false;'/></p>
 		</div>
+		</form>
 	</div>
 <script>
 var upload = document.getElementsByTagName('input')[0],

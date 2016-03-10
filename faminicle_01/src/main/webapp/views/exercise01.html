@@ -194,11 +194,10 @@
 <script src="../js/common.js"></script>
 <script>
 	$(function () {
-		
 		$.getJSON(contextRoot + "/chronicle/list.do", function (result) {
 			var html = "";
 			var index = 1;
-			for(var i in result.chronicleList) {
+			for(var i in result.chronicleList) {	
 				html += "<div class='box'>"
 					  + "	<img src='" + result.chronicleList[i].filePath + "' />"
 					  + "	<div class='detail' onselectstart='return false;'>"
