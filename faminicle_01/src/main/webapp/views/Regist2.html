@@ -7,6 +7,8 @@
 <script src="../lib/jquery/dist/jquery.js"></script>
 <script src="../jquery_ui/jquery-ui.js"></script>
 <script src="../js/h5utils.js"></script>
+<script type="text/javascript" src="../js/pic.js"></script>
+<script type="text/javascript" src="../js/pic3.js"></script>
 <style>
    *{
       margin: 0px;
@@ -113,8 +115,10 @@
           left: 40%;
     }    
 	#droppic img{
-		width: 100%;
-		height: 100%;
+		width: auto;
+		height: auto;
+		max-height: 100%;
+		max-width: 100%;
 	}
 	#droppic, #file {
 		width: 100%;
@@ -177,16 +181,16 @@
     	}
        });	
 	   $("#equal").click(function(){
-		   if(flagequal){
+		   if(!flagequal){
 			   $("#equal").css('opacity','1');
 			   $("#in").attr('readonly', true);
 			   $("#in").css('backgroundColor',"rgba(255,0,0,0.1)");
-			   flagequal=false;
+			   flagequal=true;
 		   }else{
 		  	   $("#equal").css('opacity','0.3');
 			   $("#in").attr('readonly', false);
 			   $("#in").css('backgroundColor',"white");
-		  	   flagequal=true;
+		  	   flagequal=false;
 			}
 	   });
 	});
@@ -216,7 +220,6 @@
 				if(isImage) {
 					dropImage.src = event.target.result;
 					dropBox.appendChild(dropImage);
-					size(dropImage);
 					$("#upload").hide();
 				} else {
 					dropBox.html = result;
@@ -238,26 +241,18 @@
 	
 	function imageUp ($item) {
 		indexImg = "img_"+ index
+		if(!flagequal){
+			$("#lat").attr("value", "");
+			$("#lng").attr("value", "");
+			document.getElementById("in").value=null;
+		}
 		var image = document.getElementById(indexImg);
-		$("#image").prepend(image)/*.fadeIn(function() {
-			$("#image img")
-	            .animate({ width: "40%", height: "10%" })
-	            
-	        })*/;
+		$("#image").prepend(image);
 		$("#image img").css({ width: "40%", height: "20%" })
 		$("#upload").show();
 		index++
 	};
 	
-	function size(dropImage){
-		var divAspect = document.getElementById('droppic').offsetHeight/document.getElementById('droppic').offsetWidth ; 
-		var imgAspect = dropImage.naturalHeight/dropImage.naturalWidth;
-		if(imgAspect <= divAspect){
-			$('#droppic > img').css({width: '100%', height: 'auto'})
-		}else{
-			$('#droppic > img').css({width: 'auto', height: '100%'})
-		}
-	}
 	
 	// map
 	var map;
@@ -265,14 +260,18 @@
 	var marker =[];
 	var geocoder;
 	var geocodemarker = [];
+	var latlng="";
 	var GreenIcon = new google.maps.MarkerImage(
 	   "http://labs.google.com/ridefinder/images/mm_20_green.png",
 	   new google.maps.Size(12, 20),
 	   new google.maps.Point(0, 0),
 	   new google.maps.Point(6, 20));
 	// 녹색 마커 아이콘을 정의하는 부분
-	function initialize(){
-	 var latlng = new google.maps.LatLng(37.5240220, 126.9265940);
+	function initialize(lat, lng){
+		latlng = new google.maps.LatLng(37.5240220, 126.9265940);
+	if(lat && lng){
+		latlng = new google.maps.LatLng(lat, lng);
+	}
 	 var myOptions = {
 	  zoom: 15,
 	  center:latlng,
@@ -281,17 +280,23 @@
 	  mapTypeId: google.maps.MapTypeId.ROADMAP   
 	 };
 	 map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+	 if(lat && lng){
+	 	Setmarker(latlng);
+		}
+// 	 marker.push(new google.maps.Marker({
+// 		   position: latLng,
+// 		   map: map
+// 		  } ));
 	 geocoder =  new google.maps.Geocoder();
 	 google.maps.event.addListener(map, 'click', codeCoordinate);
 	        /*아랫글에서 설명한 event를 이용 지도를 'click'하면 codeCoordinate함수를 실행합니다.
 	           codeCoordinate함수는 클릭한 지점의 좌표를 가지고 주소를 찾는 함수입니다. */
 	}
 	function Setmarker(latLng) {
-	  if (marker.length > 0)
-	        {
-	  marker[0].setMap(null); 
-	  }
-	  
+		if (marker.length > 0)
+        {
+		  marker[0].setMap(null); 
+		  } 
 	// marker.length는 marker라는 배열의 원소의 개수입니다.
 	// 이는 다른 지점을 클릭할 때 기존의 마커를 제거하기 위함입니다.
 	  marker = [];
@@ -340,8 +345,6 @@
 	}
 	//클릭 이벤트 발생 시 그 좌표를 주소로 변환하는 함수입니다.
 	function codeCoordinate(event) {
-		console.dir(event.latLng);	
-		console.log(event.latLng.lat(), event.latLng.lng());
 	 Setmarker(event.latLng);
 	        //이벤트 발생 시 그 좌표에 마커를 생성합니다.
 	        // 좌표를 받아 reverse geocoding(좌표를 주소로 바꾸기)를 실행합니다.
@@ -353,7 +356,6 @@
 	    infowindow.open(map,marker[0]);
 	    $("#lat").attr('value',event.latLng.lat());
 	    $("#lng").attr('value',event.latLng.lng());
-	    console.log(results[1].formatted_address);
 	   }
 	  }
 	 });
@@ -366,7 +368,6 @@
 	<div id="picContainer">
 		<div id="image" dir="rtl">
 		</div>
-		<div id="delete"></div>
 		<form>
 		<div id="reg" ondrop="drop(event)" ondragover="allowDrop(event)"> 
 				<div id="droppic" align="center">
@@ -380,7 +381,7 @@
 				<input type="text" id="lng">
 			</div>
 			</div>
-			<input id="in" title="사진의 제목을 입력하세요" type="text">
+			<input id="in" title="사진의 제목을 입력하세요" type="text" value="">
 			<img id="equal" title="이 전과 같음" src="../images/등호2.png">
 			<img id="map" title="사진 주소" src="../images/지도.png">
 			<img id="check" title="사진 등록" src="../images/확인.jpg" onclick="imageUp()">
@@ -405,7 +406,6 @@ var img = new Image();
 img.src = event.target.result;
 holder.innerHTML = '';
 holder.appendChild(img);
-size(dropImage);
 $("#upload").hide();
 };
 holder.addEventListener("load", function (event) {
