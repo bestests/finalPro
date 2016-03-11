@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+<form>
+<input type="text" id="id" name="id">  아이디<br/>
+<input type="password" id="pass" name="pass">  비번
+<input type="submit" value="전송">
+
+</form>
+<button id="test"> 세션테스트</button>
+
+	<script src="../js/common.js"></script>
+    <script src="../lib/jquery/dist/jquery.js"></script>
+    <script>
+    	$("form").submit(function(){
+    		var param = $(this).serialize();
+    		console.log(param);
+    		
+    		//ajax로 아이디와 비밀번호 가져오기
+			$.post(
+				contextRoot+"/chronicle/login.do",
+				{
+					id:$("#id").val(),
+					pass:$("#pass").val()
+				},
+				function(resultObj){
+					console.log(resultObj);
+					console.log("로그인 상태 : "+resultObj.ajaxResult.status);
+					
+					if(resultObj.ajaxResult.status == "success"){
+						alert("로그인 되었습니다. "+resultObj.ajaxResult.data.name+" 님 안녕하세요!")
+						location.href="main.html";
+					}else{
+						console.log("로그인 실패");
+						alert("아이디 혹은 비밀번호가 일치하지 않습니다.다시한번 확인해주세요");
+					}
+					
+							
+				},"json");
+    		return false;
+    	});
+    	
+    	$("#test").click(function(){
+    		
+//     		$.ajax
+//     		contextRoot+"/chronicle/test.do",
+//     		{
+//     			id:$("#id").val()
+//     		},
+//     		error : function(response) {
+    			
+//     		},
+// 			success : function(resultObj){
+// 				console.log(resultObj);
+// 				console.log(resultObj.ajaxResult.status);
+    		
+//     	}
+    	});
+    	
+    </script>
+
+</body>
+</html>
