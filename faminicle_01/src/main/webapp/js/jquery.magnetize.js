@@ -34,7 +34,11 @@
 		
 //		if (options.$navi != undefined) {
 			
+<<<<<<< .mine
+			$('main-3d').bind('mousewheel', function(e){
+=======
 			$('.main-3d').bind('mousewheel', function(e){
+>>>>>>> .r28
 				e.preventDefault();
 				if (isAnimation == true) return;
 				//보여지는 판넬 수 10장씩 3판넬
