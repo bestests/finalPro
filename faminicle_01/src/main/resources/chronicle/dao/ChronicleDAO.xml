@@ -19,13 +19,30 @@
 	
 	<select id="insertMember" parameterType="members">
 		insert into fam_member(id,pass,e_mail,name,birthday,tel)
-		values('${id}','${pass}','${eMail}','${name}','${birthday}',${tel})
+		values(#{id},#{pass},#{eMail},#{name},#{birthday},${tel})
 	</select>
 	
 	<select id="checkId" parameterType="members" resultType="int">
 		select count(*)
 		from fam_member
-		where id = '${id}'
+		where id = #{id}
+	</select>
+	
+	
+	
+	<resultMap type="members" id="loginMap">
+		<result column="mem_no" property="memNo" />
+		<result column="id" property="id" />
+		<result column="pass" property="pass" />
+		<result column="e_mail" property="eMail" />
+		<result column="name" property="name" />
+		<result column="birthday" property="birthday" />
+		<result column="tel" property="tel" />
+	</resultMap>
+	<select id="loginCheck" parameterType="LoginCheck" resultMap="loginMap">
+		select *
+		from fam_member
+		where id= #{id} and pass=#{pass}
 	</select>
 	
 	
