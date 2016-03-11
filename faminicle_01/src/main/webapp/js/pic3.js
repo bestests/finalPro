@@ -35,8 +35,8 @@
 	    var prop;
 
 	    if (jpeg.gps && jpeg.gps.longitude) {
-		$("data").innerHTML= "<input type='text' id='lat' value='"+jpeg.gps.latitude.value+"'>";
-		$("data").innerHTML+= "<input type='text' id='lng' value='"+jpeg.gps.longitude.value+"'>";
+		$("data").innerHTML= "<input type='hidden' id='lat' value='"+jpeg.gps.latitude.value+"'>";
+		$("data").innerHTML+= "<input type='hidden' id='lng' value='"+jpeg.gps.longitude.value+"'>";
 		initialize(jpeg.gps.latitude.value, jpeg.gps.longitude.value)
 	    }
 
