@@ -2,93 +2,552 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Faminicle</title>
-
-    <!-- Bootstrap -->
-    <link href="../lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- font awesome -->
-    <link rel="stylesheet" href="../lib/bootstrap/dist/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
-    <!-- Custom style -->
-    <link rel="stylesheet" href="../lib/bootstrap/dist/css/style.css" media="screen" title="no title" charset="utf-8">
-
-
+<title>Insert title here</title>
+<link href="../lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+<link href="../js/vis/dist/vis.css" rel="stylesheet" type="text/css"> 
 <style>
-	*{
-		margin: 0px;
-		padding: 0px;
-	} 
+	* { margin: 0px; padding: 0px; box-sizing: border-box; }
+	html, body { width: 100%; height: 100%; }
+	#all { 
+		width:100%; height: 100%; position: relative;
+	}
+	#menu { 
+		width: 95%; height: 96%; 
+		background: aquamarine; 
+		position: absolute; 
+		margin-top: 1%;
+		left: -93%;
+		transition: 1s;
+		border-radius: 0% 2% 2% 0%;
+		z-index: 1000;
+	}
+	#chronicle {
+		width: 95%;
+		height: 23%;
+		background: white;
+		border: 2px dashed lightgrey;
+		position: absolute;
+		top: 2%;
+		left: 2%;
+	}
+	#container {
+		width: 95%;
+		height: 72%;
+		background: rgba(255,255,255,0.01);
+		border: 2px dashed lightgrey;
+		position: absolute;
+		bottom: 2%;
+		left: 2%;
+		overflow: auto;
+	}
+	#content {
+		width: 93%;
+		height: 100%;
+		background: rgba(255,255,255,0);
+		position: relative;
+		margin: 0px auto;
+	}
+	#content .box {
+		width: 200px;
+		max-width: 48%;
+		display: inline-block;
+		padding: 6px;
+		vertical-align: top;
+		margin-bottom: 12px;
+		position: absolute;
+		overflow: hidden;
+	}
+	.box img {
+		width: 100%;
+	}
 
-	body, html{
+	@media screen and (min-width: 720px) {
+	  #content .box { width: 33%; }
+	}
+
+	@media screen and (min-width: 992px) {
+	  #content .box { width: 20%; }
+	}
+	
+	#visualization {
 		width: 100%;
 		height: 100%;
+		background: white;
+	}
+	#toggleBox {
+		width: 2%;
+		height: 3%;
+		position: absolute;
+		bottom: 1%;
+		right: 0.5%;
+		display: none;
+		z-index: 1000;
+	}
+	#submenuBox {
+		width: 2%;
+		height: 10%;
+		position: absolute;
+		bottom: 5%;
+		right: 0.5%;
+		display: none;
+		z-index: 1000;
+	}
+	.detail {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+		top: 0px;
+		left:0px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		opacity: 0;
+	}
+	.box:hover .detail {
+		opacity: .8;
+	}
+	.detailDate {
+		width: 100%;
+		position: absolute;
+		left: -100%;
+		top: 0px;
+		background: black;
+		color: white;
+		transition: 1s;
+	}
+	.detailTitle {
+		width: 100%;
+		position: absolute;
+		right: -100%;
+		bottom: 0px;
+		background: black;
+		color: white;
+		transition: 1s;
+		text-overflow: ellipsis;
+	}
+	.detail:hover .detailDate {
+		left: 0px;
+	}
+	.detail:hover .detailTitle {
+		right: 0px;
+	}
+	#toggleBox img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1001;
+	}
+	.submenus {
+		width: 100%;
+		height: 30%;
+		z-index: 1000;
+	}
+	.submenus img {
+		width: 100%;
+		height: 100%;
+		z-index: 1001;
+	}
+	.modal-content {
+		position: absolute;
+		left: 30%;
 	}
 	
-	#main-container{
-		margin: auto;
-		padding: 20px;
-		width: 90%;
-		height: 90%;
+	#modalImgBox {
+		max-height: 40%;
 	}
-	
-	#main {
-		margin-top: 7%;
-		width: 400px;
-		height: 70%;
-		margin-bottom: 20px;
-		float: left;
+	#chronicleBox {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		opacity: .3;
 	}
-	
-	#main img{
-		width: 400px;
-		height: 358.047px;
+	#chronicleView {
+		width: 1%;
+		height: 100%;
+		border: 1px solid blue;
+		background: blue;
+		position: absolute;
+		margin: 0px auto;
+		left: 49.5%;
 	}
-	
-	
-	#form {
-		margin-top: 7%;
-		width: 400px;
-		height: 70%;
-		padding: 20px;
-		margin-bottom: 20px;
-		float: right;
-	}
-	
 </style>
+<!-- 
+ -->
+<link rel="stylesheet" href="../css/demo.css" type="text/css" />
+<link rel="stylesheet" href="../css/jquery.magnetize.css" type="text/css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="../js/jquery.easing.1.3.js"></script>
+<script type="text/javascript" src="../js/jquery.magnetize.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function($){
+		$('.main-3d').magnetize({layout: 0});
+	});
+</script>
+
+<script type="text/javascript" src="../js/demo.js"></script>
+<script src="../lib/jquery/dist/jquery.js"></script>
+<script src="../lib/bootstrap/dist/js/bootstrap.js"></script>
+<script src="../js/masonry.pkgd.min.js"></script>
+<script src="../js/imagesloaded.3.1.8.min.js"></script>
+<script src="../js/vis/dist/vis.js"></script>
+<script src="../js/vis/dist/googleAnalytics.js"></script>
+<script src="../lib/bootstrap/js/modal.js"></script>
+<script src="../js/common.js"></script>
+<script>
+	$(function () {
+		$.getJSON(contextRoot + "/chronicle/list.do", function (result) {
+			var html = "";
+			var index = 1;
+			for(var i in result.chronicleList) {	
+				html += "<div class='box'>"
+					  + "	<img src='" + result.chronicleList[i].filePath + "' />"
+					  + "	<div class='detail' onselectstart='return false;'>"
+					  + "		<div class='detailDate'>" + result.chronicleList[i].picDate + "</div>"
+					  + "		<div class='detailTitle'>" + result.chronicleList[i].content + "</div>"
+					  + "	</div>"
+					  + "</div>";
+			};
+			$("#content").append(html);
+		});
+		
+		
+		init_masonry();
+		
+		var menuStatus = false;
+		$("#menu").click(function (event) {
+			if(!menuStatus) {
+				$("#menu").css({
+					left: "0%",
+					background: "white",
+					borderRadius: "0px",
+					backgroundImage: "url('../images/c_background.jpg')",
+					backgroundSize: "100% 100%",
+					backgroundRepeat: "no-repeat"
+				});
+				$("#toggleBox").show("slow");
+				event.stopPropagation();
+				menuStatus = true;
+				$(".main-3d").hide();
+			} 
+			event.stopPropagation();
+		});
+		$("#all").click(function (event) {
+			if(menuStatus) {
+				$("#menu").css({
+					left: "-93%",
+					columnWidth: 0,
+					background: "aquamarine",
+					borderRadius: "0px 2% 2% 0px"
+				});
+				$("#toggleBox").hide("slow");
+				$("#submenuBox").hide("slow");
+				menuStatus = false;
+				submenuStatus = false;
+				$(".main-3d").show();
+			}
+		});
+		var submenuStatus = false;
+		$("#toggleBox").click(function (event) {
+			if(!submenuStatus) {
+				$("#submenuBox").show("slow");
+				submenuStatus = true;
+			} else {
+				$("#submenuBox").hide("slow");
+				submenuStatus = false;
+			}
+			event.stopPropagation();
+		});
+		
+		$("#submenuBox").click(function (event) {
+			event.stopPropagation();
+		});
+		
+		$("#content").on("dblclick", ".detail", function () {
+			var $check = $(this).parent();
+			var src = $(this).prev().attr("src");
+			var title = $(this).children("[class='detailTitle']").html();
+			var date  = $(this).children("[class='detailDate']").html();
+			$("#modalImg").attr("src", src);
+			$("#title").val(title);
+			$("#date").val(date);
+			$("#myModal").modal();
+		});
+	});
+	
+	function init_masonry () {
+		var $container = $("#content");
+		
+		$container.imagesLoaded(function () {
+			$container.masonry({
+				itemSelector: ".box",
+				isAnimated: true
+			});
+		});
+		
+	/*	
+	//	타임라인	
+	 // DOM element where the Timeline will be attached
+	  var container = document.getElementById('visualization');
+	
+	  // Create a DataSet (allows two way data-binding)
+	  var items = new vis.DataSet([
+	    {id: 1, className: 'pink', content: 'item 1', start: '2013-04-20', title: '학원감'},
+	    {id: 2, content: 'item 2', start: '2013-04-14'},
+	    {id: 3, className: 'pink', content: 'item 3', start: '2013-04-18'},
+	    {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
+	    {id: 5, content: 'item 5', start: '2013-04-25'},
+	    {id: 6, content: 'item 6', start: '2013-04-27'},
+	    {id: 7, content: '오늘 등록', start: '2016-02-01', end: '2016-02-24', style: 'background: blue; color:yellow;'}
+	  ]);
+	
+	  // Configuration for the Timeline
+	  var options = {
+			  height: "100%",
+			  editable: {
+				  add: true
+			  }
+	  };
+	
+	  // Create a Timeline
+	  var timeline = new vis.Timeline(container, items, options);
+	  timeline.moveTo(new Date());
+	  
+	  timeline.on('select', function (properties) {
+		  console.dir(properties.nodes);
+	  });
+	 
+	 var currDate = "";
+	 $("#visualization").click(function (event) {
+		var props = timeline.getEventProperties(event);
+		currDate = props.time;
+		console.log(currDate);
+		timeline.moveTo(currDate);
+		$("#container").stop().animate({scrollTop: currScroll + 500});
+	 });
+	 
+	 var currScroll = 0;
+	 $("#container").scroll(function () {
+		
+		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
+		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
+		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
+		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
+		
+		console.log("scrollHeight : " + scrollHeight);
+		console.log("currScroll : " + currScroll);
+		console.log("scrollTop : " + scrollTop);
+		console.log("conHeight : " + conHeight);
+		console.log("maxHeight : " + maxHeight);
+		
+		// 현재 날짜가 없을때, 오늘 날짜 불러옴
+		if(currDate == "") {
+			currDate = new Date();
+		}
+		// 스크롤 내릴때 (일 +1)
+		if(scrollTop > currScroll) {
+			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() + 1);
+		} 
+		// 스크롤 올릴때 (일 -1)
+		else {
+			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() - 1);
+		}
+		currScroll = scrollTop;
+		
+		// 해당 날짜로 이동
+		timeline.moveTo(currDate);
+		
+	 });
+	*/	
+	 
+	 
+	 
+	};
+</script>
 </head>
 <body>
-	<div id="main-container">
-		<div id="main">
-			<img alt="" src="../images/main1.gif">
-		</div>	 
-		
-		<div id="form">
-			<img alt="" src="../images/faminicle.jpg">
-			<br/>
-			<br/>
-			<br/>
-			<form>
-				<div class="form-group">
-					<label for="InputId" class="control-label">아이디</label>
-					<input type="text" size="50" class="form-control" id="InputId" />
-					<br/>
-					<label for="InputPassword" class="control-label">비밀번호</label>
-					<input type="text" size="50" class="form-control" id="InputPassword" />
-				</div>
-					<br/>
-				<div class="form-group text-center">
-					<button type="submit" class="btn btn-login">로그인</button>
-					<button type="submit" class="btn btn-info">회원가입</button>
-				</div>
-			</form> 
-		</div>
+	<div id="all">
+	<!-- 
+	 -->
+	<div class="main-3d">
+    <div id="level1" class="plane">
+        <img src="../images/0.jpg" alt="3d10" />
+        <div></div>
+    
+        <img src="../images/1.jpg" />
+        <img src="../images/2.jpg" alt="3d12" />
+        <img src="../images/3.jpg" alt="3d13" />
+        <img src="../images/4.jpg" alt="3d14" />
+        <img src="../images/5.jpg" alt="3d15" />
+        <img src="../images/6.jpg" alt="3d17" />
+        <img src="../images/7.jpg" alt="3d18" />
+        <img src="../images/8.jpg" alt="3d19" />
+        <img src="../images/9.jpg" alt="3d2" />
+    </div>
+    <div id="level2" class="plane">
+        <img src="../images/10.jpg" alt="3d23" />
+        <img src="../images/11.jpg" alt="3d24" />
+        <img src="../images/12.jpg" alt="3d26" />
+        <img src="../images/13.jpg" alt="3d27" />
+        <img src="../images/14.jpg" />
+        <img src="../images/15.jpg" alt="3d29" />        
+        <img src="../images/16.jpg" alt="3d3" />
+        <img src="../images/17.jpg" alt="3d20" />
+        <img src="../images/18.jpg" alt="3d9" />
+        <img src="../images/19.jpg" alt="3d64" />
+    </div>
+    <div id="level3" class="plane">
+        <img src="../images/20.jpg" alt="3d31" />
+        <img src="../images/21.jpg" alt="3d32" />
+        <img src="../images/22.jpg" alt="3d34" />
+        <img src="../images/23.jpg" alt="3d38" />
+        <img src="../images/24.jpg" alt="3d40" />
+        <img src="../images/25.jpg" alt="3d41" />
+        <img src="../images/26.jpg" alt="3d36" />        
+        <img src="../images/27.jpg" alt="3d42" />
+        <img src="../images/28.jpg" alt="3d66" />
+        <img src="../images/29.jpg" alt="3d63" />
+    </div>
 	</div>
+		<div id="menu" class="border-right-radius">
+			<div id="chronicle">
+				<div id="chronicleBox">
+					<div id="chronicleView"></div>
+				</div>
+				<div id="visualization"></div>
+			</div>			
+			<div id="container">
+				<div id="content"></div>
+			</div>
+			<div id=toggleBox>
+				<img src=" ../images/menu/menu.png" >
+			</div>
+			<div id="submenuBox">
+				<div class="submenus"><img src=" ../images/menu/logout.png" ></div>
+				<div class="submenus"><img src=" ../images/menu/option.png" ></div>
+				<div class="submenus"><a href=" Slide.html"><img src=" ../images/menu/slide.png" ></a></div>
+			</div>
+		</div>		
+	</div>
+	
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="width: 40%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Update</h4>
+				</div>
+				<form>
+					<div class="modal-body">
+						<div id="modalImgBox">
+							<img id="modalImg" style="width: 100%;">
+						</div>
+						<div class="form-group">
+							<label for="title" class="control-label">Title</label>
+							<input type="text" size="50" class="form-control" id="title" />
+							<label for="date" class="control-label">Date</label>
+							<input type="date" class="form-control" id="date" />
+						</div>
+					</div>
+					<div class="modal-footer">
+				        <button type="submit" class="btn btn-primary">Update</button>
+				        <button type="button" class="btn btn-danger">Delete</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      	</div>
+				</form>
+			</div>
+		</div>
+  	</div>
+  	
+  	<script>
+//	타임라인	
+	 // DOM element where the Timeline will be attached
+	  var container = document.getElementById('visualization');
+	
+	  // Create a DataSet (allows two way data-binding)
+	  var items = new vis.DataSet([
+	    {id: 1, className: 'pink', content: 'item 1', start: '2013-04-20', title: '학원감'},
+	    {id: 2, content: 'item 2', start: '2013-04-14'},
+	    {id: 3, className: 'pink', content: 'item 3', start: '2013-04-18'},
+	    {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
+	    {id: 5, content: 'item 5', start: '2013-04-25'},
+	    {id: 6, content: 'item 6', start: '2013-04-27'},
+	    {id: 7, content: '오늘 등록', start: '2016-02-01', end: '2016-02-24', style: 'background: blue; color:yellow;'}
+	  ]);
+	
+	  // Configuration for the Timeline
+	  var options = {
+			  height: "100%",
+			  editable: {
+				  add: true
+			  }
+	  };
+	
+	  // Create a Timeline
+	  var timeline = new vis.Timeline(container, items, options);
+	  timeline.moveTo(new Date());
+	  
+	  timeline.on('select', function (properties) {
+		  console.dir(properties);
+		  console.dir(items);
+		  for(var i in items._data) {
+			 if(properties.event.target.innerText == items._data[i].content) {
+		  			//console.log("start : " + items._data[i].start);
+		  			if(items._data[i].end) {
+		  				//console.log("end : " + items._data[i].end);
+		  			} else {
+		  				console.log("당일 이벤트 입니다.");
+		  			}
+	  		 };
+		  }
+	  });
 	 
-	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../lib/bootstrap/dist/js/bootstrap.min.js"></script>
-
-  </body>
+	 var currDate = "";
+	 var currScroll = 0;
+	 $("#visualization").click(function (event) {
+		var props = timeline.getEventProperties(event);
+		var itemNum = props.item;
+		console.dir(props);
+		console.log("item : " + props.item);
+		currDate = props.time;
+		timeline.moveTo(currDate);
+		$("#container").stop().animate({scrollTop: currScroll + 500});
+		curScroll = currScroll + 500;
+		if(itemNum) {
+			console.log("start : " + items._data[itemNum].start);
+			console.log("end : " + items._data[itemNum].end);
+		}
+	 });
+	 
+	 $("#container").on("mousewheel", function (event) {
+		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
+		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
+		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
+		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
+		/*
+		console.log("scrollHeight : " + scrollHeight);
+		console.log("currScroll : " + currScroll);
+		console.log("scrollTop : " + scrollTop);
+		console.log("conHeight : " + conHeight);
+		console.log("maxHeight : " + maxHeight);
+		*/
+		// 현재 날짜가 없을때, 오늘 날짜 불러옴
+		if(currDate == "") {
+			currDate = new Date();
+		}
+		// 스크롤 내릴때 (일 +1)
+		if(event.originalEvent.deltaY > 0) {
+			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() + 1);
+		} 
+		// 스크롤 올릴때 (일 -1)
+		else {
+			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() - 1);
+		}
+		currScroll = scrollTop;
+		
+		console.log("마우스 이벤트 날짜 :" + currDate);
+		// 해당 날짜로 이동
+		timeline.moveTo(currDate);
+	 });
+  	</script>
+</body>
 </html>

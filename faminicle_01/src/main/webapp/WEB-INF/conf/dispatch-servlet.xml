@@ -41,17 +41,13 @@
     </property>
   </bean>  
   
-  <!-- 인터셉터를 등록 -->
-  <!--  
   <mvc:interceptors>
     <mvc:interceptor>
         <mvc:mapping path="/**"/>
-        <bean class="java76.pms.interceptor.AuthInterceptor"/>
+        <bean class="chronicle.util.LoginCheckInterceptor"/>
     </mvc:interceptor>
   </mvc:interceptors>
-  -->
 </beans>
-
 
 
 

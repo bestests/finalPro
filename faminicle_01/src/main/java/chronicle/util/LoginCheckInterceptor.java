@@ -42,7 +42,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 //		Members check = (Member) session.getAttribute("loginInfo");
 		Members check = (Members) request.getSession().getAttribute("loginInfo");
 		System.out.println("세션값 " +check);
-		if(!("/chronicle/login.do".equals(servletPath)) && check == null) {
+		if(!("/chronicle/login.do".equals(servletPath)||"/chronicle/checkId.do".equals(servletPath)) && check == null) {
 			System.out.println("로그인페이지 아니면서 세션이 없을때");
 			
 			response.setContentType("900");
