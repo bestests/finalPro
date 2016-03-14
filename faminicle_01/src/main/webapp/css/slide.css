@@ -203,8 +203,7 @@ p {
 	width: 30%;
 }
 
-#sildemap {
-	overflow: hidden;
+.mapclass {
 	width: 100%;
 	height: 100%;
 }
