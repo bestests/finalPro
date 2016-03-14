@@ -30,7 +30,7 @@
         <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
           <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
           <property name="prefix" value="/WEB-INF/views/"/>
-          <property name="suffix" value=".jsp"/>
+          <property name="suffix" value=".html"/>
         </bean>
       </list>
     </property>
@@ -41,13 +41,17 @@
     </property>
   </bean>  
   
-  <mvc:interceptors>
-    <mvc:interceptor>
-        <mvc:mapping path="/**"/>
-        <bean class="chronicle.util.LoginCheckInterceptor"/>
-    </mvc:interceptor>
-  </mvc:interceptors>
+  <!-- 인터셉터를 등록 -->
+   
+<!--   <mvc:interceptors> -->
+<!--     <mvc:interceptor> -->
+<!--         <mvc:mapping path="/**"/> -->
+<!--         <bean class="chronicle.util.LoginCheckInterceptor"/> -->
+<!--     </mvc:interceptor> -->
+<!--   </mvc:interceptors> -->
+  
 </beans>
+
 
 
 
