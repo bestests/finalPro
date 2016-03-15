@@ -1,19 +1,29 @@
 package chronicle.controller;
 
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import chronicle.domain.Chronicle;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
+import chronicle.domain.Regist;
 import chronicle.service.ChronicleService;
 
 @Controller
@@ -22,6 +32,8 @@ public class ChronicleController {
 	
 	@Autowired
 	ChronicleService service;
+	@Autowired
+	private ServletContext servletContext;
 	
 	@RequestMapping("list.do")
 	public List<Chronicle> list () {
@@ -70,7 +82,7 @@ public class ChronicleController {
 //			session.setMaxInactiveInterval(3600);
 			
 			
-			Test(session);
+//			Test(session);
 //			Members mem = (Members)session.getAttribute("loginInfo");
 //			System.out.println("세션에서 가져온값 " + mem.getName());
 			
@@ -86,18 +98,43 @@ public class ChronicleController {
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
 	}
-	@RequestMapping("test001.do")
-	public void Test(HttpSession session){
-		Members mem = (Members)session.getAttribute("loginInfo");
-		
-		System.out.println("세션에서 가져온 아이디"+mem.getId());
-		
+	
+	@RequestMapping("Regist.do")
+	@ResponseBody
+	public AjaxResult register(Regist regist, MultipartHttpServletRequest mRequest) throws Exception{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
+		String realPath = servletContext.getRealPath("/upload/");
+		String sdfPath = sdf.format(new Date());
+		String filePath = realPath + sdfPath;
+		File file = new File(filePath);
+		file.mkdirs();
+		Iterator<String> iter = mRequest.getFileNames();
+		if(iter.hasNext()){
+			MultipartFile mFile =  mRequest.getFile(iter.next());
+			String oriFileName = mFile.getOriginalFilename();
+			System.out.println(oriFileName);
+			if(oriFileName != null && !oriFileName.equals("")){
+				String ext = oriFileName.substring(oriFileName.lastIndexOf("."));
+				String realFileName = UUID.randomUUID().toString()+ext;
+				String saveFullFileName = filePath+"/"+realFileName;
+				String srcPath = "../upload/"+ sdfPath;
+				mFile.transferTo(new File(saveFullFileName));
+				regist.setPicFilePath(srcPath+realFileName);
+			}
+		}
+		service.registpic(regist);
+//		System.out.println("lat: " + regist.getLat());
+//		System.out.println("lng: " + regist.getLng());
+//		System.out.println("PicDate: " + regist.getPicDate());
+//		System.out.println("PicFilePath: " + regist.getPicFilePath());
+//		System.out.println("Title: " + regist.getTitle());
+//		System.out.println("MemNo: " + regist.getMemNo());
+		AjaxResult result = new AjaxResult("ok", "ok");
+		return result;
 	}
-	
-	
-	
-	
 }
+	
+	
 
 	
 

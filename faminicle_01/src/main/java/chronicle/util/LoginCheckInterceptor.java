@@ -1,13 +1,8 @@
 package chronicle.util;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import chronicle.domain.Members;
@@ -22,7 +17,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		
 		
 //		return true;
-//		
+		
 //		try{
 //			if(request.getSession().getAttribute("loginInfo")==null){
 //				System.out.println("세션값없음");
@@ -41,12 +36,9 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		
 //		Members check = (Member) session.getAttribute("loginInfo");
 		Members check = (Members) request.getSession().getAttribute("loginInfo");
-
-		
-		System.out.println("세션값 checkcehckcheck***************      " +check);
-		
-		
-		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && check == null) {
+		System.out.println("세션값 " +check);
+//		System.out.println(check.getName());
+		if(!("/chronicle/login.do".equals(servletPath)||"/chronicle/checkId.do".equals(servletPath)) && check == null) {
 			System.out.println("로그인페이지 아니면서 세션이 없을때");
 			
 			response.setContentType("900");
@@ -55,7 +47,6 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		System.out.println("통과함");
 //		System.out.println(check.getId());
 		return true;
-		
 		/*
 		System.out.println("인터셉터 로그인 여부: "+ check);
 		

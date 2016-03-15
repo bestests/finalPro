@@ -9,6 +9,7 @@ import chronicle.dao.ChronicleDAO;
 import chronicle.domain.Chronicle;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
+import chronicle.domain.Regist;
 
 @Service
 public class ChronicleServiceImpl implements ChronicleService{
@@ -38,6 +39,11 @@ public class ChronicleServiceImpl implements ChronicleService{
 	@Override
 	public Members loginCheck(LoginCheck loginInfo) {
 		return dao.loginCheck(loginInfo);
+	}
+
+	@Override
+	public void registpic(Regist regist) {
+		dao.insertpic(regist);
 	}
 	
 	

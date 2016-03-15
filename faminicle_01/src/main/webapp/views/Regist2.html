@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="../jquery_ui/jquery-ui.css">
 <script src="../lib/jquery/dist/jquery.js"></script>
 <script src="../jquery_ui/jquery-ui.js"></script>
 <script src="../js/h5utils.js"></script>
+<script src="../js/common.js"></script>
 <script type="text/javascript" src="../js/pic.js"></script>
 <script type="text/javascript" src="../js/pic3.js"></script>
 <style>
@@ -97,9 +98,9 @@
           left: 40%;
     }   
     #addr{
-    	width: 39%;
+    	width: 27%;
     	position: absolute;
- 		right: 2%;
+ 		right: 7%;
  		bottom:39%;
     }
     #addr1{
@@ -109,6 +110,7 @@
     #check {
           top: 83%;
           left: 10%;
+          opacity:0.3;
     }    
     #cancel {
           top: 83%;
@@ -116,9 +118,7 @@
     }    
 	#droppic img{
 		width: auto;
-		height: auto;
-		max-height: 100%;
-		max-width: 100%;
+		height: 100%;
 	}
 	#droppic, #file {
 		width: 100%;
@@ -129,12 +129,10 @@
 	}
  	#datepicker, #map_canvas {
  		position: absolute;
- 		right: 2%;
- 		bottom: 6%; 
- 	}
- 	#datepicker, #map_canvas{
- 		width: 39%;
- 		height: 36%;
+ 		right: 7%;
+ 		bottom: 10%; 
+ 		width: 27%;
+ 		height: 32%;
  	}
  	#file{
  		opacity: 0;
@@ -153,6 +151,7 @@
 	var dropBox;
 	var flagMap=true;
 	var flagequal=false;
+	var execute = false;
 	$(function () {
 		$("#map_canvas").hide(2000);
     	$("#addr").hide(2000);
@@ -208,27 +207,17 @@
 	    var textType = /text.*/;
 		var isImage;
 		
-		if(file.type.match(imageType)) {
-			isImage = true;
-		} else if(file.type.match(textType)) {
-			isImage = false;
-		}
 		var reader = new FileReader();
-		if(isImage){
-		reader.onload = (function (aFile) {
+		reader.onload = (function (File) {
 			return function (event) {
-				if(isImage) {
 					dropImage.src = event.target.result;
 					dropBox.appendChild(dropImage);
 					$("#upload").hide();
-				} else {
-					dropBox.html = result;
-				}
+					$("#check").css('opacity','1');
+					execute=true;
 			};
 		})(file);
-		}
-		if(isImage) { reader.readAsDataURL(file); }
-		else { reader.readAsText(file, "UTF-8"); }
+		reader.readAsDataURL(file); 
 		
 		event.stopPropagation();
 		event.preventDefault();
@@ -241,16 +230,14 @@
 	
 	function imageUp ($item) {
 		indexImg = "img_"+ index
-		if(!flagequal){
-			$("#lat").attr("value", "");
-			$("#lng").attr("value", "");
-			document.getElementById("in").value=null;
-		}
 		var image = document.getElementById(indexImg);
+		if(execute){
 		$("#image").prepend(image);
 		$("#image img").css({ width: "40%", height: "20%" })
 		$("#upload").show();
-		index++
+		registPic();
+		index++;
+		}
 	};
 	
 	
@@ -354,13 +341,34 @@
 	   {
 	    infowindow.setContent(results[1].formatted_address);
 	    infowindow.open(map,marker[0]);
-	    $("#lat").attr('value',event.latLng.lat());
-	    $("#lng").attr('value',event.latLng.lng());
+	    
 	   }
 	  }
 	 });
 	}
-	
+function registPic(){
+		var form = $(".regist")[0];
+		var formData = new FormData(form);
+		console.dir(form[3]);
+		$.ajax({
+		   url: contextRoot + "/chronicle/Regist.do",
+		   processData: false,
+		   contentType: false,
+		   data: formData,
+		   type: 'POST',
+		   success: function(data){
+			   if(!flagequal){
+					$("#lat").attr("value", "");
+					$("#lng").attr("value", "");
+					document.getElementById("in").value=null;
+					$("#check").css('opacity','0.3');
+					execute=false;
+				}
+					execute=false;
+					$("#check").css('opacity','0.3');
+		   },dataType:'json'
+		});
+}  
 
 </script>
 </head>
@@ -368,20 +376,21 @@
 	<div id="picContainer">
 		<div id="image" dir="rtl">
 		</div>
-		<form>
-		<div id="reg" ondrop="drop(event)" ondragover="allowDrop(event)"> 
+		<form class="regist" >
+			<div id="reg" ondrop="drop(event)" ondragover="allowDrop(event)"> 
 				<div id="droppic" align="center">
 				</div>
 			<div>
 			<img id="upload" src="../images/regist.png" title="업로드할 사진을 드래그 해주세요~^^">
 			<input type="file" id="file" name="file" accept="image/*"/>
-			<input type="hidden" class="datedata">
+			<input type="hidden" class="datedata" name="picDate">
+			<input type="hidden" class="memNo" name="memNo" value="1">
 			<div id="data">
-				<input type="hidden" id="lat">
-				<input type="hidden" id="lng">
+				<input type="hidden" id="lat" name="lat">
+				<input type="hidden" id="lng" name="lng">
 			</div>
+			<input id="in" title="사진의 제목을 입력하세요" type="text" name="title">
 			</div>
-			<input id="in" title="사진의 제목을 입력하세요" type="text" value="">
 			<img id="equal" title="이 전과 같음" src="../images/등호2.png">
 			<img id="map" title="사진 주소" src="../images/지도.png">
 			<img id="check" title="사진 등록" src="../images/확인.jpg" onclick="imageUp()">
@@ -407,6 +416,8 @@ img.src = event.target.result;
 holder.innerHTML = '';
 holder.appendChild(img);
 $("#upload").hide();
+$("#check").css('opacity','1');
+execute=true;
 };
 holder.addEventListener("load", function (event) {
 	var target = event.target;
