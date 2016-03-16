@@ -203,6 +203,8 @@
 			var html = "";
 			var index = 1;
 			for(var i in result.cList) {	
+				if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
+				console.log(result.cList);
 				html += "<div class='box'>"
 					  + "	<img src='" + result.cList[i].filePath + "' />"
 					  + "	<div class='detail' onselectstart='return false;'>"
@@ -212,12 +214,15 @@
 					  + "</div>";
 			};
 			startDate = result.cList[0].regDate;
-			startNo = result.cList[0].no;
+			startNo = maxNum;
+			
 			endDate = result.cList[result.cList.length - 1].regDate;
 			endNo = result.cList[result.cList.length - 1].no;
+			
 			console.log(startDate);
 			console.log(endDate);
 			$("#content").append(html);
+			maxNum = 0;
 		});
 		
 		
@@ -445,11 +450,14 @@
 		currDate = currDate.getFullYear() + "-" + currDate.getMonth() + "-" + currDate.getDate();
 		timeline.moveTo(currDate);
 		$.getJSON(
+				
 				contextRoot + "/chronicle/list.do?pageNo=&startDate=" + currDate + "&endDate=",
 				function (result) {
 					var html = "";
 					console.dir(result.cList);
 					for(var i in result.cList) {	
+						if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
+						if(minNum > result.cList[i].no) minNum = result.cList[i].no;
 						html += "<div class='box'>"
 							  + "	<img src='" + result.cList[i].filePath + "' />"
 							  + "	<div class='detail' onselectstart='return false;'>"
@@ -465,14 +473,20 @@
 					$("#content").masonry("layout");
 					
 					startDate = result.cList[0].regDate;
-					startno = result.cList[0].no;
+					startNo = maxNum;
 					
 					endDate = result.cList[result.cList.length - 1].regDate;
-					endNo = result.cList[result.cList.length - 1].no;
+					endNo = minNum;
 					
 					console.log(startDate);
 					timeline.moveTo(new Date(startDate), {duration: 2000});
+					
+					console.log("startDate : " + startDate);
+					console.log("startNo : " + startNo);
 					$("#container").scrollTop(0);
+					
+					maxNum = 0;
+					minNum = 999999999999999999999;
 				}
 			
 		);
@@ -494,7 +508,8 @@
 			}
 		}
 	 });
-	 
+	 var maxNum = 0;
+	 var minNum = 999999999999999999999;
 	 var nextList = function () {
 			console.log(endDate);
 			$.getJSON(
@@ -507,6 +522,9 @@
 							console.dir(result);
 							var html = "";
 							for(var i in result.cList) {	
+								
+								if(minNum > result.cList[i].no) minNum = result.cList[i].no;
+								
 								html += "<div class='box'>"
 									  + "	<img src='" + result.cList[i].filePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
@@ -517,7 +535,7 @@
 							};
 							
 							endDate = result.cList[result.cList.length - 1].regDate;
-							endNo = result.cList[result.cList.length - 1].no;
+							endNo = minNum;
 							
 							
 							$("#content").append(html).masonry("appended", html, true);	        
@@ -525,6 +543,7 @@
 							$("#content").masonry("layout");
 							console.log(endDate);
 							timeline.moveTo(new Date(result.cList[0].regDate), [{"animation": true, "duration": 3000}]);
+							minNum = 999999999999999999999;
 						}
 					}
 	 
@@ -543,6 +562,7 @@
 							var html = "";
 							console.dir(result.cList);
 							for(var i in result.cList) {	
+								if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
 								html += "<div class='box'>"
 									  + "	<img src='" + result.cList[i].filePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
@@ -557,11 +577,12 @@
 							$("#content").masonry("layout");
 							
 							startDate = result.cList[0].regDate;
-							startNo = result.cList[0].no;
+							startNo = maxNum;
 							
 							console.log(startDate);
-							timeline.moveTo(new Date(startDate), {duration: 2000});
+							timeline.moveTo(new Date(startDate), {animation: {duration: 2000}});
 							$("#container").scrollTop(0);
+							maxNum = 0;
 						}
 					}
 				
