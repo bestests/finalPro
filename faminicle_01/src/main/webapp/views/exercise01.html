@@ -479,7 +479,7 @@
 					endNo = minNum;
 					
 					console.log(startDate);
-					timeline.moveTo(new Date(startDate), {duration: 2000});
+					timeline.moveTo(new Date(startDate), {animation: {duration: 1500, easingFunction: 'linear'}});
 					
 					console.log("startDate : " + startDate);
 					console.log("startNo : " + startNo);
@@ -542,7 +542,7 @@
 							$("#content").masonry("reloadItems");	        
 							$("#content").masonry("layout");
 							console.log(endDate);
-							timeline.moveTo(new Date(result.cList[0].regDate), [{"animation": true, "duration": 3000}]);
+							timeline.moveTo(new Date(result.cList[0].regDate), {animation: {duration: 1500, easingFunction: 'linear'}});
 							minNum = 999999999999999999999;
 						}
 					}
@@ -580,7 +580,7 @@
 							startNo = maxNum;
 							
 							console.log(startDate);
-							timeline.moveTo(new Date(startDate), {animation: {duration: 2000}});
+							timeline.moveTo(new Date(startDate), {animation: {duration: 1500, easingFunction: 'linear'}});
 							$("#container").scrollTop(0);
 							maxNum = 0;
 						}
