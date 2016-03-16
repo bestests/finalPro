@@ -10,11 +10,34 @@
 		<result column="reg_date" property="regDate" />
 		<result column="pic_date" property="picDate" />
 		<result column="file_path" property="filePath" />
+		<result column="row_num" property="rNum" />
 	</resultMap>
 	<select id="selectList" resultMap="chronicleMap">
-		select no, content, date_format(reg_date,'%Y-%m-%d') reg_date,
-			   date_format(pic_date,'%Y-%m-%d') pic_date, file_path 
-		  from test01
+		select *
+		  from listtest
+		 order by reg_date desc
+		 limit 24
+	</select>
+	<select id="selectPrevList" parameterType="page" resultMap="chronicleMap">
+		select t.*
+		  from (
+		  		select *
+		  		  from listtest
+		  		 where reg_date <![CDATA[>=]]> #{startDate}
+		  		   and no != #{pageNo}
+		  		 order by reg_date asc
+		  		 limit 24
+		  		)as t
+		 order by reg_date desc 		
+	</select>
+	
+	<select id="selectNextList" parameterType="page" resultMap="chronicleMap">
+		select *
+		  from listtest
+		 where reg_date <![CDATA[<=]]> #{endDate}
+		   and no != #{pageNo}
+		 order by reg_date desc
+		 limit 24 
 	</select>
 	
 	<insert id="insertMember" parameterType="members">

@@ -6,7 +6,14 @@ public class Chronicle {
 	private String regDate;
 	private String picDate;
 	private String filePath;
+	private Object rNum;
 	
+	public Object getrNum() {
+		return rNum;
+	}
+	public void setrNum(Object rNum) {
+		this.rNum = rNum;
+	}
 	public int getNo() {
 		return no;
 	}

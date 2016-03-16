@@ -36,10 +36,13 @@ public class ChronicleController {
 	private ServletContext servletContext;
 	
 	@RequestMapping("list.do")
-	public List<Chronicle> list () {
-		System.out.println("요청 옴");
+	public Map<String, Object> list (String startDate, String endDate, String pageNo, HttpServletRequest req) {
+		Map<String, Object> result = new HashMap<>();
 		
-		return service.selectList();
+		result.put("cList", service.selectList(startDate, endDate, pageNo));
+		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
+		
+		return result;
 	}
 	
 	@RequestMapping("registMember.do")
@@ -82,7 +85,7 @@ public class ChronicleController {
 //			session.setMaxInactiveInterval(3600);
 			
 			
-//			Test(session);
+			Test(session);
 //			Members mem = (Members)session.getAttribute("loginInfo");
 //			System.out.println("세션에서 가져온값 " + mem.getName());
 			
@@ -123,18 +126,14 @@ public class ChronicleController {
 			}
 		}
 		service.registpic(regist);
-//		System.out.println("lat: " + regist.getLat());
-//		System.out.println("lng: " + regist.getLng());
-//		System.out.println("PicDate: " + regist.getPicDate());
-//		System.out.println("PicFilePath: " + regist.getPicFilePath());
-//		System.out.println("Title: " + regist.getTitle());
-//		System.out.println("MemNo: " + regist.getMemNo());
 		AjaxResult result = new AjaxResult("ok", "ok");
 		return result;
 	}
+	
+	
+	
+	
 }
-	
-	
 
 	
 

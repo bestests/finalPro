@@ -186,26 +186,37 @@
 <script type="text/javascript" src="../js/demo.js"></script>
 <script src="../lib/jquery/dist/jquery.js"></script>
 <script src="../lib/bootstrap/dist/js/bootstrap.js"></script>
-<script src="../js/masonry.pkgd.min.js"></script>
+<script src="../js/masonry.pkgd.js"></script>
 <script src="../js/imagesloaded.3.1.8.min.js"></script>
 <script src="../js/vis/dist/vis.js"></script>
 <script src="../js/vis/dist/googleAnalytics.js"></script>
 <script src="../lib/bootstrap/js/modal.js"></script>
 <script src="../js/common.js"></script>
 <script>
+	var startDate;
+	var endDate;
+	var startNo;
+	var endNo;
 	$(function () {
-		$.getJSON(contextRoot + "/chronicle/list.do", function (result) {
+		$.getJSON(contextRoot + "/chronicle/list.do?pageNo=&startDate=&endDate=", function (result) {
+			console.log(result.member.id);
 			var html = "";
 			var index = 1;
-			for(var i in result.chronicleList) {	
+			for(var i in result.cList) {	
 				html += "<div class='box'>"
-					  + "	<img src='" + result.chronicleList[i].filePath + "' />"
+					  + "	<img src='" + result.cList[i].filePath + "' />"
 					  + "	<div class='detail' onselectstart='return false;'>"
-					  + "		<div class='detailDate'>" + result.chronicleList[i].picDate + "</div>"
-					  + "		<div class='detailTitle'>" + result.chronicleList[i].content + "</div>"
+					  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
+					  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
 					  + "	</div>"
 					  + "</div>";
 			};
+			startDate = result.cList[0].regDate;
+			startNo = result.cList[0].no;
+			endDate = result.cList[result.cList.length - 1].regDate;
+			endNo = result.cList[result.cList.length - 1].no;
+			console.log(startDate);
+			console.log(endDate);
 			$("#content").append(html);
 		});
 		
@@ -278,95 +289,15 @@
 		
 		$container.imagesLoaded(function () {
 			$container.masonry({
-				itemSelector: ".box",
-				isAnimated: true
+				itemSelector: ".box"
 			});
 		});
-		
-	/*	
-	//	타임라인	
-	 // DOM element where the Timeline will be attached
-	  var container = document.getElementById('visualization');
-	
-	  // Create a DataSet (allows two way data-binding)
-	  var items = new vis.DataSet([
-	    {id: 1, className: 'pink', content: 'item 1', start: '2013-04-20', title: '학원감'},
-	    {id: 2, content: 'item 2', start: '2013-04-14'},
-	    {id: 3, className: 'pink', content: 'item 3', start: '2013-04-18'},
-	    {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
-	    {id: 5, content: 'item 5', start: '2013-04-25'},
-	    {id: 6, content: 'item 6', start: '2013-04-27'},
-	    {id: 7, content: '오늘 등록', start: '2016-02-01', end: '2016-02-24', style: 'background: blue; color:yellow;'}
-	  ]);
-	
-	  // Configuration for the Timeline
-	  var options = {
-			  height: "100%",
-			  editable: {
-				  add: true
-			  }
-	  };
-	
-	  // Create a Timeline
-	  var timeline = new vis.Timeline(container, items, options);
-	  timeline.moveTo(new Date());
-	  
-	  timeline.on('select', function (properties) {
-		  console.dir(properties.nodes);
-	  });
-	 
-	 var currDate = "";
-	 $("#visualization").click(function (event) {
-		var props = timeline.getEventProperties(event);
-		currDate = props.time;
-		console.log(currDate);
-		timeline.moveTo(currDate);
-		$("#container").stop().animate({scrollTop: currScroll + 500});
-	 });
-	 
-	 var currScroll = 0;
-	 $("#container").scroll(function () {
-		
-		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
-		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
-		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
-		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
-		
-		console.log("scrollHeight : " + scrollHeight);
-		console.log("currScroll : " + currScroll);
-		console.log("scrollTop : " + scrollTop);
-		console.log("conHeight : " + conHeight);
-		console.log("maxHeight : " + maxHeight);
-		
-		// 현재 날짜가 없을때, 오늘 날짜 불러옴
-		if(currDate == "") {
-			currDate = new Date();
-		}
-		// 스크롤 내릴때 (일 +1)
-		if(scrollTop > currScroll) {
-			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() + 1);
-		} 
-		// 스크롤 올릴때 (일 -1)
-		else {
-			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() - 1);
-		}
-		currScroll = scrollTop;
-		
-		// 해당 날짜로 이동
-		timeline.moveTo(currDate);
-		
-	 });
-	*/	
-	 
-	 
-	 
 	};
+	
 </script>
 </head>
 <body>
 	<div id="all">
-	<!-- 
-	 -->
 	<div class="main-3d">
     <div id="level1" class="plane">
         <img src="../images/0.jpg" alt="3d10" />
@@ -484,8 +415,10 @@
 	
 	  // Create a Timeline
 	  var timeline = new vis.Timeline(container, items, options);
+	  // 처음 로딩 시 연대기 오늘 날짜로 이동
 	  timeline.moveTo(new Date());
 	  
+	  // 이벤트 선택 시 날짜 데이터
 	  timeline.on('select', function (properties) {
 		  console.dir(properties);
 		  console.dir(items);
@@ -509,45 +442,131 @@
 		console.dir(props);
 		console.log("item : " + props.item);
 		currDate = props.time;
+		currDate = currDate.getFullYear() + "-" + currDate.getMonth() + "-" + currDate.getDate();
 		timeline.moveTo(currDate);
-		$("#container").stop().animate({scrollTop: currScroll + 500});
-		curScroll = currScroll + 500;
-		if(itemNum) {
-			console.log("start : " + items._data[itemNum].start);
-			console.log("end : " + items._data[itemNum].end);
-		}
+		$.getJSON(
+				contextRoot + "/chronicle/list.do?pageNo=&startDate=" + currDate + "&endDate=",
+				function (result) {
+					var html = "";
+					console.dir(result.cList);
+					for(var i in result.cList) {	
+						html += "<div class='box'>"
+							  + "	<img src='" + result.cList[i].filePath + "' />"
+							  + "	<div class='detail' onselectstart='return false;'>"
+							  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
+							  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+							  + "	</div>"
+							  + "</div>";
+					};
+					
+					$("#content").html("");
+					$("#content").append(html).masonry("appended", html, true);	        
+					$("#content").masonry("reloadItems");	        
+					$("#content").masonry("layout");
+					
+					startDate = result.cList[0].regDate;
+					startno = result.cList[0].no;
+					
+					endDate = result.cList[result.cList.length - 1].regDate;
+					endNo = result.cList[result.cList.length - 1].no;
+					
+					console.log(startDate);
+					timeline.moveTo(new Date(startDate), {duration: 2000});
+					$("#container").scrollTop(0);
+				}
+			
+		);
 	 });
-	 
 	 $("#container").on("mousewheel", function (event) {
 		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
 		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
 		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
 		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
-		/*
-		console.log("scrollHeight : " + scrollHeight);
-		console.log("currScroll : " + currScroll);
-		console.log("scrollTop : " + scrollTop);
-		console.log("conHeight : " + conHeight);
-		console.log("maxHeight : " + maxHeight);
-		*/
-		// 현재 날짜가 없을때, 오늘 날짜 불러옴
-		if(currDate == "") {
-			currDate = new Date();
-		}
-		// 스크롤 내릴때 (일 +1)
-		if(event.originalEvent.deltaY > 0) {
-			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() + 1);
-		} 
-		// 스크롤 올릴때 (일 -1)
-		else {
-			currDate = new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate() - 1);
-		}
-		currScroll = scrollTop;
 		
-		console.log("마우스 이벤트 날짜 :" + currDate);
-		// 해당 날짜로 이동
-		timeline.moveTo(currDate);
+		if(scrollHeight == conHeight + scrollTop) {
+			if(event.originalEvent.deltaY > 0) {
+				nextList();
+			}
+		}
+		if(scrollTop == 0) {
+			if(event.originalEvent.deltaY < 0) {
+				prevList();
+			}
+		}
 	 });
+	 
+	 var nextList = function () {
+			console.log(endDate);
+			$.getJSON(
+					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
+					function (result) {
+						if (result.cList.length == 0){
+							alert("마지막 페이지 입니다.");
+						} else {
+							console.log("다음 글 로딩 완료");
+							console.dir(result);
+							var html = "";
+							for(var i in result.cList) {	
+								html += "<div class='box'>"
+									  + "	<img src='" + result.cList[i].filePath + "' />"
+									  + "	<div class='detail' onselectstart='return false;'>"
+									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
+									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+									  + "	</div>"
+									  + "</div>";
+							};
+							
+							endDate = result.cList[result.cList.length - 1].regDate;
+							endNo = result.cList[result.cList.length - 1].no;
+							
+							
+							$("#content").append(html).masonry("appended", html, true);	        
+							$("#content").masonry("reloadItems");	        
+							$("#content").masonry("layout");
+							console.log(endDate);
+							timeline.moveTo(new Date(result.cList[0].regDate), [{"animation": true, "duration": 3000}]);
+						}
+					}
+	 
+			);
+			
+		};
+		
+		 
+		var prevList = function () {
+			$.getJSON(
+					contextRoot + "/chronicle/list.do?pageNo=" + startNo + "&startDate=" + startDate + "&endDate=",
+					function (result) {
+						if(result.cList.length == 0) {
+								alert("처음 페이지 입니다.");
+						} else {
+							var html = "";
+							console.dir(result.cList);
+							for(var i in result.cList) {	
+								html += "<div class='box'>"
+									  + "	<img src='" + result.cList[i].filePath + "' />"
+									  + "	<div class='detail' onselectstart='return false;'>"
+									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
+									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+									  + "	</div>"
+									  + "</div>";
+							};
+							
+							$("#content").prepend(html).masonry("appended", html, true);	        
+							$("#content").masonry("reloadItems");	        
+							$("#content").masonry("layout");
+							
+							startDate = result.cList[0].regDate;
+							startNo = result.cList[0].no;
+							
+							console.log(startDate);
+							timeline.moveTo(new Date(startDate), {duration: 2000});
+							$("#container").scrollTop(0);
+						}
+					}
+				
+			);
+		};
   	</script>
 </body>
 </html>

@@ -8,7 +8,7 @@ import chronicle.domain.Members;
 import chronicle.domain.Regist;
 
 public interface ChronicleService {
-	public List<Chronicle> selectList();
+	public List<Chronicle> selectList(String startDate, String endDate, String pageNo);
 	public void registMember(Members members);
 	public Integer checkId(Members members);
 	public Members loginCheck(LoginCheck loginInfo);
