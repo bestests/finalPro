@@ -13,11 +13,33 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 	
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response,
 			Object handler)throws Exception{
-		System.out.println("인터셉터에 들어옴");
 		
+		System.out.println("01. 인터셉터 In");
+	
+		String servletPath = request.getServletPath();
+		System.out.println(servletPath);
+		
+		System.out.println("02. 현재 페이지 주소 : " +servletPath );
+		
+		Members check = (Members) request.getSession().getAttribute("loginInfo");		
+		System.out.println("03. Session 유무 : " + check );
+		
+		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && check == null) {
+			System.out.println("04. !(Login & CheckId) || Session null");
+			response.setContentType("900");
+			return false;
+		}else if(check!=null){
+			System.out.println("05. Session Name : " + check.getName());
+		}
+				
+		return true;
+		
+		
+		
+		//↓  창고
 		
 //		return true;
-		
+//		
 //		try{
 //			if(request.getSession().getAttribute("loginInfo")==null){
 //				System.out.println("세션값없음");
@@ -27,26 +49,6 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 //		}catch(Exception e){
 //			e.printStackTrace();
 //		}
-		
-		
-//		return true;
-		
-		String servletPath = request.getServletPath();
-		System.out.println(servletPath);
-		
-//		Members check = (Member) session.getAttribute("loginInfo");
-		Members check = (Members) request.getSession().getAttribute("loginInfo");
-		System.out.println("세션값 " +check);
-//		System.out.println(check.getName());
-		if(!("/chronicle/login.do".equals(servletPath)||"/chronicle/checkId.do".equals(servletPath)) && check == null) {
-			System.out.println("로그인페이지 아니면서 세션이 없을때");
-			
-			response.setContentType("900");
-			return false;
-		}
-		System.out.println("통과함");
-//		System.out.println(check.getId());
-		return true;
 		/*
 		System.out.println("인터셉터 로그인 여부: "+ check);
 		
