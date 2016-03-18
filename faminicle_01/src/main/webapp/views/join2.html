@@ -78,7 +78,7 @@
 						<!--  bootstrap 기본 적용틀  -->
             <div class="form-group text-center">
               <button type="submit" type="button" class="btn btn-info" >회원가입<em class="fa fa-check spaceLeft"></em></button>
-              <button class="btn btn-warning" value="가입취소">가입취소<em class="fa fa-times spaceLeft"></em></button>
+              <button class="btn btn-warning" value="가입취소" type="button">가입취소<em class="fa fa-times spaceLeft"></em></button>
             </div>
           </form>
         </div>
@@ -113,7 +113,7 @@
 							idFlag=true;
 						}else{
 							alert("이미 사용중인 아이디입니다.");
-						}
+						}	
 					},"json");
 				return false;	
 			}		
@@ -157,6 +157,7 @@
 					console.log(resultObj.data);
 					console.log(resultObj.members.id);
 					alert("등록이 완료되었습니다");
+					location.href="exercise01.html";
 				},"json");
 			
 			return false;
