@@ -47,26 +47,24 @@ body, html {
 
 #main {
 	margin: auto;
-	height: 64%;
+	height: 55%;
 	width: 99%;
 }
 
 #main-left{
-	margin-top: 4%;
 	float: left;	
-	height: 86%;
+	height: 100%;
 	width: 50%;
 	
 }
 
 #main-right{
-	margin-top: 4%;
 	float: left;	
-	height: 86%;
+	height: 100%;
 	width: 50%;
 }
 
-#slider , #slidy ,  #slide {
+#slider , #slidy {
 	height: 100%;
 }
 
@@ -74,19 +72,17 @@ body, html {
 #slide {
 	border: 1px solid #000;
 	border-radius: 10px;
+    width: 100%;
+	height: 150px;
 	box-shadow: 3px 3px 5px #333;
+	margin-top: 5px; 
 	}
+	
 #content {
 	font-size: 12px;
 	margin: -4px 0;
 	text-align: center;
 }
-	
-/*
-#slidy {
-	height: 100%;
-}
-*/
 
 #footer {
 	height: 25%;
@@ -95,30 +91,31 @@ body, html {
 }
 
 #login {
-	left: 66%;
-    bottom: 11%;
     font-size: inherit;
-    position: absolute;
 }	
 
 #join {
-	left: 63%;
-    bottom: 52%;
     font-size: inherit;
-    position: absolute;
+    display: block;
+        margin-top: 16px;
 }	
 
-form {
-	position: absolute;	
-	right: 1%;	
-	width: 20%;
-	height: 16%;
+.form-group-mt {
+	margin-top: 18px;
+	width: 25% !important;
+}
+
+#formTest {
+    width: 268px;
+    height: 16%;
+    float: right;
 }
 
 .form-group {
-	font-size: 10px;
-	position: static;
-	
+    font-size: 10px;
+    position: static;
+    width: 48%;
+    float: right;
 }
 
 .form-control{
@@ -197,20 +194,21 @@ div#slider figure {
 			</div>
 			<div id="form">
 				<form id="formTest">
+					<div class="form-group form-group-mt">
+						<button id="login" type="submit" class="btn btn-login">로그인</button>
+						<button id="join" type="button" class="btn btn-info" onclick="location.href='join.html'">회원가입</button>
+					</div>
 					<div class="form-group">
 						<label for="InputId" class="control-label" >아이디</label>
 						<input type="text" size="15" class="form-control" id="id" />
 						<label for="InputPassword" class="control-label">비밀번호</label>
 						<input type="password" size="15" class="form-control" id="pass" />
 					</div>
-					<div class="form-group text-center">
-						<button id="login" type="submit" class="btn btn-login">로그인</button>
-						<button id="join" type="button" class="btn btn-info" onclick="location.href='join.html'">회원가입</button>
-					</div>
 				</form>
 			</div>
 		
 		</div>
+		<div style="clear: both;"></div>
 		<div id="main">
 			<div id="main-left">
 				<div id="slider">
@@ -239,7 +237,7 @@ div#slider figure {
 		</div>
 		<div id="footer">
 			<div id="content">
-				<img id="slide" src="../images/main/family.jpg" name="slide" width="100%" height="98%"><br/>
+				<img id="slide" src="../images/main/family.jpg" name="slide"><br/>
 			</div>
 		</div>
 	</div>
@@ -281,7 +279,6 @@ div#slider figure {
 					alert("아이디 혹은 비밀번호가 일치하지 않습니다.다시한번 확인해주세요");
 				}
 				
-						
 			},"json");
 		return false;
 	});
