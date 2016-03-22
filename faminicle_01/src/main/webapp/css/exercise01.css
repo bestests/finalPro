@@ -191,7 +191,8 @@
 	#infoId:hover, #slide:hover, #album:hover  {
 		background: fuchsia;
 		border-radius: 15px;
-		transtion: 1;
+		color: white;
+		transition: 1s;
 	}
 	
 	
