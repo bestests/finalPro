@@ -38,7 +38,7 @@
 		select *
 		  from listtest
 		 where reg_date <![CDATA[<=]]> #{endDate}
-		   and no <![CDATA[<]]> #{pageNo}
+	 	    and no <![CDATA[<]]> #{pageNo}
 		 order by reg_date desc
 		 limit 24 
 	</select>
@@ -62,6 +62,7 @@
 		<result column="pass" property="pass" />
 		<result column="e_mail" property="eMail" />
 		<result column="pic_File_Path" property="picFilePath" />
+		<result column="pic_mini_file_path" property="picMiniFilePath" />
 		<result column="name" property="name" />
 		<result column="birthday" property="birthday" />
 		<result column="tel" property="tel" />
@@ -73,12 +74,10 @@
 	</select>
 	
 	<insert id="insertpic" parameterType="regist">
-		
-			insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
-			values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
-		
+		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
+		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
 	</insert>
-	
+		
 	<select id="checkPass" parameterType="members" resultType="members">
 		select pass
 		  from fam_member
@@ -99,12 +98,16 @@
 		where id = #{id} 
 	</update>
 	
-	<update id="updataMemberPic" parameterType="members">
+	<update id="updateMemberPic" parameterType="members">
 		update fam_member
-		set pic_File_Path = #{picFilePath}
+		set pic_file_path = #{picFilePath}
+			,pic_mini_file_path = #{picMiniFilePath}
 		where id = #{id}
 	</update>
-
+	
+	
+	
+		
 	
 	
 	<!-- 기념일 설정 쿼리  -->
@@ -115,29 +118,32 @@
 		<result column="ev_start" property="evStart" />
 		<result column="ev_end" property="evEnd" />
 	</resultMap>
+	
 	<!-- member 번호로 기념일 조회 -->
 	<select id="selectEventByMem" parameterType="int" resultMap="eventdayMap">
 		select *
 		  from eventday
 		 where mem_no = #{memNo} 
 	</select>
+	
 	<!-- 기념일 등록  -->
 	<insert id="insertEvent" parameterType="eventDay" useGeneratedKeys="true" keyProperty="evNo">
 		insert into eventday(mem_no, ev_title, ev_start, ev_end)
 		values(#{memNo}, #{evTitle}, #{evStart}, #{evEnd})
 	</insert>
+	
 	<!-- insert 후 1개 기념일 조회  -->
 	<select id="selectEventOne" parameterType="int" resultMap="eventdayMap">
 		select *
 		  from eventday
 		 where ev_no = #{evNo} 
 	</select>
+	
 	<!-- 기념일 삭제   -->
 	<delete id="deleteEvent" parameterType="int">
 		delete
 		  from eventday
 		 where ev_no = #{evNo} 
 	</delete>
-	
 	
 </mapper>
