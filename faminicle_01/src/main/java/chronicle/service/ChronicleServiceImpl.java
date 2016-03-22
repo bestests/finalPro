@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import chronicle.dao.ChronicleDAO;
 import chronicle.domain.Chronicle;
+import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Page;
@@ -17,6 +18,7 @@ import chronicle.domain.Regist;
 @Service
 public class ChronicleServiceImpl implements ChronicleService{
 
+	
 	@Autowired
 	ChronicleDAO dao;
 	
@@ -73,6 +75,24 @@ public class ChronicleServiceImpl implements ChronicleService{
 	public void registpic(Regist regist) {
 		dao.insertpic(regist);
 	}
+
+	@Override
+	public EventDay registEvent(EventDay evDay) {
+		
+		dao.insertEvent(evDay);
+		
+		return dao.selectEventOne(evDay.getEvNo());
+	}
 	
+	@Override
+	public List<EventDay> selectEvent(int memNo) {
+		return dao.selectEventByMem(memNo);
+	}
+
+	@Override
+	public void deleteEvent(int evNo) {
+		dao.deleteEvent(evNo);
+	}
+
 	
 }

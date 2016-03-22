@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import chronicle.domain.Chronicle;
+import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Regist;
@@ -38,9 +38,11 @@ public class ChronicleController {
 	@RequestMapping("list.do")
 	public Map<String, Object> list (String startDate, String endDate, String pageNo, HttpServletRequest req) {
 		Map<String, Object> result = new HashMap<>();
+		Members member = (Members)req.getSession().getAttribute("loginInfo");
 		
+		result.put("member", member);
+		result.put("eventDay", service.selectEvent(member.getMemNo()));
 		result.put("cList", service.selectList(startDate, endDate, pageNo));
-		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
 		
 		return result;
 	}
@@ -85,7 +87,6 @@ public class ChronicleController {
 //			session.setMaxInactiveInterval(3600);
 			
 			
-			Test(session);
 //			Members mem = (Members)session.getAttribute("loginInfo");
 //			System.out.println("세션에서 가져온값 " + mem.getName());
 			
@@ -130,9 +131,28 @@ public class ChronicleController {
 		return result;
 	}
 	
+	@RequestMapping("eventRegist.do")
+	public EventDay eventRegist (EventDay evDay) {
+		System.out.println(evDay.getEvColor());
+		System.out.println(evDay.getEvTitle());
+		System.out.println(evDay.getEvStart());
+		System.out.println(evDay.getMemNo());
+		
+		if(evDay.getEvEnd() == null || evDay.getEvEnd().equals("")) {
+			evDay.setEvEnd("1000-01-01");
+		}
+		
+		return service.registEvent(evDay);
+	}
 	
-	
-	
+	@RequestMapping("deleteEvent.do")
+	public AjaxResult deleteEvent (int evNo) {
+		service.deleteEvent(evNo);
+		
+		AjaxResult result = new AjaxResult("success", "OK");
+		
+		return result;
+	}
 }
 
 	

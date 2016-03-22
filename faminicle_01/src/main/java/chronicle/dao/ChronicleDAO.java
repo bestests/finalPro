@@ -3,6 +3,7 @@ package chronicle.dao;
 import java.util.List;
 
 import chronicle.domain.Chronicle;
+import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Page;
@@ -17,4 +18,8 @@ public interface ChronicleDAO {
 	public Integer checkId(Members members);
 	public Members loginCheck(LoginCheck loginInfo);
 	public void insertpic(Regist regist);
+	public int insertEvent(EventDay evDay);
+	public EventDay selectEventOne(int enNo);
+	public List<EventDay> selectEventByMem(int memNo);
+	public void deleteEvent(int evNo);
 }

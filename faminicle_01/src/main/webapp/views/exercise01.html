@@ -5,173 +5,7 @@
 <title>Insert title here</title>
 <link href="../lib/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
 <link href="../js/vis/dist/vis.css" rel="stylesheet" type="text/css"> 
-<style>
-	* { margin: 0px; padding: 0px; box-sizing: border-box; }
-	html, body { width: 100%; height: 100%; }
-	#all { 
-		width:100%; height: 100%; position: relative;
-	}
-	#menu { 
-		width: 95%; height: 96%; 
-		background: aquamarine; 
-		position: absolute; 
-		margin-top: 1%;
-		left: -93%;
-		transition: 1s;
-		border-radius: 0% 2% 2% 0%;
-		z-index: 1000;
-	}
-	#chronicle {
-		width: 95%;
-		height: 23%;
-		background: white;
-		border: 2px dashed lightgrey;
-		position: absolute;
-		top: 2%;
-		left: 2%;
-	}
-	#container {
-		width: 95%;
-		height: 72%;
-		background: rgba(255,255,255,0.01);
-		border: 2px dashed lightgrey;
-		position: absolute;
-		bottom: 2%;
-		left: 2%;
-		overflow: auto;
-	}
-	#content {
-		width: 93%;
-		height: 100%;
-		background: rgba(255,255,255,0);
-		position: relative;
-		margin: 0px auto;
-	}
-	#content .box {
-		width: 200px;
-		max-width: 48%;
-		display: inline-block;
-		padding: 6px;
-		vertical-align: top;
-		margin-bottom: 12px;
-		position: absolute;
-		overflow: hidden;
-	}
-	.box img {
-		width: 100%;
-	}
-
-	@media screen and (min-width: 720px) {
-	  #content .box { width: 33%; }
-	}
-
-	@media screen and (min-width: 992px) {
-	  #content .box { width: 20%; }
-	}
-	
-	#visualization {
-		width: 100%;
-		height: 100%;
-		background: white;
-	}
-	#toggleBox {
-		width: 2%;
-		height: 3%;
-		position: absolute;
-		bottom: 1%;
-		right: 0.5%;
-		display: none;
-		z-index: 1000;
-	}
-	#submenuBox {
-		width: 2%;
-		height: 10%;
-		position: absolute;
-		bottom: 5%;
-		right: 0.5%;
-		display: none;
-		z-index: 1000;
-	}
-	.detail {
-		width: 100%;
-		height: 100%;
-		position: absolute;
-		top: 0px;
-		left:0px;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		opacity: 0;
-	}
-	.box:hover .detail {
-		opacity: .8;
-	}
-	.detailDate {
-		width: 100%;
-		position: absolute;
-		left: -100%;
-		top: 0px;
-		background: black;
-		color: white;
-		transition: 1s;
-	}
-	.detailTitle {
-		width: 100%;
-		position: absolute;
-		right: -100%;
-		bottom: 0px;
-		background: black;
-		color: white;
-		transition: 1s;
-		text-overflow: ellipsis;
-	}
-	.detail:hover .detailDate {
-		left: 0px;
-	}
-	.detail:hover .detailTitle {
-		right: 0px;
-	}
-	#toggleBox img {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		z-index: 1001;
-	}
-	.submenus {
-		width: 100%;
-		height: 30%;
-		z-index: 1000;
-	}
-	.submenus img {
-		width: 100%;
-		height: 100%;
-		z-index: 1001;
-	}
-	.modal-content {
-		position: absolute;
-		left: 30%;
-	}
-	
-	#modalImgBox {
-		max-height: 40%;
-	}
-	#chronicleBox {
-		position: absolute;
-		width: 100%;
-		height: 100%;
-		opacity: .3;
-	}
-	#chronicleView {
-		width: 1%;
-		height: 100%;
-		border: 1px solid blue;
-		background: blue;
-		position: absolute;
-		margin: 0px auto;
-		left: 49.5%;
-	}
-</style>
-<!-- 
- -->
+<link href="../css/exercise01.css" rel="stylesheet" type="text/css" />
 <link rel="stylesheet" href="../css/demo.css" type="text/css" />
 <link rel="stylesheet" href="../css/jquery.magnetize.css" type="text/css" />
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" type="text/javascript"></script>
@@ -192,114 +26,6 @@
 <script src="../js/vis/dist/googleAnalytics.js"></script>
 <script src="../lib/bootstrap/js/modal.js"></script>
 <script src="../js/common.js"></script>
-<script>
-	var startDate;
-	var endDate;
-	var startNo;
-	var endNo;
-	$(function () {
-		$.getJSON(contextRoot + "/chronicle/list.do?pageNo=&startDate=&endDate=", function (result) {
-			console.log(result.member.id);
-			var html = "";
-			var index = 1;
-			for(var i in result.cList) {	
-				if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
-				console.log(result.cList);
-				html += "<div class='box'>"
-					  + "	<img src='" + result.cList[i].filePath + "' />"
-					  + "	<div class='detail' onselectstart='return false;'>"
-					  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-					  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
-					  + "	</div>"
-					  + "</div>";
-			};
-			startDate = result.cList[0].regDate;
-			startNo = maxNum;
-			
-			endDate = result.cList[result.cList.length - 1].regDate;
-			endNo = result.cList[result.cList.length - 1].no;
-			
-			console.log(startDate);
-			console.log(endDate);
-			$("#content").append(html);
-			maxNum = 0;
-		});
-		
-		
-		init_masonry();
-		
-		var menuStatus = false;
-		$("#menu").click(function (event) {
-			if(!menuStatus) {
-				$("#menu").css({
-					left: "0%",
-					background: "white",
-					borderRadius: "0px",
-					backgroundImage: "url('../images/c_background.jpg')",
-					backgroundSize: "100% 100%",
-					backgroundRepeat: "no-repeat"
-				});
-				$("#toggleBox").show("slow");
-				event.stopPropagation();
-				menuStatus = true;
-				$(".main-3d").hide();
-			} 
-			event.stopPropagation();
-		});
-		$("#all").click(function (event) {
-			if(menuStatus) {
-				$("#menu").css({
-					left: "-93%",
-					columnWidth: 0,
-					background: "aquamarine",
-					borderRadius: "0px 2% 2% 0px"
-				});
-				$("#toggleBox").hide("slow");
-				$("#submenuBox").hide("slow");
-				menuStatus = false;
-				submenuStatus = false;
-				$(".main-3d").show();
-			}
-		});
-		var submenuStatus = false;
-		$("#toggleBox").click(function (event) {
-			if(!submenuStatus) {
-				$("#submenuBox").show("slow");
-				submenuStatus = true;
-			} else {
-				$("#submenuBox").hide("slow");
-				submenuStatus = false;
-			}
-			event.stopPropagation();
-		});
-		
-		$("#submenuBox").click(function (event) {
-			event.stopPropagation();
-		});
-		
-		$("#content").on("dblclick", ".detail", function () {
-			var $check = $(this).parent();
-			var src = $(this).prev().attr("src");
-			var title = $(this).children("[class='detailTitle']").html();
-			var date  = $(this).children("[class='detailDate']").html();
-			$("#modalImg").attr("src", src);
-			$("#title").val(title);
-			$("#date").val(date);
-			$("#myModal").modal();
-		});
-	});
-	
-	function init_masonry () {
-		var $container = $("#content");
-		
-		$container.imagesLoaded(function () {
-			$container.masonry({
-				itemSelector: ".box"
-			});
-		});
-	};
-	
-</script>
 </head>
 <body>
 	<div id="all">
@@ -344,6 +70,7 @@
     </div>
 	</div>
 		<div id="menu" class="border-right-radius">
+			<input type="button" value="addEvent" onclick="addEvent()">
 			<div id="chronicle">
 				<div id="chronicleBox">
 					<div id="chronicleView"></div>
@@ -378,6 +105,7 @@
 							<img id="modalImg" style="width: 100%;">
 						</div>
 						<div class="form-group">
+							<input type="hidden" name="no">
 							<label for="title" class="control-label">Title</label>
 							<input type="text" size="50" class="form-control" id="title" />
 							<label for="date" class="control-label">Date</label>
@@ -394,200 +122,37 @@
 		</div>
   	</div>
   	
-  	<script>
-//	타임라인	
-	 // DOM element where the Timeline will be attached
-	  var container = document.getElementById('visualization');
-	
-	  // Create a DataSet (allows two way data-binding)
-	  var items = new vis.DataSet([
-	    {id: 1, className: 'pink', content: 'item 1', start: '2013-04-20', title: '학원감'},
-	    {id: 2, content: 'item 2', start: '2013-04-14'},
-	    {id: 3, className: 'pink', content: 'item 3', start: '2013-04-18'},
-	    {id: 4, content: 'item 4', start: '2013-04-16', end: '2013-04-19'},
-	    {id: 5, content: 'item 5', start: '2013-04-25'},
-	    {id: 6, content: 'item 6', start: '2013-04-27'},
-	    {id: 7, content: '오늘 등록', start: '2016-02-01', end: '2016-02-24', style: 'background: blue; color:yellow;'}
-	  ]);
-	
-	  // Configuration for the Timeline
-	  var options = {
-			  height: "100%",
-			  editable: {
-				  add: true
-			  }
-	  };
-	
-	  // Create a Timeline
-	  var timeline = new vis.Timeline(container, items, options);
-	  // 처음 로딩 시 연대기 오늘 날짜로 이동
-	  timeline.moveTo(new Date());
-	  
-	  // 이벤트 선택 시 날짜 데이터
-	  timeline.on('select', function (properties) {
-		  console.dir(properties);
-		  console.dir(items);
-		  for(var i in items._data) {
-			 if(properties.event.target.innerText == items._data[i].content) {
-		  			//console.log("start : " + items._data[i].start);
-		  			if(items._data[i].end) {
-		  				//console.log("end : " + items._data[i].end);
-		  			} else {
-		  				console.log("당일 이벤트 입니다.");
-		  			}
-	  		 };
-		  }
-	  });
-	 
-	 var currDate = "";
-	 var currScroll = 0;
-	 $("#visualization").click(function (event) {
-		var props = timeline.getEventProperties(event);
-		var itemNum = props.item;
-		console.dir(props);
-		console.log("item : " + props.item);
-		currDate = props.time;
-		currDate = currDate.getFullYear() + "-" + currDate.getMonth() + "-" + currDate.getDate();
-		timeline.moveTo(currDate);
-		$.getJSON(
-				
-				contextRoot + "/chronicle/list.do?pageNo=&startDate=" + currDate + "&endDate=",
-				function (result) {
-					var html = "";
-					console.dir(result.cList);
-					for(var i in result.cList) {	
-						if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
-						if(minNum > result.cList[i].no) minNum = result.cList[i].no;
-						html += "<div class='box'>"
-							  + "	<img src='" + result.cList[i].filePath + "' />"
-							  + "	<div class='detail' onselectstart='return false;'>"
-							  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-							  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
-							  + "	</div>"
-							  + "</div>";
-					};
-					
-					$("#content").html("");
-					$("#content").append(html).masonry("appended", html, true);	        
-					$("#content").masonry("reloadItems");	        
-					$("#content").masonry("layout");
-					
-					startDate = result.cList[0].regDate;
-					startNo = maxNum;
-					
-					endDate = result.cList[result.cList.length - 1].regDate;
-					endNo = minNum;
-					
-					console.log(startDate);
-					timeline.moveTo(new Date(startDate), {animation: {duration: 1500, easingFunction: 'linear'}});
-					
-					console.log("startDate : " + startDate);
-					console.log("startNo : " + startNo);
-					$("#container").scrollTop(0);
-					
-					maxNum = 0;
-					minNum = 999999999999999999999;
-				}
-			
-		);
-	 });
-	 $("#container").on("mousewheel", function (event) {
-		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
-		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
-		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
-		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
-		
-		if(scrollHeight == conHeight + scrollTop) {
-			if(event.originalEvent.deltaY > 0) {
-				nextList();
-			}
-		}
-		if(scrollTop == 0) {
-			if(event.originalEvent.deltaY < 0) {
-				prevList();
-			}
-		}
-	 });
-	 var maxNum = 0;
-	 var minNum = 999999999999999999999;
-	 var nextList = function () {
-			console.log(endDate);
-			$.getJSON(
-					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
-					function (result) {
-						if (result.cList.length == 0){
-							alert("마지막 페이지 입니다.");
-						} else {
-							console.log("다음 글 로딩 완료");
-							console.dir(result);
-							var html = "";
-							for(var i in result.cList) {	
-								
-								if(minNum > result.cList[i].no) minNum = result.cList[i].no;
-								
-								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].filePath + "' />"
-									  + "	<div class='detail' onselectstart='return false;'>"
-									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
-									  + "	</div>"
-									  + "</div>";
-							};
-							
-							endDate = result.cList[result.cList.length - 1].regDate;
-							endNo = minNum;
-							
-							
-							$("#content").append(html).masonry("appended", html, true);	        
-							$("#content").masonry("reloadItems");	        
-							$("#content").masonry("layout");
-							console.log(endDate);
-							timeline.moveTo(new Date(result.cList[0].regDate), {animation: {duration: 1500, easingFunction: 'linear'}});
-							minNum = 999999999999999999999;
-						}
-					}
-	 
-			);
-			
-		};
-		
-		 
-		var prevList = function () {
-			$.getJSON(
-					contextRoot + "/chronicle/list.do?pageNo=" + startNo + "&startDate=" + startDate + "&endDate=",
-					function (result) {
-						if(result.cList.length == 0) {
-								alert("처음 페이지 입니다.");
-						} else {
-							var html = "";
-							console.dir(result.cList);
-							for(var i in result.cList) {	
-								if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
-								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].filePath + "' />"
-									  + "	<div class='detail' onselectstart='return false;'>"
-									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
-									  + "	</div>"
-									  + "</div>";
-							};
-							
-							$("#content").prepend(html).masonry("appended", html, true);	        
-							$("#content").masonry("reloadItems");	        
-							$("#content").masonry("layout");
-							
-							startDate = result.cList[0].regDate;
-							startNo = maxNum;
-							
-							console.log(startDate);
-							timeline.moveTo(new Date(startDate), {animation: {duration: 1500, easingFunction: 'linear'}});
-							$("#container").scrollTop(0);
-							maxNum = 0;
-						}
-					}
-				
-			);
-		};
-  	</script>
+	<!-- Modal -->
+	<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="width: 40%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Event</h4>
+				</div>
+				<form id="eventForm">
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="hidden" id="hiddenMemNo" name="memNo" value="">
+							<input type="checkbox" id="eventTypeChk">기간 설정<br />
+							<label for="title" class="control-label">Title</label>
+							<input type="text" size="50" class="form-control" name="evTitle" id="evTitle" required="required" />
+							<label for="date" class="control-label" id="startDateLavel">Date</label>
+							<input type="date" class="form-control" name="evStart" id="startDate" required="required" />
+							<label for="date" class="control-label" id="endDateLabel">EndDate</label>
+							<input type="date" class="form-control" name="evEnd" id="endDate" />
+							<label for="color" class="control-label">Color</label>
+							<input type="color" name="evColor" value="#80ffff">
+						</div>
+					</div>
+					<div class="modal-footer">
+				        <button type="submit" class="btn btn-primary">Confirm</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      	</div>
+				</form>
+			</div>
+		</div>
+  	</div>
+  	<script src="../js/exercise01.js"></script>
 </body>
 </html>

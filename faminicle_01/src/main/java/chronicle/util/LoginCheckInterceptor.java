@@ -14,7 +14,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response,
 			Object handler)throws Exception{
 		
-		System.out.println("01. 인터셉터 In");
+		System.out.println("01. 인터셉터 Indddddddd");
 	
 		String servletPath = request.getServletPath();
 		System.out.println(servletPath);

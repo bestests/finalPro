@@ -2,7 +2,7 @@ package chronicle.domain;
 
 public class Members {
 	
-	private String memNo;
+	private int memNo;
 	private String id;
 	private String pass;
 	private String eMail;
@@ -11,10 +11,10 @@ public class Members {
 	private int tel;
 	
 	
-	public String getMemNo() {
+	public int getMemNo() {
 		return memNo;
 	}
-	public void setMemNo(String memNo) {
+	public void setMemNo(int memNo) {
 		this.memNo = memNo;
 	}
 	public int getTel() {
