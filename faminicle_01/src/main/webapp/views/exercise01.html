@@ -34,8 +34,8 @@
 		 	<div id="album" onclick="location.href='album2.html'" >사진앨범</div>
 		 	<div id="slide" onclick="location.href='Slide.html'" >슬라이드</div>
 			<div></div><div></div><div></div><div></div><div></div><div></div>
-			<div id="infoId"></div>
 			<div id="thumbnailDiv"><img id="thumbnail" src="" ></div>
+			<div id="infoId"></div>
 		 </div>
 	
 	<div class="main-3d">
@@ -141,12 +141,13 @@
 				</div>
 				<!--  이미지 등록 부분  -->
 				<form id="update" method="post" enctype="multipart/form-data">
-					<iframe id="uploadResponse" name="upload_target" class="none"></iframe>
+					<iframe id="uploadResponse" name="upload_target" class="none" ></iframe>
 					<div class="modal-body">
 						<div id="modalImgDrop" ondragenter="onDragEnter(event)" ondragover="onDragOver(event)" ondrop="onDrop(event)">
 							<img src=" ../images/regist.png" id="infoModalImg">
 						</div>
 						<input type="file" id="file" name="file" accept="/image/*">
+					
 						<br/>
 							<input type="hidden" id="hidden" name="id">
 							<div class="form-group">

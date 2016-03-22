@@ -42,6 +42,10 @@
 			console.log(startDate);
 			console.log(endDate);
 			$("#hiddenMemNo").val(result.member.memNo);
+			$("#infoId").html(result.member.name);
+			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
+			$("#infoModalImg").attr("src", result.member.picFilePath);
+			$("#thumbnail").attr("src",result.member.picMiniFilePath);
 			$("#content").append(html);
 			maxNum = 0;
 			
@@ -69,6 +73,12 @@
 				});
 				$("#toggleBox").show("slow");
 				event.stopPropagation();
+				
+				// info 메뉴 ** 추가
+				$("#header").css({
+					top: "-10%"
+					});
+				
 				menuStatus = true;
 				$(".main-3d").hide();
 			} 
@@ -82,6 +92,12 @@
 					background: "aquamarine",
 					borderRadius: "0px 2% 2% 0px"
 				});
+				// info 메뉴 ** 추가
+				$("#header").css({
+					top: "0%",
+					"z-index": "1000"
+					});
+				
 				$("#toggleBox").hide("slow");
 				$("#submenuBox").hide("slow");
 				menuStatus = false;
@@ -118,6 +134,94 @@
 			$("#myModal").modal();
 		});
 		
+		
+		/* info modal */
+		$("#infoId").on("click" , function (event) {
+			event.stopPropagation();
+			/* 비밀번호 초기화 작업 */ 
+			$("#passchk").val("");
+			$("#pass").val("");
+			$("#pass2").val("");
+			
+			$("#infoModal").modal();
+			$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", true);
+						$.post(
+				contextRoot + "/chronicle/selectInfo.do",
+				{id : $("#hiddenId").val()},
+				function(result) {
+					var info = result.ajaxResult.data;
+					$("[name=eMail]").val(info.eMail);
+					$("#tel").val(info.tel);
+					$("#hidden").val($("#hiddenId").val());
+				} , "json"
+			)
+		})
+		
+		/* 비밀번호 체크 */
+		$("#passchk").keyup(function () {
+			var $this = $(this);
+			console.log($("#hiddenId").val());
+			$.getJSON(
+				contextRoot + "/chronicle/checkPass.do",
+				{
+					id: $("#hiddenId").val(),
+					check: $("#passchk").val()
+				},
+				function (result) {
+					if(result.ajaxResult.data) {	
+						$this.prev().html("현재 비밀번호 (비밀번호가 일치합니다.)");
+						$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", false);
+					} else {
+						$this.prev().html("현재 비밀번호 (비밀번호가 일치하지않습니다.)");
+						$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", true);
+					}
+				}
+			);
+		});
+		
+		/* update */
+		$("#updatebt").click(function () {
+			
+			if($("#pass").val()) {
+				var regPass = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/;
+				if( !regPass.test($("#pass").val())){
+					alert("비밀번호는 특수문자와 숫자를 포함하여 8~16자로 설정하여야합니다.");
+					return false;
+				}
+				
+				if($("#pass").val() != $("#pass2").val()){
+					alert("비밀번호가 일치하지 않습니다. 다시한번 확인해주세요");
+					$("#pass2").focus();
+					return false;
+				}
+			} else {
+				$("#pass").val($("#passchk").val());
+				$("#pass2").val($("#passchk").val());
+			}
+			
+			var regTel = /^\d{10,11}$/;
+			if( !regTel.test($("#tel").val())){
+				alert("연락처는 -없이 숫자(10~11자리)만 입력 가능합니다");
+				return false;
+			}
+			
+			var param = $(this).serialize();
+			$.post(
+				contextRoot + "/chronicle/updateMember.do",
+				param,
+				function (resultObj) {
+					alert("수정이 완료되었습니다");
+					$("#passchk").val("");
+					$("#pass").val("");
+					$("#pass2").val("");
+					$("#infoModal").modal('hide');
+				}, "json");
+			return false;
+		})
+		
+	});
+		
+		
 		var endDateStatus = false;
 		$("#eventTypeChk").click(function () {
 			$(this).attr("checked", !endDateStatus);
@@ -138,7 +242,7 @@
 		$("#startDate").change(function () {
 			$("#endDate").attr("min", $(this).val());
 		});
-	});
+	
 	
 	function init_masonry () {
 		var $container = $("#content");
@@ -266,6 +370,12 @@
 		var scrollTop = $("#container").scrollTop();			 // 스크롤 위치 값
 		var maxHeight = conHeight + scrollTop;					 // 현재 화면상 마지막 위치 값
 		
+		//스크롤 내릴때 #header 내려옴 // info 메뉴 ** 추가
+		if(event.originalEvent.deltaY > 0) $("#header").css({"top": "0%", "z-index": "1001"});
+		//스크롤 올릴때 #header 올라감 // info 메뉴 ** 추가
+		if(event.originalEvent.deltaY < 0) $("#header").css({"top": "-10%", "z-index":"1000"});
+		
+		
 		if(scrollHeight == conHeight + scrollTop) {
 			if(event.originalEvent.deltaY > 0) {
 				nextList();
@@ -378,3 +488,212 @@
 			
 			return false;
 		});
+		var upload = document.getElementById('file'),
+		holder = document.getElementById('modalImgDrop')
+
+		upload.onchange = function (e) {
+			e.preventDefault();
+	
+			var file = upload.files[0],
+		    reader = new FileReader();
+			
+			
+			reader.onload = function (event) {
+				var img = new Image();
+				img.src = event.target.result;
+				holder.innerHTML = '';
+				holder.appendChild(img);
+				
+				updateMemberPic(file);
+			};
+			reader.readAsDataURL(file);
+			return false;
+		};	 
+		
+	 /* update image!! */
+		function updateMemberPic() {
+		 var form = $("#update");
+		 console.dir(form);
+		 
+		 $('#update').prop('target', 'upload_target');
+         $('#update').prop('action', contextRoot + '/chronicle/updateMemberPic.do');
+         $('#update').submit();          
+
+// 		 var formData = new FormData(form); 
+// 		 console.dir(formData);
+// 			$.ajax({
+// 				url: contextRoot + "/chronicle/updateMemberPic.do",
+// 				processData: false,
+// 				contentType: false,
+// 				data: formData,
+// 				type: 'POST',
+// 				success: function(data) {
+// 					alert(1);
+// 				}, dataType: 'json' 
+// 			});
+		}
+		
+		/* 업로드 파일 미리보기 */
+	$.fn.setPreview = function(opt){
+    "use strict"
+    var defaultOpt = {
+        inputFile: $(this),
+        img: null,
+        w: 200,
+        h: 200
+    };
+    $.extend(defaultOpt, opt);
+ 
+    var previewImage = function(){
+        if (!defaultOpt.inputFile || !defaultOpt.img) return;
+ 
+        var inputFile = defaultOpt.inputFile.get(0);
+        var img       = defaultOpt.img.get(0);
+ 
+        // FileReader
+        if (window.FileReader) {
+            // image 파일만
+            if (!inputFile.files[0].type.match(/image\//)) return;
+ 
+            // preview
+            try {
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    img.src = e.target.result;
+                    img.style.width  = defaultOpt.w+'px';
+                    img.style.height = defaultOpt.h+'px';
+                    img.style.display = '';
+                }
+                reader.readAsDataURL(inputFile.files[0]);
+            } catch (e) {
+                // exception...
+            }
+        // img.filters (MSIE)
+        } else if (img.filters) {
+            inputFile.select();
+            inputFile.blur();
+            var imgSrc = document.selection.createRange().text;
+ 
+            img.style.width  = defaultOpt.w+'px';
+            img.style.height = defaultOpt.h+'px';
+            img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enable='true',sizingMethod='scale',src=\""+imgSrc+"\")";            
+            img.style.display = '';
+        // no support
+        } else {
+            // Safari5, ...
+        }
+    };
+	 
+	    // onchange
+	    $(this).change(function(){
+	        previewImage();
+	    });
+	};
+		 
+	 
+	$(document).ready(function(){
+	    var opt = {
+	        img: $('#update'),
+	        w: 200,
+	        h: 200
+	    };
+	 
+	    $('#update').setPreview(opt);
+	});
+			
+			
+		
+	 
+	 /* info drag 사진 등록 */
+		var dropBox = document.getElementById("modalImgDrop");          
+		var dropImage = document.getElementById("infoModalImg");   
+		          
+		function onDragEnter(event){    
+		        event.preventDefault();   
+			 }    
+ 	function onDragOver(event){
+		      event.preventDefault();      
+		    }                  
+		function onDrop(event){     
+			console.log(event.file);
+		    var file = event.dataTransfer.files[0];      
+		           
+		    var imageType = /image.*/;
+		    var textType = /text.*/;
+		    var isImage;
+	        updateMemberPic(event.file);
+	        
+		    if(file.type.match(imageType)){
+		      isImage = true; 
+		    }
+		    else if(file.type.match(textType)){
+		      isImage = false;
+		    } 
+		             
+		    var reader = new FileReader();    
+		    
+		    reader.onload = (function(aFile){return function(e) {         
+		        var result = e.target.result;  
+		        if(isImage){
+		          dropImage.src = result;                                                                            
+		          dropBox.appendChild(dropImage)
+		         }
+		         else{
+		           dropBox.innerHTML = result;
+		         }        
+		        };
+		      })(file);
+		      
+		    if(isImage){ reader.readAsDataURL(file); }
+		    else { reader.readAsText(file,"UTF-8"); }
+		    
+		    event.stopPropagation();
+		    event.preventDefault(); 
+		  }                      
+		  
+		  dropImage.addEventListener("load", function(e) {
+			 // $("dropImage > img").css({ width: "200px" , height: "auto"}); 
+		  }, true);          
+			  	
+		  /* thumbnail */ 
+		  var thumbFfile = document.querySelector('#infoModalImg');
+			
+		  thumbFfile.onchange = function () {
+			    var thumbFfileList = file.files ;
+			
+			    // 읽기
+			    var reader = new FileReader();
+			    reader.readAsDataURL(fileList [0]);
+			
+			    //로드 한 후
+			    reader.onload = function  () {
+			        //로컬 이미지를 보여주기
+			        document.querySelector("#modalImgDrop").src = reader.result;
+			/*
+			        //썸네일 이미지 생성
+			        var tempImage = new Image(); //drawImage 메서드에 넣기 위해 이미지 객체화
+			        tempImage.src = reader.result; //data-uri를 이미지 객체에 주입
+			        tempImage.onload = function () {
+			            //리사이즈를 위해 캔버스 객체 생성
+			            var canvas = document.createElement("canvas");
+			            var canvasContext = canvas.getContext("2d");
+			
+			            //캔버스 크기 설정
+			            canvas.width = 50; //가로 100px
+			            canvas.height = 50; //세로 100px
+			
+			            //이미지를 캔버스에 그리기
+			            canvasContext.drawImage(this, 0, 0, 50, 50);
+			
+			            //캔버스에 그린 이미지를 다시 data-uri 형태로 변환
+			            var dataURI = canvas.toDataURL("image/jpeg");
+			
+			            //썸네일 이미지 보여주기
+			            document.querySelector("#thumbnail").src = dataURI;
+			      
+			        };
+		  */
+			    };
+			};
+		
+		
