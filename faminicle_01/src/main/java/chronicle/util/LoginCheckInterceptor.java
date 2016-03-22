@@ -14,22 +14,22 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request,HttpServletResponse response,
 			Object handler)throws Exception{
 		
-		System.out.println("01. 인터셉터 Indddddddd");
+		System.out.println("01. 인터셉터 In!");
 	
 		String servletPath = request.getServletPath();
 		System.out.println(servletPath);
 		
 		System.out.println("02. 현재 페이지 주소 : " +servletPath );
 		
-		Members check = (Members) request.getSession().getAttribute("loginInfo");		
-		System.out.println("03. Session 유무 : " + check );
+		Members user = (Members) request.getSession().getAttribute("loginInfo");		
+		System.out.println("03. Session 유무 : " + user );
 		
-		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && check == null) {
+		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && user == null) {
 			System.out.println("04. !(Login & CheckId) || Session null");
-			response.setContentType("900");
+//			response.sendError(901);
 			return false;
-		}else if(check!=null){
-			System.out.println("05. Session Name : " + check.getName());
+		}else if(user!=null){
+			System.out.println("05. Session Name : " + user.getName());
 		}
 				
 		return true;
