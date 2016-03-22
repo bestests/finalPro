@@ -1,7 +1,5 @@
 package chronicle.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +75,30 @@ public class ChronicleServiceImpl implements ChronicleService{
 	}
 
 	@Override
+	public Members checkPass(Members members) {
+		return dao.checkPass(members);
+	}
+
+	@Override
+	public Members memberInfo(Members members) {
+		Members info = dao.memberInfo(members);
+		return info;
+	}
+
+	@Override
+	public void updateMember(Members members) {
+		dao.updateMember(members);
+	}
+	
+	
+	
+	@Override
+	public void updateMemberPic(Members members) {
+		System.out.println("service.members.getPicFilePath() : " + members.getPicFilePath());
+		dao.updateMemberPic(members);
+	}
+	
+	@Override
 	public EventDay registEvent(EventDay evDay) {
 		
 		dao.insertEvent(evDay);
@@ -95,4 +117,6 @@ public class ChronicleServiceImpl implements ChronicleService{
 	}
 
 	
+	
+
 }
