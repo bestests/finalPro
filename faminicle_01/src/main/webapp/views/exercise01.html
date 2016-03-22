@@ -29,6 +29,15 @@
 </head>
 <body>
 	<div id="all">
+		<!-- 헤더 부분 Info-->
+		 <div id="header"> 
+		 	<div id="album" onclick="location.href='album2.html'" >사진앨범</div>
+		 	<div id="slide" onclick="location.href='Slide.html'" >슬라이드</div>
+			<div></div><div></div><div></div><div></div><div></div><div></div>
+			<div id="infoId"></div>
+			<div id="thumbnailDiv"><img id="thumbnail" src="" ></div>
+		 </div>
+	
 	<div class="main-3d">
     <div id="level1" class="plane">
         <img src="../images/0.jpg" alt="3d10" />
@@ -99,7 +108,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 					<h4 class="modal-title" id="myModalLabel">Update</h4>
 				</div>
-				<form>
+				<form id=updateform>
 					<div class="modal-body">
 						<div id="modalImgBox">
 							<img id="modalImg" style="width: 100%;">
@@ -121,8 +130,58 @@
 			</div>
 		</div>
   	</div>
+  	  	
+  	<!-- Info modal -->
+	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  		<div class="modal-dialog modal-lg">
+			<div class="modal-content" style="width: 45%;">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Info</h4>
+				</div>
+				<!--  이미지 등록 부분  -->
+				<form id="update" method="post" enctype="multipart/form-data">
+					<iframe id="uploadResponse" name="upload_target" class="none"></iframe>
+					<div class="modal-body">
+						<div id="modalImgDrop" ondragenter="onDragEnter(event)" ondragover="onDragOver(event)" ondrop="onDrop(event)">
+							<img src=" ../images/regist.png" id="infoModalImg">
+						</div>
+						<input type="file" id="file" name="file" accept="/image/*">
+						<br/>
+							<input type="hidden" id="hidden" name="id">
+							<div class="form-group">
+							  <label for="InputPassword1">현재 비밀번호</label>
+	       			       <input type="password" class="form-control" name="passchk"  id="passchk" placeholder="현재 비밀번호" title="필수입력란입니다." required="required">
+	       			       <div id="pwText"></div>
+				            </div>
+							<div class="form-group">
+							  <label for="InputPassword1">변경할 비밀번호</label>
+	       			       <input type="password" class="form-control" name="pass"  id="pass" placeholder="변경할 비밀번호" title="필수입력란입니다.">
+				            </div>
+				            <div class="form-group">
+				              <label for="InputPassword2">비밀번호 확인</label>
+				              <input type="password" class="form-control" id="pass2" placeholder="비밀번호 확인" title="필수입력란입니다.">
+				            </div>
+				             <div class="form-group">
+				              <label for="InputEmail">이메일 주소</label>
+				              <input type="email" class="form-control" name="eMail" placeholder="이메일 주소" title="필수입력란입니다." required="required" >
+				            </div>
+				            <div class="form-group">
+				              <label for="tel">연락처</label>
+				              <input type="text" class="form-control" name="tel" id="tel" placeholder="-없이 입력 해 주세요" title="필수입력란입니다." required="required">
+				            </div>
+						</div>
+					<div class="modal-footer">
+				        <button type="button" class="btn btn-family">Family</button>
+				        <button type="submit" class="btn btn-primary" id="updatebt" onclick="location.href='exercise01.html'">Update</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			      	</div>
+				</form>
+			</div>
+		</div>
+  	</div>
   	
-	<!-- Modal -->
+  	<!-- Modal -->
 	<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg">
 			<div class="modal-content" style="width: 40%;">
