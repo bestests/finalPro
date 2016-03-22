@@ -9,9 +9,15 @@
 
 </head>
 <body id='bbody' onselectstart="return false" >
-	
+<!-- 		<time datetime="2014-09-20" class="icon"> -->
+<!-- 		  <em>.</em> -->
+<!-- 		  <strong>2014</strong> -->
+<!-- 		  <span>09.20</span> -->
+<!-- 		</time> -->
 	<div class="container">
-	<div class="calendar">2015-03-04</div>
+	<div class="calendar">
+		
+</div>
 	<div id="view" align="center">
 		<ul id="stack"></ul>
 	</div>
@@ -25,8 +31,9 @@
 			        <h4 class="modal-title" id="myModalLabel">Update</h4>
 			      </div>
 			      <div class="modal-body">
-			         <h1>수정할 Title</h1>
-			         <input type="date">
+			      	 <div id="mtitle"></div>
+			         <input id="mdate" type="date" />
+			         <input id="num" type="hidden" value=""/>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
@@ -59,6 +66,7 @@
 	<script src="../js/jquery.mousewheel.min.js"></script>
 	<script src="../js/common.js"></script>
 	<script src="../js/view/slide02.js"></script>
+	<script src = "http://maps.googleapis.com/maps/api/js?sensor=false"></script>
 		<script type="text/javascript">
 		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl."
 				: "http://www.");
