@@ -1,5 +1,7 @@
 package chronicle.controller;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -16,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -43,6 +47,7 @@ public class ChronicleController {
 		result.put("member", member);
 		result.put("eventDay", service.selectEvent(member.getMemNo()));
 		result.put("cList", service.selectList(startDate, endDate, pageNo));
+		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
 		
 		return result;
 	}
@@ -73,6 +78,24 @@ public class ChronicleController {
 		return result;
 	}
 	
+	@RequestMapping("checkPass.do")
+	public AjaxResult checkPass(Members members, String check) {
+		boolean flag = false;
+		
+		if(check.equals(service.checkPass(members).getPass())) flag = true;
+		
+		return new AjaxResult("checked", flag);
+	}
+	
+	@RequestMapping("selectInfo.do")
+	public AjaxResult selectInfo(Members members) {
+		System.out.println(members.getId());
+		Members memberInfo = (Members)service.memberInfo(members); 
+		
+		return new AjaxResult("MemberInfo" , memberInfo);
+		
+	}
+	
 	@RequestMapping("login.do")
 	public AjaxResult login(LoginCheck loginInfo, HttpSession session){
 //		System.out.println(loginInfo.getId()+" : "+loginInfo.getPass());		
@@ -101,6 +124,89 @@ public class ChronicleController {
 		//return 객체를 보낸다. html에서 사용시 
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
+	}
+	@RequestMapping("updateMember.do")
+	public AjaxResult updateMembers(Members members){
+		
+		System.out.println(members.getId());
+		System.out.println(members.getPass());
+		
+		service.updateMember(members);
+
+		return new AjaxResult("success", "success"); 
+	}
+	
+	@RequestMapping("updateMemberPic.do")
+	@ResponseBody
+	public AjaxResult updateMemberPic(HttpSession session, @RequestParam("file") MultipartFile image) throws Exception{
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+		String realPath = servletContext.getRealPath("/upload/");
+		System.out.println("realPath : " + realPath);
+		realPath = realPath.replace("\\", "/");
+		System.out.println("realPath  dd: " + realPath);
+		String sdfPath = sdf.format(new Date());
+		String filePath = realPath + sdfPath;
+		File file = new File(filePath);
+		file.mkdirs();
+		String oriFileName = image.getOriginalFilename();
+		Members members = (Members) (session.getAttribute("loginInfo")); // 세션 아이디값 넣어 주기
+		if(oriFileName != null && !oriFileName.equals("")){
+			System.out.println("ofiFileName : " + oriFileName);
+			String ext = oriFileName.substring(oriFileName.lastIndexOf("."));
+			String realFileName = UUID.randomUUID().toString()+ext;
+			String saveFullFileName = filePath + "/" + realFileName;
+//			String srcPath = "../upload/" + sdfPath ;
+			image.transferTo(new File(saveFullFileName));
+			saveFullFileName =saveFullFileName.replace("C:/java77/tomcat-workspace/wtpwebapps/faminicle_01",".."); 
+			System.out.println("컨트롤러: "+ filePath);
+			System.out.println("풀파일네임"+saveFullFileName);
+			members.setPicFilePath(saveFullFileName);
+			System.out.println(saveFullFileName);
+			
+			
+			//upload
+			 try {
+		            //썸네일 가로사이즈
+		            int thumbnail_width = 100;
+		            //썸네일 세로사이즈
+		            int thumbnail_height = 100;
+		            //원본이미지파일의 경로+파일명
+		            saveFullFileName = filePath+"/"+realFileName;
+		            File origin_file_name = new File(saveFullFileName);
+		            //생성할 썸네일파일의 경로+썸네일파일명
+		            
+		            String picMiniFilePath = saveFullFileName.replace(".jpg", "_mini.jpg");
+		            File thumb_file_name = new File(picMiniFilePath);
+		            
+		            picMiniFilePath =picMiniFilePath.replace("C:/java77/tomcat-workspace/wtpwebapps/faminicle_01",".."); 
+		            members.setPicMiniFilePath(picMiniFilePath);
+		            
+		            BufferedImage buffer_original_image = ImageIO.read(origin_file_name);
+		            BufferedImage buffer_thumbnail_image = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_3BYTE_BGR);
+		            Graphics2D graphic = buffer_thumbnail_image.createGraphics();
+		            graphic.drawImage(buffer_original_image, 0, 0, thumbnail_width, thumbnail_height, null);
+		            ImageIO.write(buffer_thumbnail_image, "jpg", thumb_file_name);
+		            System.out.println("썸네일 생성완료");
+		        } catch (Exception e) {
+		            e.printStackTrace();
+		        }
+			//**
+			
+			 service.updateMemberPic(members);
+			
+			
+			AjaxResult result = new AjaxResult("ok", "ok");
+			
+			return result;
+		}
+		
+		// session.getAttribute("loginInfo") 이렇게 했을떄 리턴되는게 뭔지 
+		// 아니면 로그인 함수에서 세션 셋팅할떄 어떤타입으로 셋팅 되는지 봐바
+		// A타입으로 set 했으면 받을때도 A타입으로  Get해야함음..
+		AjaxResult result = new AjaxResult("ok", "no");
+		return result;
+		
 	}
 	
 	@RequestMapping("Regist.do")

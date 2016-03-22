@@ -1,7 +1,9 @@
 package chronicle.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
@@ -22,4 +24,8 @@ public interface ChronicleDAO {
 	public EventDay selectEventOne(int enNo);
 	public List<EventDay> selectEventByMem(int memNo);
 	public void deleteEvent(int evNo);
+	public Members checkPass(Members members);
+	public void updateMember(Members members);
+	public Members memberInfo(Members members);
+	public void updateMemberPic(Members members);
 }
