@@ -22,6 +22,6 @@ public interface ChronicleService {
 	public void deleteEvent(int evNo);
 	public Members checkPass(Members members);
 	public Members memberInfo(Members members); 
-	public void updateMember(int members);
+	public void updateMember(Members members);
 	public void updateMemberPic(Members members);
 	}
