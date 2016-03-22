@@ -65,9 +65,9 @@ function getList() {
 			+'	                                                                                       '
 			+'		<div class="imgContent" id="pic'+i+'">                                                 '
 			+'			<div class="leftContent" >                                                      '
-			+'				                                                      '
-			+'				<p class="imgDate'+i+'">'+ result.cList[i].regDate + '</p>                                          '
+			+'				<p class="imgDate'+i+'">'+ result.cList[i].regDate + '</p>                                        '
 			+'				<p class="imgTitle'+i+'">'+ result.cList[i].content +'</p>                                           '
+			+'				<input type="hidden" value="'+result.cList[i].no+'" />                                                     '
 			+'				                                                                           '
 			+'				<div class="imgIcon">                                                      '
 			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/></button>'
@@ -76,6 +76,7 @@ function getList() {
 			+'				</div>                                                                     '
 			+'			</div>                                                                         '
 			+'			<div class="imgMap">                                                           '
+			+'				<div id="map_canvas'+i+'" class="mapclass"></div>                                                                   '
 			+'			<iframe></iframe>                                                           '
 			+'			<div id="loading"><img src="../images/slide/balls.svg"/><br/>Loading... </div>                                                           '
 			+'			</div>                                                                         '
@@ -163,6 +164,7 @@ function imgUp() {
 			opacity:"0",
 			top:"-100%"
 		});
+		$(".leftContent").css("left","25%");
 		contentFlag=true;	
 	}
 }
@@ -172,17 +174,28 @@ function wheelEvent() {
 		opacity:"0",
 		top:"-100%"
 	});
+	$(".leftContent").css("left","25%");
 	contentFlag=true;
 }
 
 function updateEvent(event) {
-	console.log($(this));
-	
+	var date=$(this).parents()[1].children[0].innerHTML;  
+	var title=$(this).parents()[1].children[1].innerHTML;  
+	var num=$(this).parents()[1].children[2].value;  
 	event.stopPropagation();
+	
+	console.log(date);
+	console.log(title);
+	console.log(num);
+	
+//	console.dir($this.parents()[1].children[0].innerHTML);
+//	console.dir($this.parents()[1].children[1].innerHTML);
+//	console.dir($this.parents()[1].children[2].value);
 	$("#myModal").modal();
 	
-	$("#mtitle").html("<input type='text' value='ab' style='width:100%;'/>");
-	$("#mdate").val("2011-01-01");
+	$("#mtitle").html("<input type='text' value='"+title+"' style='width:100%;'/>");
+	$("#mdate").val(date);
+	$("#num").val(num);
 	
 }
 
@@ -193,24 +206,42 @@ function deleteEvent(event) {
 }
 
 function mapEvent(event){
+	var numCk = $(this).parents()[3].children[0].children[0].id;
 	if(mapView==false){
-		$(".leftContent").css("left","0");		
-		$("#loading").show();
-		$("iframe").show();
-//		$(".imgMap").append('<iframe id="sildemap" src="Sildemap.html"></iframe>');
-		$("iframe").attr({
-			id:'slidemap',
-			src:"Sildemap.html"
-		});
+		$(".leftContent").css("left","0");	
+//	console.dir($this.parents()[1].children[1].innerHTML);
+//		console.dir($(this).parents()[3].children[0].children[0].id);
+		$(".mapclass").show();
+//		$("#btn").click(function(){
+//			$("#mMenu").toggleClass("open");
+//			if($("#mMenu").hasClass("open")){
+//				$("#mMenu").css('left','0');
+//				$("#btn img").attr('src','btn_close.png');
+//			}else{
+//				$("#mMenu").css('left','-96%');
+//				$("#btn img").attr('src','btn_open.png');
+//			}
+//		});			
+		
+		initialize(numCk);
+		
+//		$("#loading").show();
+//		$("iframe").show();
+////		$(".imgMap").append('<iframe id="sildemap" src="Sildemap.html"></iframe>');
+//		$("iframe").attr({
+//			id:'slidemap',
+//			src:"Sildemap.html"
+//		});
 		//임시
-		$('iframe').load(function() {
-		    $('#loading').hide();
-		});	
+//		$('iframe').load(function() {
+//		    $('#loading').hide();
+//		});	
 		mapView=true;
 	}else{
 		$(".leftContent").css("left","25%");
-		$(".imgMap [id='loading']").hide();
-		$("iframe").css("display","none");
+//		$(".imgMap [id='loading']").hide();
+//		$("iframe").css("display","none");
+		$(".mapclass").hide();
 		mapView=false;
 	}
 	
@@ -430,3 +461,22 @@ function animate_stack(obj, y, z) {
 	.data('translate_z', new_z);
 
 }
+//map
+function initialize(numCk){
+	 var latlng = new google.maps.LatLng(37.5240220, 126.9265940);
+	 var myOptions = {
+	  streetViewControl: false, 
+	  mapTypeControl: false, 			 
+	  zoom: 17,
+	  center:latlng,
+	  mapTypeId: google.maps.MapTypeId.ROADMAP   
+	 };
+	 console.log("map: "+numCk);
+	 map = new google.maps.Map(document.getElementById("map_canvas"+numCk), myOptions);
+	 var marker = new google.maps.Marker({
+		 position: latlng,
+		 map : map
+	 });
+	var infowindow = new google.maps.InfoWindow();
+	}
+
