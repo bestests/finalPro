@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title> Slide View </title>
+
+<link rel="stylesheet" type="text/css" href="../css/slide02.css" >
+<link rel="stylesheet" type="text/css" href="../lib/bootstrap/dist/css/bootstrap.css" >
+
+</head>
+<body id='bbody' onselectstart="return false" >
+	
+	<div class="container">
+	<div class="calendar">2015-03-04</div>
+	<div id="view" align="center">
+		<ul id="stack"></ul>
+	</div>
+	
+	<!-- Modal Start -->
+	<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			        <h4 class="modal-title" id="myModalLabel">Update</h4>
+			      </div>
+			      <div class="modal-body">
+			         <h1>수정할 Title</h1>
+			         <input type="date">
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
+			        <button type="button" class="btn btn-primary">등록</button>			        			        
+			      </div>
+			    </div>
+			  </div>
+			</div>	
+	<!-- Modal End -->
+	
+	
+	<div id="controls">
+		<div id="one" align="center">
+			<img class="prev" src="../images/slide/prev.png" disabled="disabled" />
+			<img id="play" src="../images/slide/play.png" />
+			<img class="next" src="../images/slide/next.png" />
+		</div>
+		<div id="two" align="center">	
+			<select id="speed">
+				<option value="1" selected="selected">1초</option>
+				<option value="3">3초</option>
+				<option value="5">5초</option>
+			</select>
+	
+		</div>
+	</div>
+	</div>
+	<script src="../lib/jquery/dist/jquery.js"></script>
+	<script src="../lib/bootstrap/js/modal.js"></script>
+	<script src="../js/jquery.mousewheel.min.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/view/slide02.js"></script>
+		<script type="text/javascript">
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl."
+				: "http://www.");
+		document
+				.write(unescape("%3Cscript src='"
+						+ gaJsHost
+						+ "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+	</script>
+	<script type="text/javascript">
+		try {
+			var pageTracker = _gat._getTracker("UA-138384-13");
+			pageTracker._trackPageview();
+		} catch (err) {
+		}
+	</script>
+</body>
+</html>
