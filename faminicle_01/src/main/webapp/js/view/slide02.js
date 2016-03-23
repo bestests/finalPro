@@ -126,6 +126,18 @@ function getList() {
 // 		console.log(lis);
 //		console.log("현재페이지:"+current_index);
 		slideViewEvent();
+		if(slideShow==true){
+			$("#controls").hide("slow");
+			$("#view * li").hide();
+			lis.filter(':nth-child(' + (current_index) + ')').show();
+			$("#stack li").css("margin-top","-5%");
+			$(".imgInfo").css({
+				overflow:"visible"
+			});
+			$(".imgView img").css({
+							transform: "scale(1.3)"
+							});
+		}
 		}//end getJson
 	})
 	.fail(function(){
@@ -227,7 +239,7 @@ function mUpdate(){
 	var result = confirm("수정하시겠습니까?");
 	if(result){
 	$.post(
-			contextRoot + "/chronicle/updateEvent.do",
+			contextRoot + "/chronicle/update.do",
 			param,
 			function (resultObj) {	
 				var $this = $("[value='"+$("#no").val()+"']");
@@ -256,8 +268,23 @@ function mUpdate(){
 
 
 function deleteEvent(event) {
-	var result = confirm("정말 삭제하시겠습니까?");
-	alert(result);
+//	var result = confirm("정말 삭제하시겠습니까?");
+	//$this.parent().children(":eq(0)").html($("#regDate").val());
+	var cNo = $(this).parents("[class='leftContent']").children(":eq(2)").val();
+	$.post(
+			contextRoot + "/chronicle/delete.do",
+			{no: cNo},
+			function(resultObj){
+				console.log(resultObj);
+				alert("삭제 완료!");
+				$("#con_"+cNo).remove();
+				lis=$("li");
+				z_index=lis.length;
+			},"json"
+	);
+	
+	
+//	alert(result);
 	event.stopPropagation();
 }
 
