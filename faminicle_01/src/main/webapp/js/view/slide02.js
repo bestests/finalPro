@@ -3,6 +3,7 @@ var startDate;
 var endDate;
 var startNo;
 var endNo;
+var pageNo =1;
 var maxNum = 0;
 var minNum = 999999999999999999999;
 var contentFlag = true;
@@ -11,12 +12,15 @@ var slideShow=false;
 var slide;
 var mapView=false;
 
+
 //slideEvent
 var y_space = 30, z_space = 50;
 //controls : 자동재생에 관련된 이전화면, 다음화면 		rotate_controls: 사용자 관점에서보기
 var view, lis,z_index;
 var prev = $('#controls .prev'), next = $('#controls .next');
 var current_index = 1, translate_y = y_space * -1, translate_z = z_space * -1;
+var realCurrent_index;
+var realFlag=false;
 //slideEvent
 var html="";
 
@@ -25,23 +29,23 @@ getList();
 
 
 function getList() {
-	console.log("버튼체크의 메세지2");
+//	console.log("버튼체크의 메세지2");
 	var root = contextRoot + "/chronicle/list.do?";
-	console.log(arguments);
+//	console.log(arguments);
 	if(arguments.length == 0) {
 		root += "pageNo=&startDate=&endDate=";
 	} else {
 		root += "pageNo=" + arguments[0] + "&startDate=" + arguments[1] + "&endDate=" + arguments[2];
 	}
-	console.log(root);
+//	console.log(root);
 	
 	maxNum = 0;	
 	minNum = 999999999999999999999;
 	
 	$.getJSON(root,function(result){
 		
-		console.log(result);
-		console.log("okok");
+//		console.log(result);
+//		console.log("okok");
 		if(result.cList.length==0){
 			//수정해야함.
 			alert("더이상 데이터가 없습니다.");
@@ -49,6 +53,10 @@ function getList() {
 			
 		}else{
 			current_index = 1;
+//			y_space = 30,z_space = 50;
+//			translate_y = y_space * -1;
+//			translate_z = z_space * -1;
+//			html="";
 			$("#stack").empty();//기존에 등록된값 삭제	
 			
 		for(var i=0;i < result.cList.length ; i++){
@@ -77,8 +85,8 @@ function getList() {
 			+'			</div>                                                                         '
 			+'			<div class="imgMap">                                                           '
 			+'				<div id="map_canvas'+i+'" class="mapclass"></div>                                                                   '
-			+'			<iframe></iframe>                                                           '
-			+'			<div id="loading"><img src="../images/slide/balls.svg"/><br/>Loading... </div>                                                           '
+//			+'			<iframe></iframe>                                                           '
+//			+'			<div id="loading"><img src="../images/slide/balls.svg"/><br/>Loading... </div>                                                           '
 			+'			</div>                                                                         '
 			+'		</div>                                                                             '
 			+'		                                                                                   '
@@ -107,6 +115,7 @@ function getList() {
 // 			endNo = result.cList[result.cList.length - 1].no;		
 // 		}
 		
+		console.log("현재 y : "+translate_y+"현재 x: "+translate_z);
 //		console.log("시작일자"+ startDate);
 //		console.log("끝날자 " + endDate);
 //		console.log("시작번호"+startNo);
@@ -115,7 +124,7 @@ function getList() {
 //		console.log("최대: " + maxNum + "최소 : "+ minNum);
 //		console.log(view);
 // 		console.log(lis);
-		console.log("현재페이지:"+current_index);
+//		console.log("현재페이지:"+current_index);
 		slideViewEvent();
 		}//end getJson
 	})
@@ -126,7 +135,7 @@ function getList() {
 	});
 	
 	}
-		console.log("이벤트 활성");
+//		console.log("이벤트 활성");
 // 		$("div.imgView").click(imgDown);
 		$("#stack").on("click",".imgView",imgDown);
 // 		$("div.imgContent").click(imgUp);
@@ -144,8 +153,8 @@ function imgDown(event) {
 // 	var $target = $(event.target).attr('id');
 // 	console.log("타겟 : "+$target);
 	var numCk = $(event.target).attr("id");
-	console.log(numCk);
-	console.log($(".imgContent").attr("id"));
+//	console.log(numCk);
+//	console.log($(".imgContent").attr("id"));
 	
 	if(contentFlag){
 		$("#pic"+numCk).css({				
@@ -164,8 +173,12 @@ function imgUp() {
 			opacity:"0",
 			top:"-100%"
 		});
+		//content닫힘
 		$(".leftContent").css("left","25%");
-		contentFlag=true;	
+		contentFlag=true;
+		//mapView닫힘
+		$(".mapclass").hide();
+		mapView=false;
 	}
 }
 
@@ -174,8 +187,12 @@ function wheelEvent() {
 		opacity:"0",
 		top:"-100%"
 	});
+	//Content 닫힘
 	$(".leftContent").css("left","25%");
 	contentFlag=true;
+	//Mapview 닫힘
+	$(".mapclass").hide();
+	mapView=false;
 }
 
 function updateEvent(event) {
@@ -184,9 +201,9 @@ function updateEvent(event) {
 	var num=$(this).parents()[1].children[2].value;  
 	event.stopPropagation();
 	
-	console.log(date);
-	console.log(title);
-	console.log(num);
+//	console.log(date);
+//	console.log(title);
+//	console.log(num);
 	
 //	console.dir($this.parents()[1].children[0].innerHTML);
 //	console.dir($this.parents()[1].children[1].innerHTML);
@@ -250,18 +267,18 @@ function mapEvent(event){
 
 function slideEvent(event) {
 	slideShow=true;
-	console.log(current_index);
+//	console.log(current_index);
 	$("#controls").hide("slow");
 	//재생버튼과 다른각도에서보기 버튼 숨김적용
 	$("#view * li").hide();
-	console.log(current_index);
+//	console.log(current_index);
 	lis.filter(':nth-child(' + (current_index) + ')').show();
 	
 	//자동재생시 이미지 크기 크게
 	
 	$(".imgContent").hide();	
 	
-	$("#stack li").css("margin-top","-10%");
+	$("#stack li").css("margin-top","-5%");
 	$(".container").css("background","rgba(0,0,0,.7)");
 	//filter: alpha(opacity=50);
 //	style="background:rgba(0,0,0,0.5); "
@@ -323,7 +340,7 @@ function showImg(event) {
 //3d효과적용
 function slideViewEvent(){
 
-	console.log("li갯수 : "+lis.length);
+//	console.log("li갯수 : "+lis.length);
 	lis.each(function() {
 	this.style['-webkit-transform'] = 'translate3d(0px, '+ translate_y + 'px, ' + translate_z + 'px)';
 // 	console.log("변경전"+translate_y+":"+translate_z);
@@ -342,15 +359,25 @@ function slideViewEvent(){
 
 function check_buttons() {
 	// 현재페이지 1일때 이전(앞) 버튼 비활성화 
-	if (current_index < 1) {
+	if(realFlag==true){
+	if (realCurrent_index < 1) {
 //		alert("좀더 미래로 갑니다!.||  첫페이지 번호"+startNo+"|| 첫 일자 :"+startDate);
 		alert("다음 사진을 불러옵니다.");
+		
+//		console.log(pageNo);
+//		if(pageNo == 1){
+//			alert("최신 페이지입니다.(더이상 최신자료가음슴)");
+//		}else{
+//		}
+		
 		y_space = 30,z_space = 50;
 		translate_y = y_space * -1;
 		translate_z = z_space * -1;
 		html="";
+		realFlag=false;
 		getList(startNo,startDate,"");
-		console.log("버튼체크의 메세지");
+		
+//		console.log("버튼체크의 메세지");
 //			next.attr('disabled', true);
 		
 //			prev.attr('disabled', true);
@@ -358,16 +385,17 @@ function check_buttons() {
 		prev.attr('disabled', false);
 	}
 	// ************* 현재페이지 최대일때 다음(뒤) 버튼 비활성화
-	if (current_index > lis.length) {
+	if (realCurrent_index > lis.length) {
 //		alert("좀더 과거로 갑니다!.||  끝페이지 : "+lis.length +"끝페이지 번호"+endNo+"|| 마지막 일자 :"+endDate);
 		alert("이전 사진을 불러옵니다.");
-		console.log(endNo+":"+startDate+""+endDate);
+//		console.log(endNo+":"+startDate+""+endDate);
 		
 		y_space = 30,z_space = 50;
 
 		translate_y = y_space * -1;
 		translate_z = z_space * -1;
 		html="";
+		realFlag=false;
 		getList(endNo,"",endDate);
 		
 		console.log("버튼체크의 메세지");
@@ -376,6 +404,7 @@ function check_buttons() {
 
 	 }else {
 		next.attr('disabled', false);
+	}
 	}
 }
 
@@ -388,15 +417,20 @@ next.bind('click', function(event) {
 	}
 	
 	
-	console.log("최종길이"+lis.length);
+//	console.log("최종길이"+lis.length);
 	if ($(this).attr('disabled'))
 	return false;
-	console.log("next현재 index :"+current_index);
+//	console.log("next현재 index :"+current_index);
 	// 현재보다 클경우 체크확인
+	console.log("prev현재 index:"+current_index);
 	if((current_index+1) > lis.length){
-		current_index++;
+//		console.log("최대길이보다 크다");
+		realCurrent_index= current_index+1;
+		//버튼체크 작동할수있게.
+		realFlag=true;
 		check_buttons();
 	}else{
+//		console.log("최대길이보다 작다");
 		lis.each(function() {
 			animate_stack(this, y_space, z_space);
 		});
@@ -413,15 +447,19 @@ next.bind('click', function(event) {
 });
 
 prev.bind('click', function() {
-	if ($(this).attr('disabled'))
-	return false;
+//	alert("다운다운");
+	if ($(this).attr('disabled')) 
+		return false;
 	
 	// 현재보다 작을경우 체크확인
 	console.log("prev현재 index:"+current_index);
 	if((current_index-1) < 1){
-		current_index--;
+		console.log("현제페이지 1보다작다");
+		realCurrent_index= current_index-1;
+		realFlag=true;
 		check_buttons();
 	}else{
+		console.log("현제페이지 1보다작지않다.");
 		lis.each(function() {
 		animate_stack(this, -y_space, -z_space);
 		});
@@ -441,18 +479,22 @@ $(document).bind('mousewheel',
 	function(event, deltaY) {
 	//console.log(event);
 	if (deltaY >= 0) {
+		console.log("마우스 휠업");
 		next.trigger('click');
 	} else {
+		console.log("마우스 휠 다운")
 		prev.trigger('click');
 	}
 });
 //prev:-   next:+
 function animate_stack(obj, y, z) {
 	//console.log(obj);
-	console.log("y: "+y+"//z :"+z);
+//	console.log("y: "+y+"//z :"+z);
 	
 	var new_y = $(obj).data('translate_y') + y;
 	var new_z = $(obj).data('translate_z') + z;
+	
+//	console.log("new_y : "+new_y+"new_x : "+new_z);
 	
 	obj.style['-webkit-transform'] = 'translate3d(0px, ' + new_y
 	+ 'px, ' + new_z + 'px)';

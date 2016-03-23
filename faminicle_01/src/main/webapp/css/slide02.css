@@ -22,7 +22,10 @@ body{
 }
 
 /* calendar start*/
-
+time{
+	position:absolute;
+	margin: 10%;
+}
 .calendar{
 	z-index: 1000;
 }
@@ -60,17 +63,14 @@ time.icon strong
   top: 0;
   padding: 0.4em 0;
   color: #fff;
+  font-weight: bold;
+  font-size:20px;
   background-color: #fd9f1b;
   border-bottom: 1px dashed #f37302;
   box-shadow: 0 2px 0 #fd9f1b;
 }
 
-time.icon em
-{
-  position: absolute;
-  bottom: 0.3em;
-  color: #fd9f1b;
-}
+
 
 time.icon span
 {
@@ -212,6 +212,8 @@ p{
 	height: 100%;
 	border-radius:5%;
 }
+
+/* map */
 iframe{
 	position:relative;
 	width: 100%;
@@ -219,6 +221,15 @@ iframe{
 	border:none;
 	z-index:1;
 }
+.mapclass{
+	position:relative;
+	width: 100%;
+	height: 100%;
+	border:none;
+	z-index:1;
+}
+
+
 #loading{
 	position:absolute;
 	top:0;
