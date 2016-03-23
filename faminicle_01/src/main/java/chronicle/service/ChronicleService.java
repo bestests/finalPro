@@ -1,9 +1,6 @@
 package chronicle.service;
 
 import java.util.List;
-import java.util.Map;
-
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
@@ -20,8 +17,10 @@ public interface ChronicleService {
 	public EventDay registEvent(EventDay evDay);
 	public List<EventDay> selectEvent(int memNo);
 	public void deleteEvent(int evNo);
+	public void updateEvent(Chronicle chronicle);
+	public void deletePic(int no);
 	public Members checkPass(Members members);
 	public Members memberInfo(Members members); 
 	public void updateMember(Members members);
 	public void updateMemberPic(Members members);
-	}
+}

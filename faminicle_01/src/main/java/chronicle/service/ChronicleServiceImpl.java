@@ -33,15 +33,16 @@ public class ChronicleServiceImpl implements ChronicleService{
 		
 		Page page = new Page();
 		
+		//"".equals(startDate);
 		if(startDate.equals("") && endDate.equals("")) {
 			result = dao.selectList();
 		} else if(endDate.equals("") && !startDate.equals("")) {
-			System.out.println("이전 글 선택 : " + startDate);
+			System.out.println("미래로갑니다.");
 			page.setStartDate(startDate);
 			page.setPageNo(pageNoInt);
 			result = dao.selectPrevList(page);
 		} else if(startDate.equals("") && !endDate.equals("")) {
-			System.out.println("다음 글 선택 : " + endDate);
+			System.out.println("과거로갑니다.");
 			page.setEndDate(endDate);
 			page.setPageNo(pageNoInt);
 			result = dao.selectNextList(page);
@@ -114,6 +115,16 @@ public class ChronicleServiceImpl implements ChronicleService{
 	@Override
 	public void deleteEvent(int evNo) {
 		dao.deleteEvent(evNo);
+	}
+
+	@Override
+	public void updateEvent(Chronicle chronicle) {
+		dao.updateEvent(chronicle);
+	}
+
+	@Override
+	public void deletePic(int no) {
+		dao.deletePic(no);
 	}
 
 	
