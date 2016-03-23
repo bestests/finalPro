@@ -108,6 +108,7 @@ function getList() {
 		view = $('#view'), lis = $('li');
 		z_index = lis.length;
 		
+		
 // 		if(arguments.length != 0) {
 // 			endNo = minNum;
 // 			minNum = 999999999999999999999;
@@ -165,6 +166,7 @@ function getList() {
 			
 
 function imgDown(event) {
+	
 // 	var $target = $(event.target).attr('id');
 // 	console.log("타겟 : "+$target);
 	var numCk = $(event.target).attr("id");
@@ -177,6 +179,8 @@ function imgDown(event) {
 			top:"0"
 		});		
 //		$(".imgMap").append('<iframe id="sildemap" src="Sildemap.html"></iframe>');
+		
+		
 		
 		contentFlag=false;
 	}
@@ -268,9 +272,11 @@ function mUpdate(){
 
 
 function deleteEvent(event) {
-//	var result = confirm("정말 삭제하시겠습니까?");
-	//$this.parent().children(":eq(0)").html($("#regDate").val());
 	var cNo = $(this).parents("[class='leftContent']").children(":eq(2)").val();
+	var result = confirm("정말 삭제하시겠습니까?");
+	//$this.parent().children(":eq(0)").html($("#regDate").val());
+	
+	if(result){
 	$.post(
 			contextRoot + "/chronicle/delete.do",
 			{no: cNo},
@@ -281,8 +287,8 @@ function deleteEvent(event) {
 				lis=$("li");
 				z_index=lis.length;
 			},"json"
-	);
-	
+		);
+	}
 	
 //	alert(result);
 	event.stopPropagation();
