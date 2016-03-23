@@ -24,8 +24,11 @@ public interface ChronicleDAO {
 	public EventDay selectEventOne(int enNo);
 	public List<EventDay> selectEventByMem(int memNo);
 	public void deleteEvent(int evNo);
+	public void updateEvent(Chronicle chronicle);
+	public void deletePic(int no);
 	public Members checkPass(Members members);
 	public void updateMember(Members members);
 	public Members memberInfo(Members members);
 	public void updateMemberPic(Members members);
+
 }
