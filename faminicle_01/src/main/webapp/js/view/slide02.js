@@ -65,7 +65,7 @@ function getList() {
 // 			if(arguments.length != 0) {
 // 			}
 			html +=	
-			   '<li>                                                                                     '
+			   '<li id="con_' + result.cList[i].no + '">                                                                                     '
 			+'	<div class="imgInfo">                                                          '
 			+'		<div class="imgView" id="test">                                                          '
 			+'			<img id="'+i+'" src="'+ result.cList[i].filePath+'"/>                                            '
@@ -139,14 +139,17 @@ function getList() {
 // 		$("div.imgView").click(imgDown);
 		$("#stack").on("click",".imgView",imgDown);
 // 		$("div.imgContent").click(imgUp);
-		$("#stack").on("click",".imgContent",imgUp);
+		$("#stack").on("click",".leftContent",imgUp);
 		$("body").on("mousewheel", wheelEvent);
 		$("#stack").on("click", "#update", updateEvent);
 		$("#stack").on("click", "#delete", deleteEvent);
 		$("#stack").on("click", "#mapView", mapEvent);
 		$("#play").click(slideEvent);
 		$("body").dblclick(stopSlide);
-
+		//modalEvent
+//		$("#stack").on("click","#mUpdate",mUpdateEvent);		
+//		$("#mUpdate").click(mUpdateEvent);
+		$("#mUpdate").submit(mUpdate);
 			
 
 function imgDown(event) {
@@ -210,11 +213,47 @@ function updateEvent(event) {
 //	console.dir($this.parents()[1].children[2].value);
 	$("#myModal").modal();
 	
-	$("#mtitle").html("<input type='text' value='"+title+"' style='width:100%;'/>");
-	$("#mdate").val(date);
-	$("#num").val(num);
-	
+//	$("#mtitle").html("<input type='text' value='"+title+"' style='width:100%;'/>");
+	$("#content").val(title);
+	$("#regDate").val(date);
+	$("#no").val(num);	
 }
+//modal update Event
+function mUpdate(){
+	var param = $(this).serialize();
+//		console.log($("#no").val());
+	console.dir(param);
+	console.log()
+	var result = confirm("수정하시겠습니까?");
+	if(result){
+	$.post(
+			contextRoot + "/chronicle/updateEvent.do",
+			param,
+			function (resultObj) {	
+				var $this = $("[value='"+$("#no").val()+"']");
+				console.log(resultObj);
+				alert("수정이 완료되었습니다");
+//				console.log($("[value='168']").prev());
+//				var abc = $("input[type=hidden]").val($("#no").val());
+				console.log($("#no").val());
+				console.log($("#content").val());
+				console.log($("#regDate").val());
+//				console.log($("[value='"+$("#no").val()+"']").prev()[0]);
+				$this.parent().children(":eq(0)").html($("#regDate").val());
+				$this.parent().children(":eq(1)").html($("#content").val());
+				$(".calendar").html($("#regDate").val());
+				
+				
+				//<input type="hidden" value="'+result.cList[i].no+'" /
+				
+				$("#myModal").modal("hide");
+			},"json");
+	};
+	
+	
+	return false;
+}
+
 
 function deleteEvent(event) {
 	var result = confirm("정말 삭제하시겠습니까?");
@@ -226,38 +265,13 @@ function mapEvent(event){
 	var numCk = $(this).parents()[3].children[0].children[0].id;
 	if(mapView==false){
 		$(".leftContent").css("left","0");	
-//	console.dir($this.parents()[1].children[1].innerHTML);
-//		console.dir($(this).parents()[3].children[0].children[0].id);
 		$(".mapclass").show();
-//		$("#btn").click(function(){
-//			$("#mMenu").toggleClass("open");
-//			if($("#mMenu").hasClass("open")){
-//				$("#mMenu").css('left','0');
-//				$("#btn img").attr('src','btn_close.png');
-//			}else{
-//				$("#mMenu").css('left','-96%');
-//				$("#btn img").attr('src','btn_open.png');
-//			}
-//		});			
 		
 		initialize(numCk);
 		
-//		$("#loading").show();
-//		$("iframe").show();
-////		$(".imgMap").append('<iframe id="sildemap" src="Sildemap.html"></iframe>');
-//		$("iframe").attr({
-//			id:'slidemap',
-//			src:"Sildemap.html"
-//		});
-		//임시
-//		$('iframe').load(function() {
-//		    $('#loading').hide();
-//		});	
 		mapView=true;
 	}else{
 		$(".leftContent").css("left","25%");
-//		$(".imgMap [id='loading']").hide();
-//		$("iframe").css("display","none");
 		$(".mapclass").hide();
 		mapView=false;
 	}
@@ -400,8 +414,6 @@ function check_buttons() {
 		
 		console.log("버튼체크의 메세지");
 //			next.attr('disabled', true);
-
-
 	 }else {
 		next.attr('disabled', false);
 	}

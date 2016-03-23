@@ -30,15 +30,18 @@
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 			        <h4 class="modal-title" id="myModalLabel">Update</h4>
 			      </div>
+			      <form id="mUpdate">
 			      <div class="modal-body">
-			      	 <div id="mtitle"></div>
-			         <input id="mdate" type="date" />
-			         <input id="num" type="hidden" value=""/>
+			      	 <input id="content" name="content" type="text"/>
+<!-- 			      	 <div id="mtitle" name="content"></div> -->
+			         <input id="regDate" name="regDate" type="date" />
+			         <input id="no" name="no" type="hidden" value=""/>
 			      </div>
 			      <div class="modal-footer">
 			        <button type="button" class="btn btn-default" data-dismiss="modal">닫기</button>
-			        <button type="button" class="btn btn-primary">등록</button>			        			        
+			        <button type="submit"  class="btn btn-primary">수정</button>			        			        
 			      </div>
+			      </form>
 			    </div>
 			  </div>
 			</div>	
