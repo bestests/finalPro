@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
@@ -47,7 +47,6 @@ public class ChronicleController {
 		result.put("member", member);
 		result.put("eventDay", service.selectEvent(member.getMemNo()));
 		result.put("cList", service.selectList(startDate, endDate, pageNo));
-		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
 		
 		return result;
 	}
@@ -103,7 +102,7 @@ public class ChronicleController {
 		Members member = (Members) service.loginCheck(loginInfo);
 		
 		if(member !=null){
-			System.out.println("아이디 찾기성공");
+			System.out.println("아이디 찾기성공^^!");
 			
 //			session.setAttribute("loginInfo", loginInfo);
 			session.setAttribute("loginInfo", member);
@@ -259,6 +258,33 @@ public class ChronicleController {
 		
 		return result;
 	}
+	@RequestMapping("update.do")
+	public AjaxResult update (Chronicle chronicle) {
+		
+		System.out.println(chronicle.getContent());
+		System.out.println(chronicle.getNo());
+		System.out.println(chronicle.getRegDate());
+		
+		service.updateEvent(chronicle);
+		
+		AjaxResult result = new AjaxResult("success", chronicle);
+		return result;		
+	}
+	@RequestMapping("delete.do")
+	public AjaxResult delete (int no) {
+		System.out.println(no);
+//		int no1 = (Integer)no;
+//		System.out.println("삭제 번호:"+no1);
+		
+		
+		service.deletePic(no);
+		AjaxResult result = new AjaxResult("success", "ok");
+		return result;		
+	}
+	
+	
+	
+	
 }
 
 	
