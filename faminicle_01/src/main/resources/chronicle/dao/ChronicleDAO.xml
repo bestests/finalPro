@@ -145,5 +145,17 @@
 		  from eventday
 		 where ev_no = #{evNo} 
 	</delete>
+	<!-- 수정 -->
+	<update id="updateEvent" parameterType="chronicle" > 
+		update listtest
+		set  content = #{content} , reg_date = #{regDate}
+		where no= #{no} 
+	</update>
+	<!-- 사진삭제 -->
+	<delete id="deletePic" parameterType="int">
+		delete 
+		from listtest
+		where no = #{no}
+	</delete>
 	
 </mapper>
