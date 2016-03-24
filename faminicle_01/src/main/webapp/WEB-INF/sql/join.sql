@@ -3,7 +3,8 @@ CREATE TABLE FAM_MEMBER(
 	,ID	 			VARCHAR(20)	 	NOT NULL 
 	,PASS	 		VARCHAR(20)	 	NOT NULL 
 	,E_MAIL		 	VARCHAR(100) 	NOT NULL  
-	,member_pic_path VARCHAR(100)  
+	,member_pic_path VARCHAR(300)  
+	,member_pic_mini_file_path VARCHAR(300)
 	,NAME	 		VARCHAR(20)	 	NOT NULL
 	,BIRTHDAY	 	VARCHAR(20)	 	NOT NULL 
 	,TEL	 		INT		 		NOT NULL 
