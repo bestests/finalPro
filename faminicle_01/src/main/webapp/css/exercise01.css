@@ -2,9 +2,8 @@
 * { margin: 0px; padding: 0px; box-sizing: border-box; }
 	html, body { width: 100%; height: 100%; }
 	#all { 
-		width:100%; height: 100%; position: relative;
+		width:100%; height: 100%; position: relative; background: black;
 	}
-	
 	#menu { 
 		width: 95%; height: 96%; 
 		background: aquamarine; 
@@ -172,13 +171,15 @@
 		/* Info ** */
 	
 	#header {
-		width: 100%; height: 9%;
-		position: absolute;
-		transition: 0.5s;
-		z-index: 1000;
-		text-align: center;
-	    background: #AABCFD;
-		
+	    margin-left: 3%;
+	    width: 93%;
+	    height: 9%;
+	    position: absolute;
+	    transition: 0.5s;
+	    text-align: center;
+	    background: rgb(55,156,213);
+	    border-radius: 15px;
+	    color: white;
 	}
 
 	#header > div {
@@ -186,21 +187,25 @@
 	    height: 100%;
 	    width: 10%;
 	    line-height: 400%;
-	    background: #AABCFD;
+	    background: rgb(55,156,213);
+	    border-radius: 15px;
 	}
 	
 	#infoId:hover, #slide:hover, #album:hover  {
-		background: fuchsia;
+		background: lightblue;
 		border-radius: 15px;
-		color: white;
-		transition: 1s;
+		color: black;
+		transition: .5s;
+		
 	}
 	
+	#fileDiv {
+		display: none;
+	}
 	
 	#modalImgDrop {
 		width: 100%;
-		height: 300px;
-		max-height: 300px;
+		max-height: 280px;
 		border: 1px solid aqua;
 		margin: auto;
 		overflow: hidden;
@@ -220,7 +225,7 @@
 	#thumbnail {
 		margin-bottom: 7px;
 		width: 60px;
-		height: 55px; 
+		height: 54px; 
 	}
 	
 	#uploadResponse {
