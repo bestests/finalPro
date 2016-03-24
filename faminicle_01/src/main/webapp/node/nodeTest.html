@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="http://localhost:9002/socket.io/socket.io.js"></script>
+<script src="../lib/jquery/dist/jquery.js"></script>
+<script>
+	$(function () {
+		var socket = io.connect("http://localhost:9002");
+		
+		socket.on("checkedId", function (data) {
+			$("#result").html(data);
+		});
+		
+		$("#id").keyup(function () {
+			socket.emit("checkId", $("#id").val());
+		});
+	});
+</script>
+</head>
+<body>
+	<input type="text" id="id" />
+	<div id="result"></div>
+</body>
+</html>
