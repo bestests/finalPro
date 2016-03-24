@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -72,7 +73,7 @@ public class ChronicleController {
 		
 		return result;
 	}
-	
+
 	@RequestMapping("checkPass.do")
 	public AjaxResult checkPass(Members members, String check) {
 		boolean flag = false;
@@ -120,6 +121,7 @@ public class ChronicleController {
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
 	}
+	
 	@RequestMapping("updateMember.do")
 	public AjaxResult updateMembers(Members members){
 		
@@ -227,15 +229,9 @@ public class ChronicleController {
 			}
 		}
 		service.registpic(regist);
-		return new AjaxResult("ok", "ok");
+		AjaxResult result = new AjaxResult("ok", "ok");
+		return result;
 	}
-	
-	@RequestMapping("selectEvent.do")
-	public AjaxResult selectEventDay(int memNo){	
-		return new AjaxResult("success", service.selectEvent(memNo));
-	}
-	
-	
 	
 	@RequestMapping("eventRegist.do")
 	public EventDay eventRegist (EventDay evDay) {
@@ -259,6 +255,14 @@ public class ChronicleController {
 		
 		return result;
 	}
+	
+	@RequestMapping("eventList.do")
+	public AjaxResult eventList (EventDay evDay) {
+		System.out.println("start : " + evDay.getEvStart());
+		System.out.println("end : " + evDay.getEvEnd());
+		return null;
+	}
+	
 	@RequestMapping("update.do")
 	public AjaxResult update (Chronicle chronicle) {
 		
@@ -271,6 +275,7 @@ public class ChronicleController {
 		AjaxResult result = new AjaxResult("success", chronicle);
 		return result;		
 	}
+	
 	@RequestMapping("delete.do")
 	public AjaxResult delete (int no) {
 		System.out.println(no);
@@ -282,9 +287,6 @@ public class ChronicleController {
 		AjaxResult result = new AjaxResult("success", "ok");
 		return result;		
 	}
-	
-	
-	
 	
 }
 

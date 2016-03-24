@@ -1,5 +1,7 @@
 package chronicle.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,16 +35,15 @@ public class ChronicleServiceImpl implements ChronicleService{
 		
 		Page page = new Page();
 		
-		//"".equals(startDate);
 		if(startDate.equals("") && endDate.equals("")) {
 			result = dao.selectList();
 		} else if(endDate.equals("") && !startDate.equals("")) {
-			System.out.println("미래로갑니다.");
+			System.out.println("이전 글 선택 : " + startDate);
 			page.setStartDate(startDate);
 			page.setPageNo(pageNoInt);
 			result = dao.selectPrevList(page);
 		} else if(startDate.equals("") && !endDate.equals("")) {
-			System.out.println("과거로갑니다.");
+			System.out.println("다음 글 선택 : " + endDate);
 			page.setEndDate(endDate);
 			page.setPageNo(pageNoInt);
 			result = dao.selectNextList(page);
@@ -76,30 +77,6 @@ public class ChronicleServiceImpl implements ChronicleService{
 	}
 
 	@Override
-	public Members checkPass(Members members) {
-		return dao.checkPass(members);
-	}
-
-	@Override
-	public Members memberInfo(Members members) {
-		Members info = dao.memberInfo(members);
-		return info;
-	}
-
-	@Override
-	public void updateMember(Members members) {
-		dao.updateMember(members);
-	}
-	
-	
-	
-	@Override
-	public void updateMemberPic(Members members) {
-		System.out.println("service.members.getPicFilePath() : " + members.getPicFilePath());
-		dao.updateMemberPic(members);
-	}
-	
-	@Override
 	public EventDay registEvent(EventDay evDay) {
 		
 		dao.insertEvent(evDay);
@@ -117,17 +94,5 @@ public class ChronicleServiceImpl implements ChronicleService{
 		dao.deleteEvent(evNo);
 	}
 
-	@Override
-	public void updateEvent(Chronicle chronicle) {
-		dao.updateEvent(chronicle);
-	}
-
-	@Override
-	public void deletePic(int no) {
-		dao.deletePic(no);
-	}
-
 	
-	
-
 }

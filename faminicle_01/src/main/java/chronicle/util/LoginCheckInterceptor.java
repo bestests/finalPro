@@ -21,15 +21,15 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		
 		System.out.println("02. 현재 페이지 주소 : " +servletPath );
 		
-		Members user = (Members) request.getSession().getAttribute("loginInfo");		
-		System.out.println("03. Session 유무 : " + user );
+		Members check = (Members) request.getSession().getAttribute("loginInfo");		
+		System.out.println("03. Session 유무 : " + check );
 		
-		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && user == null) {
+		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && check == null) {
 			System.out.println("04. !(Login & CheckId) || Session null");
-//			response.sendError(901);
+			response.setContentType("900");
 			return false;
-		}else if(user!=null){
-			System.out.println("05. Session Name : " + user.getName());
+		}else if(check!=null){
+			System.out.println("05. Session Name : " + check.getName());
 		}
 				
 		return true;
