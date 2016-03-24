@@ -5,10 +5,9 @@
  	// Create a DataSet (allows two way data-binding)
 	var items = new vis.DataSet([]);
 	$(function () {
-	 	
+	 	var html = "";
 		$.getJSON(contextRoot + "/chronicle/list.do?pageNo=&startDate=&endDate=", function (result) {
 			console.dir(result);
-			var html = "";
 			var index = 1;
 			for(var i in result.cList) {	
 				if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
@@ -242,7 +241,7 @@
 		$("#startDate").change(function () {
 			$("#endDate").attr("min", $(this).val());
 		});
-	
+	});
 	
 	function init_masonry () {
 		var $container = $("#content");
@@ -310,6 +309,12 @@
 	  timeline.on('select', function (properties) {
 		  console.log("start : " + items._data[properties.items[0]].start);
 		  console.log("end : " + items._data[properties.items[0]].end);
+		  $.get(
+			contextRoot + "/chronicle/eventList.do?evStart=" + items._data[properties.items[0]].start + "&evEnd=" + items._data[properties.items[0]].end,
+			function (result) {
+				
+			}
+		  );
 	  });
 	 
 	 var currDate = "";
@@ -488,6 +493,13 @@
 			
 			return false;
 		});
+		
+		$("#updateCon").submit(function () {
+			alert($(this).serialize());
+			
+			return false;
+		});
+		
 		var upload = document.getElementById('file'),
 		holder = document.getElementById('modalImgDrop')
 
@@ -695,5 +707,3 @@
 		  */
 			    };
 			};
-		
-		

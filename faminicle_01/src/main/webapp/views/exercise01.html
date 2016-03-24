@@ -29,7 +29,7 @@
 </head>
 <body>
 	<div id="all">
-		<!-- 헤더 부분 Info-->
+	<!-- 헤더 부분 Info-->
 		 <div id="header"> 
 		 	<div id="album" onclick="location.href='album2.html'" >사진앨범</div>
 		 	<div id="slide" onclick="location.href='slide02.html'" >슬라이드</div>
@@ -39,44 +39,44 @@
 		 </div>
 	
 	<div class="main-3d">
-    <div id="level1" class="plane">
-        <img src="../images/0.jpg" alt="3d10" />
-        <div></div>
-    
-        <img src="../images/1.jpg" />
-        <img src="../images/2.jpg" alt="3d12" />
-        <img src="../images/3.jpg" alt="3d13" />
-        <img src="../images/4.jpg" alt="3d14" />
-        <img src="../images/5.jpg" alt="3d15" />
-        <img src="../images/6.jpg" alt="3d17" />
-        <img src="../images/7.jpg" alt="3d18" />
-        <img src="../images/8.jpg" alt="3d19" />
-        <img src="../images/9.jpg" alt="3d2" />
-    </div>
-    <div id="level2" class="plane">
-        <img src="../images/10.jpg" alt="3d23" />
-        <img src="../images/11.jpg" alt="3d24" />
-        <img src="../images/12.jpg" alt="3d26" />
-        <img src="../images/13.jpg" alt="3d27" />
-        <img src="../images/14.jpg" />
-        <img src="../images/15.jpg" alt="3d29" />        
-        <img src="../images/16.jpg" alt="3d3" />
-        <img src="../images/17.jpg" alt="3d20" />
-        <img src="../images/18.jpg" alt="3d9" />
-        <img src="../images/19.jpg" alt="3d64" />
-    </div>
-    <div id="level3" class="plane">
-        <img src="../images/20.jpg" alt="3d31" />
-        <img src="../images/21.jpg" alt="3d32" />
-        <img src="../images/22.jpg" alt="3d34" />
-        <img src="../images/23.jpg" alt="3d38" />
-        <img src="../images/24.jpg" alt="3d40" />
-        <img src="../images/25.jpg" alt="3d41" />
-        <img src="../images/26.jpg" alt="3d36" />        
-        <img src="../images/27.jpg" alt="3d42" />
-        <img src="../images/28.jpg" alt="3d66" />
-        <img src="../images/29.jpg" alt="3d63" />
-    </div>
+	    <div id="level1" class="plane">
+	        <img src="../images/0.jpg" alt="3d10" />
+	        <div></div>
+	    
+	        <img src="../images/1.jpg" />
+	        <img src="../images/2.jpg" alt="3d12" />
+	        <img src="../images/3.jpg" alt="3d13" />
+	        <img src="../images/4.jpg" alt="3d14" />
+	        <img src="../images/5.jpg" alt="3d15" />
+	        <img src="../images/6.jpg" alt="3d17" />
+	        <img src="../images/7.jpg" alt="3d18" />
+	        <img src="../images/8.jpg" alt="3d19" />
+	        <img src="../images/9.jpg" alt="3d2" />
+	    </div>
+	    <div id="level2" class="plane">
+	        <img src="../images/10.jpg" alt="3d23" />
+	        <img src="../images/11.jpg" alt="3d24" />
+	        <img src="../images/12.jpg" alt="3d26" />
+	        <img src="../images/13.jpg" alt="3d27" />
+	        <img src="../images/14.jpg" />
+	        <img src="../images/15.jpg" alt="3d29" />        
+	        <img src="../images/16.jpg" alt="3d3" />
+	        <img src="../images/17.jpg" alt="3d20" />
+	        <img src="../images/18.jpg" alt="3d9" />
+	        <img src="../images/19.jpg" alt="3d64" />
+	    </div>
+	    <div id="level3" class="plane">
+	        <img src="../images/20.jpg" alt="3d31" />
+	        <img src="../images/21.jpg" alt="3d32" />
+	        <img src="../images/22.jpg" alt="3d34" />
+	        <img src="../images/23.jpg" alt="3d38" />
+	        <img src="../images/24.jpg" alt="3d40" />
+	        <img src="../images/25.jpg" alt="3d41" />
+	        <img src="../images/26.jpg" alt="3d36" />        
+	        <img src="../images/27.jpg" alt="3d42" />
+	        <img src="../images/28.jpg" alt="3d66" />
+	        <img src="../images/29.jpg" alt="3d63" />
+	    </div>
 	</div>
 		<div id="menu" class="border-right-radius">
 			<input type="button" value="addEvent" onclick="addEvent()">
@@ -108,7 +108,7 @@
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
 					<h4 class="modal-title" id="myModalLabel">Update</h4>
 				</div>
-				<form id=updateform>
+				<form id="updateform">
 					<div class="modal-body">
 						<div id="modalImgBox">
 							<img id="modalImg" style="width: 100%;">
@@ -116,9 +116,9 @@
 						<div class="form-group">
 							<input type="hidden" name="no">
 							<label for="title" class="control-label">Title</label>
-							<input type="text" size="50" class="form-control" id="title" />
+							<input type="text" size="50" class="form-control" name="title" />
 							<label for="date" class="control-label">Date</label>
-							<input type="date" class="form-control" id="date" />
+							<input type="date" class="form-control" name="date" />
 						</div>
 					</div>
 					<div class="modal-footer">
@@ -130,7 +130,7 @@
 			</div>
 		</div>
   	</div>
-  	  	
+  	
   	<!-- Info modal -->
 	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg">
@@ -182,7 +182,7 @@
 		</div>
   	</div>
   	
-  	<!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg">
 			<div class="modal-content" style="width: 40%;">
