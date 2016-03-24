@@ -54,10 +54,6 @@ public class ChronicleController {
 	@RequestMapping("registMember.do")
 	public Map<String,Object> insertMember(Members members){	
 		
-		System.out.println("회원가입요청");
-		
-		System.out.println(members.getId());
-		
 		service.registMember(members);	
 		
 		Map<String,Object> result = new HashMap<>();
@@ -209,7 +205,6 @@ public class ChronicleController {
 	}
 	
 	@RequestMapping("Regist.do")
-	@ResponseBody
 	public AjaxResult register(Regist regist, MultipartHttpServletRequest mRequest) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
 		String realPath = servletContext.getRealPath("/upload/");
@@ -232,9 +227,15 @@ public class ChronicleController {
 			}
 		}
 		service.registpic(regist);
-		AjaxResult result = new AjaxResult("ok", "ok");
-		return result;
+		return new AjaxResult("ok", "ok");
 	}
+	
+	@RequestMapping("selectEvent.do")
+	public AjaxResult selectEventDay(int memNo){	
+		return new AjaxResult("success", service.selectEvent(memNo));
+	}
+	
+	
 	
 	@RequestMapping("eventRegist.do")
 	public EventDay eventRegist (EventDay evDay) {
