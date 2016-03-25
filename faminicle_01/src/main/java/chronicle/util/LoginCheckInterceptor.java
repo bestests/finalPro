@@ -3,7 +3,6 @@ package chronicle.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import chronicle.domain.Members;
@@ -25,7 +24,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		Members check = (Members) request.getSession().getAttribute("loginInfo");		
 		System.out.println("03. Session 유무 : " + check );
 		
-		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)) && check == null) {
+		if(!(("/chronicle/login.do".equals(servletPath))||("/chronicle/checkId.do").equals(servletPath)||("/chronicle/registMember.do").equals(servletPath)) && check == null) {
 			System.out.println("04. !(Login & CheckId) || Session null");
 			response.setContentType("900");
 			return false;

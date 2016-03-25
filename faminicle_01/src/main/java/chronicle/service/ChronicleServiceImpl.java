@@ -95,7 +95,6 @@ public class ChronicleServiceImpl implements ChronicleService{
 	
 	@Override
 	public void updateMemberPic(Members members) {
-		System.out.println("service.members.getPicFilePath() : " + members.getPicFilePath());
 		dao.updateMemberPic(members);
 	}
 	

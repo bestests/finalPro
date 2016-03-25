@@ -47,20 +47,21 @@ public class ChronicleController {
 		Map<String, Object> result = new HashMap<>();
 		Members member = (Members)req.getSession().getAttribute("loginInfo");
 		
+		String filePath = member.getMemFilePath();
+		if(filePath != null) {
+			filePath = filePath.substring(0, filePath.lastIndexOf("."));
+			filePath += "_mini.jpg";
+			member.setPicMiniFilePath(filePath);
+		}
 		result.put("member", member);
 		result.put("eventDay", service.selectEvent(member.getMemNo()));
 		result.put("cList", service.selectList(startDate, endDate, pageNo));
-		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
 		
 		return result;
 	}
 	
 	@RequestMapping("registMember.do")
 	public Map<String,Object> insertMember(Members members){	
-		
-		System.out.println("회원가입요청");
-		
-		System.out.println(members.getId());
 		
 		service.registMember(members);	
 		
@@ -80,7 +81,7 @@ public class ChronicleController {
 		
 		return result;
 	}
-	
+
 	@RequestMapping("checkPass.do")
 	public AjaxResult checkPass(Members members, String check) {
 		boolean flag = false;
@@ -128,6 +129,7 @@ public class ChronicleController {
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
 	}
+	
 	@RequestMapping("updateMember.do")
 	public AjaxResult updateMembers(Members members){
 		
@@ -161,12 +163,12 @@ public class ChronicleController {
 			String saveFullFileName = filePath + "/" + realFileName;
 //			String srcPath = "../upload/" + sdfPath ;
 			image.transferTo(new File(saveFullFileName));
-			saveFullFileName =saveFullFileName.replace("C:/java77/tomcat-workspace/wtpwebapps/faminicle_01",".."); 
+			saveFullFileName =saveFullFileName.replace(realPath,"../upload/"); 
 			System.out.println("컨트롤러: "+ filePath);
 			System.out.println("풀파일네임"+saveFullFileName);
-			members.setPicFilePath(saveFullFileName);
+			members.setMemFilePath(saveFullFileName);
 			System.out.println(saveFullFileName);
-			
+					
 			//upload
 			 try {
 		            //썸네일 가로사이즈
@@ -180,9 +182,6 @@ public class ChronicleController {
 		            
 		            String picMiniFilePath = saveFullFileName.replace(ext, "_mini.jpg");
 		            File thumb_file_name = new File(picMiniFilePath);
-		            
-		            picMiniFilePath =picMiniFilePath.replace("C:/java77/tomcat-workspace/wtpwebapps/faminicle_01",".."); 
-		            members.setPicMiniFilePath(picMiniFilePath);
 		            
 		            BufferedImage buffer_original_image = ImageIO.read(origin_file_name);
 		            BufferedImage buffer_thumbnail_image = new BufferedImage(thumbnail_width, thumbnail_height, BufferedImage.TYPE_3BYTE_BGR);
@@ -307,7 +306,6 @@ public class ChronicleController {
 		
 		return new AjaxResult("success", service.seletePicByEvent(evDay));
 	}
-	
 }
 
 	

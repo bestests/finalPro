@@ -132,11 +132,11 @@
 			$("[name='no']").val(no);
 			$("#myModal").modal();
 		});
+		
 		/* 파일 업로드 */
 		$("#modalImgDrop").click(function (){
 			$("#file").click();
 		})
-		
 		
 		/* info modal */
 		$("#infoId").on("click" , function (event) {
@@ -616,7 +616,6 @@
 	 
 	    $('#update').setPreview(opt);
 	});
-			
 	 
 	 /* info drag 사진 등록 */
 		var dropBox = document.getElementById("modalImgDrop");          
@@ -709,5 +708,3 @@
 		  */
 			    };
 			};
-		
-		
