@@ -233,8 +233,14 @@ public class ChronicleController {
 			}
 		}
 		service.registpic(regist);
-		AjaxResult result = new AjaxResult("ok", "ok");
-		return result;
+		return new AjaxResult("ok", "ok");
+	}
+	
+	@RequestMapping("selectEvent.do")
+	public AjaxResult selectEventDay(HttpServletRequest req){	
+		Members member = (Members)req.getSession().getAttribute("loginInfo");
+		List<EventDay> eList = service.selectEvent(member.getMemNo());
+		return new AjaxResult("success", eList);
 	}
 	
 	@RequestMapping("eventRegist.do")
