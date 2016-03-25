@@ -23,9 +23,9 @@
     }
     #picContainer:after {
 		  content: "";
-	      background: url('../images/등록폼배경2.jpg');
+ 	      background: url('../images/등록폼배경2.jpg'); 
 	      background-size: 100%;
-		  opacity: 0.3;
+		  opacity: 0.4;
 		  top: 0;
 		  left: 0;
 		  bottom: 0;
@@ -350,7 +350,6 @@
 function registPic(){
 		var form = $(".regist")[0];
 		var formData = new FormData(form);
-		console.dir(form[3]);
 		$.ajax({
 		   url: contextRoot + "/chronicle/Regist.do",
 		   processData: false,
@@ -411,6 +410,7 @@ e.preventDefault();
 
 var file = upload.files[0],
   reader = new FileReader();
+  console.log(file);
 reader.onload = function (event) {
 var img = new Image();
 img.src = event.target.result;

@@ -43,12 +43,12 @@
   
   <!-- 인터셉터를 등록 -->
    
-<!--   <mvc:interceptors> -->
-<!--     <mvc:interceptor> -->
-<!--         <mvc:mapping path="/**"/> -->
-<!--         <bean class="chronicle.util.LoginCheckInterceptor"/> -->
-<!--     </mvc:interceptor> -->
-<!--   </mvc:interceptors> -->
+  <mvc:interceptors>
+    <mvc:interceptor>
+        <mvc:mapping path="/**"/>
+        <bean class="chronicle.util.LoginCheckInterceptor"/>
+    </mvc:interceptor>
+  </mvc:interceptors>
   
 </beans>
 

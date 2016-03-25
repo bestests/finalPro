@@ -30,4 +30,5 @@ public interface ChronicleDAO {
 	public void updateMember(Members members);
 	public Members memberInfo(Members members);
 	public void updateMemberPic(Members members);
+	public List<Regist> seletePicByEvent(EventDay evDay);
 }

@@ -246,7 +246,6 @@
 		$("#startDate").change(function () {
 			$("#endDate").attr("min", $(this).val());
 		});
-	});
 	
 	function init_masonry () {
 		var $container = $("#content");

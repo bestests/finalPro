@@ -47,7 +47,7 @@ date : 20150909
 				'top':'0px',
 				'background':bookbg,
 				'width':'0px',
-				'height':'100%'
+				'height':ele.height()+'px'
 				});
 			$('.page',ele).each(function(i,e){
 				if($(this).children().length>0){

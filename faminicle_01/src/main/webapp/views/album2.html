@@ -7,19 +7,40 @@
 *{
 	margin: 0;
 	padding: 0;
+	border: 1px solid black;
+	box-sizing: border-box;
 }
-body, html, #book, .page{
+body, html{
 	width: 100%;
 	height: 100%;
+}
+#book{
+	height: 90%;
+}
+#book > div {
+	width: 30%;
+	text-align: center;
+}
+#page{
+	text-align: center;
+}
+#tab{
+	width: 100%;
+	height: 10%;
+}
+#tab > div {
+	height: 100%;
+	width: 10%;
+	float: left;
 	text-align: center;
 }
 .page img{
-	margin:5px;
 	width: auto;
 	height: auto;
 	max-width: 45%;
 	max-height: 45%;
 }
+
 
 </style>
 <link rel="stylesheet" href="../js/booklet/booklet/jquery.booklet.latest.css">
@@ -27,140 +48,90 @@ body, html, #book, .page{
 <script src="../js/booklet/booklet/jquery.easing.1.3.js"></script>
 <script src="../js/booklet/booklet/jquery.booklet.latest.js"></script>
 <script src="../js/booklet/booklet/jquery-ui-1.10.4.min.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/masonry.pkgd.js"></script>
+<script src="../js/imagesloaded.3.1.8.min.js"></script>
+
 <script>
-	$(document).ready(function(){
-		 $('#book').booklet();
+	$(function(){
+		$.post(
+			contextRoot + "/chronicle/selectEvent.do",function(result){
+				var result = result.ajaxResult;
+				for(var i in result.data) {
+					if(result.data[i].evEnd != '1000-01-01'){
+						html="<div class='tap'>"+result.data[i].evStart+" <br/>~ <br/>" +result.data[i].evEnd 
+						+ "<form id='tForm'>"
+						+"<input type='hidden' name='evStart' value='"+result.data[i].evStart+"'>"
+						+"<input type='hidden' name='evEnd' value='"+result.data[i].evEnd+"'>"
+						+"</form>"
+						+"</div>";
+						
+						bookHtml="<div class='page'>"
+						+"<h2>"+result.data[i].evStart+" 부터 <br/>" +result.data[i].evEnd + " 까지</h2>"
+						+ "<form id='bForm'>"
+						+"<input type='hidden' name='evStart' value='"+result.data[i].evStart+"'>"
+						+"<input type='hidden' name='evEnd' value='"+result.data[i].evEnd+"'>"
+						+"</form>"
+						+"</div>";
+						
+						$("#tab").append(html);
+						init_masonry ();
+						$("#book").append(bookHtml).masonry("appended", bookHtml, true);	        
+						$("#book").masonry("reloadItems");	        
+						$("#book").masonry("layout");
+					}
+				}
+			},"json"
+		);
+		$("#tab").on('click',$(".tap"), function(event) {
+			var form = $(event.target).children()[2];
+			var formData = new FormData(form);
+			$.ajax({
+				url:contextRoot + "/chronicle/seletePicByEvent.do",
+				processData: false,
+				contentType: false,
+				data: formData,
+				type: 'POST',
+				success:function(result){
+					var result = result.ajaxResult
+					console.dir(result);
+				},dataType:"json"}
+			);
 		});
+		
+		$("#book").on('click',$(".page"), function(event) {
+			var form = ($(event.target).siblings())[0];
+			var formData = new FormData(form);
+			
+			
+		});
+		
+		
+// 		$("#book").append(html).masonry("appended", bookHtml, true);	        
+// 		$("#book").masonry("reloadItems");	        
+// 		$("#book").masonry("layout");
+// 		 $('#book').booklet({
+// 		    	height: '89%',
+// 		    	width: '99%'
+// 		    });
+	});
+	
+	function init_masonry () {
+		var $container = $("#book");
+		
+		$container.masonry({
+			itemSelector: ".page",
+			initLayout: false
+		});
+		$container.imagesLoaded(function () {
+		});
+	};
 </script>
 </head>
 <body>
+	<div id="tab">
+	</div>
 	<div id="book">
-		<div class="page">
-		<img src="../images/0.jpg">
-		<img src="../images/1.jpg">
-		<img src="../images/2.jpg">
-		<img src="../images/3.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/4.jpg">
-		<img src="../images/5.jpg">
-		<img src="../images/6.jpg">
-		<img src="../images/7.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/8.jpg">
-		<img src="../images/9.jpg">
-		<img src="../images/10.jpg">
-		<img src="../images/11.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/12.jpg">
-		<img src="../images/13.jpg">
-		<img src="../images/14.jpg">
-		<img src="../images/15.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/16.jpg">
-		<img src="../images/17.jpg">
-		<img src="../images/18.jpg">
-		<img src="../images/19.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/20.jpg">
-		<img src="../images/21.jpg">
-		<img src="../images/22.jpg">
-		<img src="../images/23.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/24.jpg">
-		<img src="../images/25.jpg">
-		<img src="../images/26.jpg">
-		<img src="../images/27.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/0.jpg">
-		<img src="../images/1.jpg">
-		<img src="../images/2.jpg">
-		<img src="../images/3.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/4.jpg">
-		<img src="../images/5.jpg">
-		<img src="../images/6.jpg">
-		<img src="../images/7.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/8.jpg">
-		<img src="../images/9.jpg">
-		<img src="../images/10.jpg">
-		<img src="../images/11.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/12.jpg">
-		<img src="../images/13.jpg">
-		<img src="../images/14.jpg">
-		<img src="../images/15.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/16.jpg">
-		<img src="../images/17.jpg">
-		<img src="../images/18.jpg">
-		<img src="../images/19.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/20.jpg">
-		<img src="../images/21.jpg">
-		<img src="../images/22.jpg">
-		<img src="../images/23.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/24.jpg">
-		<img src="../images/25.jpg">
-		<img src="../images/26.jpg">
-		<img src="../images/27.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/0.jpg">
-		<img src="../images/1.jpg">
-		<img src="../images/2.jpg">
-		<img src="../images/3.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/4.jpg">
-		<img src="../images/5.jpg">
-		<img src="../images/6.jpg">
-		<img src="../images/7.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/8.jpg">
-		<img src="../images/9.jpg">
-		<img src="../images/10.jpg">
-		<img src="../images/11.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/12.jpg">
-		<img src="../images/13.jpg">
-		<img src="../images/14.jpg">
-		<img src="../images/15.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/16.jpg">
-		<img src="../images/17.jpg">
-		<img src="../images/18.jpg">
-		<img src="../images/19.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/20.jpg">
-		<img src="../images/21.jpg">
-		<img src="../images/22.jpg">
-		<img src="../images/23.jpg">
-		</div>
-		<div class="page">
-		<img src="../images/24.jpg">
-		<img src="../images/25.jpg">
-		<img src="../images/26.jpg">
-		<img src="../images/27.jpg">
-		</div>
 	</div>
 </body>
 </html>

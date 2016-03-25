@@ -23,4 +23,5 @@ public interface ChronicleService {
 	public Members memberInfo(Members members); 
 	public void updateMember(Members members);
 	public void updateMemberPic(Members members);
+	public List<Regist> seletePicByEvent(EventDay evDay);
 }

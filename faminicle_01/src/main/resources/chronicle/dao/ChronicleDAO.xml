@@ -12,6 +12,37 @@
 		<result column="file_path" property="filePath" />
 		<result column="row_num" property="rNum" />
 	</resultMap>
+	
+	<resultMap type="eventday" id="eventdayMap">
+		<result column="ev_no" property="evNo" />
+		<result column="mem_no" property="memNo" />
+		<result column="ev_title" property="evTitle" />
+		<result column="ev_start" property="evStart" />
+		<result column="ev_end" property="evEnd" />
+	</resultMap>
+	
+	<resultMap type="regist" id="picMap">
+		<result column="PIC_NO" property="picNo" />
+		<result column="MEM_NO" property="memNo" />
+		<result column="TITLE" property="title" />
+		<result column="PIC_DATE" property="picDate" />
+		<result column="PIC_FILE_PATH" property="picFilePath" />
+		<result column="lat" property="lat" />
+		<result column="lng" property="lng" />
+	</resultMap>
+	
+	<resultMap type="members" id="loginMap">
+		<result column="mem_no" property="memNo" />
+		<result column="id" property="id" />
+		<result column="pass" property="pass" />
+		<result column="e_mail" property="eMail" />
+		<result column="pic_File_Path" property="picFilePath" />
+		<result column="pic_mini_file_path" property="picMiniFilePath" />
+		<result column="name" property="name" />
+		<result column="birthday" property="birthday" />
+		<result column="tel" property="tel" />
+	</resultMap>
+	
 	<select id="selectList" resultMap="chronicleMap">
 		select *
 		  from listtest
@@ -54,30 +85,28 @@
 		where id = #{id}
 	</select>
 	
+	<insert id="insertpic" parameterType="regist">
+		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
+		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
+	</insert>
+	
+	<select id="seletePicByEvent" parameterType="EventDay" resultMap="picMap">
+		select * 
+		from fam_pic
+		where PIC_DATE <![CDATA[>=]]> #{evStart} 
+			and PIC_DATE <![CDATA[<=]]> #{evEnd}
+			and MEM_NO = #{memNo}
+			order by PIC_DATE
+	</select>
 	
 	<!-- 회원 관련 쿼리  -->
-	<resultMap type="members" id="loginMap">
-		<result column="mem_no" property="memNo" />
-		<result column="id" property="id" />
-		<result column="pass" property="pass" />
-		<result column="e_mail" property="eMail" />
-		<result column="pic_File_Path" property="picFilePath" />
-		<result column="pic_mini_file_path" property="picMiniFilePath" />
-		<result column="name" property="name" />
-		<result column="birthday" property="birthday" />
-		<result column="tel" property="tel" />
-	</resultMap>
+	
 	<select id="loginCheck" parameterType="LoginCheck" resultMap="loginMap">
 		select *
 		from fam_member
 		where id= #{id} and pass=#{pass}
 	</select>
 	
-	<insert id="insertpic" parameterType="regist">
-		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
-		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
-	</insert>
-		
 	<select id="checkPass" parameterType="members" resultType="members">
 		select pass
 		  from fam_member
@@ -105,25 +134,15 @@
 		where id = #{id}
 	</update>
 	
-	
-	
-		
-	
-	
 	<!-- 기념일 설정 쿼리  -->
-	<resultMap type="eventday" id="eventdayMap">
-		<result column="ev_no" property="evNo" />
-		<result column="mem_no" property="memNo" />
-		<result column="ev_title" property="evTitle" />
-		<result column="ev_start" property="evStart" />
-		<result column="ev_end" property="evEnd" />
-	</resultMap>
+	
 	
 	<!-- member 번호로 기념일 조회 -->
 	<select id="selectEventByMem" parameterType="int" resultMap="eventdayMap">
 		select *
 		  from eventday
 		 where mem_no = #{memNo} 
+		 order by ev_start
 	</select>
 	
 	<!-- 기념일 등록  -->

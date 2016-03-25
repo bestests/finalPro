@@ -3,6 +3,7 @@ package chronicle.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import chronicle.domain.Members;

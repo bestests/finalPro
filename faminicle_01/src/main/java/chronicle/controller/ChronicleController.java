@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.google.common.util.concurrent.Service;
+
 import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
 import chronicle.domain.LoginCheck;
@@ -296,6 +298,14 @@ public class ChronicleController {
 		service.deletePic(no);
 		AjaxResult result = new AjaxResult("success", "ok");
 		return result;		
+	}
+	
+	@RequestMapping("seletePicByEvent.do")
+	public AjaxResult seletePicByEvent (HttpServletRequest req, EventDay evDay){
+		Members member = (Members)req.getSession().getAttribute("loginInfo");
+		evDay.setMemNo(member.getMemNo());
+		
+		return new AjaxResult("success", service.seletePicByEvent(evDay));
 	}
 	
 }

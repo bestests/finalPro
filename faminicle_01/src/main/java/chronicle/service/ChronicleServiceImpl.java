@@ -116,7 +116,6 @@ public class ChronicleServiceImpl implements ChronicleService{
 	public void deleteEvent(int evNo) {
 		dao.deleteEvent(evNo);
 	}
-
 	@Override
 	public void updateEvent(Chronicle chronicle) {
 		dao.updateEvent(chronicle);
@@ -125,6 +124,12 @@ public class ChronicleServiceImpl implements ChronicleService{
 	@Override
 	public void deletePic(int no) {
 		dao.deletePic(no);
+	}
+
+	@Override
+	public List<Regist> seletePicByEvent(EventDay evDay) {
+		
+		return dao.seletePicByEvent(evDay);
 	}
 
 	
