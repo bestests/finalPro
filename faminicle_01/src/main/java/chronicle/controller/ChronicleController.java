@@ -47,7 +47,7 @@ public class ChronicleController {
 		Map<String, Object> result = new HashMap<>();
 		Members member = (Members)req.getSession().getAttribute("loginInfo");
 		
-		String filePath = member.getMemFilePath();
+		String filePath = member.getMemPicPath();
 		if(filePath != null) {
 			filePath = filePath.substring(0, filePath.lastIndexOf("."));
 			filePath += "_mini.jpg";
@@ -166,7 +166,7 @@ public class ChronicleController {
 			saveFullFileName =saveFullFileName.replace(realPath,"../upload/"); 
 			System.out.println("컨트롤러: "+ filePath);
 			System.out.println("풀파일네임"+saveFullFileName);
-			members.setMemFilePath(saveFullFileName);
+			members.setMemPicPath(saveFullFileName);
 			System.out.println(saveFullFileName);
 					
 			//upload

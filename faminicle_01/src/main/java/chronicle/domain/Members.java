@@ -6,17 +6,17 @@ public class Members {
 	private String id;
 	private String pass;
 	private String eMail;
-	private String memFilePath;
+	private String memPicPath;
 	private	String picMiniFilePath;
 	private String name;
 	private String birthday;
 	private int tel;
 	
-	public String getMemFilePath() {
-		return memFilePath;
+	public String getMemPicPath() {
+		return memPicPath;
 	}
-	public void setMemFilePath(String memFilePath) {
-		this.memFilePath = memFilePath;
+	public void setMemPicPath(String memPicPath) {
+		this.memPicPath = memPicPath;
 	}
 	public String getPicMiniFilePath() {
 		return picMiniFilePath;

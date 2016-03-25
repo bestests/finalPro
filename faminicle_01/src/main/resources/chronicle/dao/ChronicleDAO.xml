@@ -36,7 +36,7 @@
 		<result column="id" property="id" />
 		<result column="pass" property="pass" />
 		<result column="e_mail" property="eMail" />
-		<result column="mem_pic_Path" property="memFilePath" />
+		<result column="mem_pic_Path" property="memPicPath" />
 		<result column="name" property="name" />
 		<result column="birthday" property="birthday" />
 		<result column="tel" property="tel" />
@@ -127,7 +127,7 @@
 	
 	<update id="updateMemberPic" parameterType="members">
 		update fam_member
-		set mem_pic_path = #{picFilePath}
+		set mem_pic_path = #{memPicPath}
 		where id = #{id}
 	</update>
 	
