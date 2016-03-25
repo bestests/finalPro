@@ -48,12 +48,17 @@ public class ChronicleController {
 		result.put("member", member);
 		result.put("eventDay", service.selectEvent(member.getMemNo()));
 		result.put("cList", service.selectList(startDate, endDate, pageNo));
+		result.put("member", (Members)req.getSession().getAttribute("loginInfo"));
 		
 		return result;
 	}
 	
 	@RequestMapping("registMember.do")
 	public Map<String,Object> insertMember(Members members){	
+		
+		System.out.println("회원가입요청");
+		
+		System.out.println(members.getId());
 		
 		service.registMember(members);	
 		
@@ -73,7 +78,7 @@ public class ChronicleController {
 		
 		return result;
 	}
-
+	
 	@RequestMapping("checkPass.do")
 	public AjaxResult checkPass(Members members, String check) {
 		boolean flag = false;
@@ -121,7 +126,6 @@ public class ChronicleController {
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
 	}
-	
 	@RequestMapping("updateMember.do")
 	public AjaxResult updateMembers(Members members){
 		
@@ -161,7 +165,6 @@ public class ChronicleController {
 			members.setPicFilePath(saveFullFileName);
 			System.out.println(saveFullFileName);
 			
-			
 			//upload
 			 try {
 		            //썸네일 가로사이즈
@@ -173,7 +176,7 @@ public class ChronicleController {
 		            File origin_file_name = new File(saveFullFileName);
 		            //생성할 썸네일파일의 경로+썸네일파일명
 		            
-		            String picMiniFilePath = saveFullFileName.replace(".jpg", "_mini.jpg");
+		            String picMiniFilePath = saveFullFileName.replace(ext, "_mini.jpg");
 		            File thumb_file_name = new File(picMiniFilePath);
 		            
 		            picMiniFilePath =picMiniFilePath.replace("C:/java77/tomcat-workspace/wtpwebapps/faminicle_01",".."); 
@@ -207,6 +210,7 @@ public class ChronicleController {
 	}
 	
 	@RequestMapping("Regist.do")
+	@ResponseBody
 	public AjaxResult register(Regist regist, MultipartHttpServletRequest mRequest) throws Exception{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
 		String realPath = servletContext.getRealPath("/upload/");
