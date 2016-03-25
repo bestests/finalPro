@@ -6,12 +6,18 @@ public class Members {
 	private String id;
 	private String pass;
 	private String eMail;
-	private String picFilePath;
+	private String memFilePath;
 	private	String picMiniFilePath;
 	private String name;
 	private String birthday;
 	private int tel;
 	
+	public String getMemFilePath() {
+		return memFilePath;
+	}
+	public void setMemFilePath(String memFilePath) {
+		this.memFilePath = memFilePath;
+	}
 	public String getPicMiniFilePath() {
 		return picMiniFilePath;
 	}
@@ -53,12 +59,6 @@ public class Members {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public String getPicFilePath() {
-		return picFilePath;
-	}
-	public void setPicFilePath(String picFilePath) {
-		this.picFilePath = picFilePath;
 	}
 	public String getBirthday() {
 		return birthday;
