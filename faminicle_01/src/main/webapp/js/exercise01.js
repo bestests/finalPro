@@ -41,7 +41,7 @@
 			console.log(startDate);
 			console.log(endDate);
 			$("#hiddenMemNo").val(result.member.memNo);
-			$("#infoId").html(result.member.name);
+			$("#infoId").html(result.member.name + " 님");
 			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
 			$("#infoModalImg").attr("src", result.member.picFilePath);
 			$("#thumbnail").attr("src",result.member.picMiniFilePath);
@@ -132,6 +132,10 @@
 			$("[name='no']").val(no);
 			$("#myModal").modal();
 		});
+		/* 파일 업로드 */
+		$("#modalImgDrop").click(function (){
+			$("#file").click();
+		})
 		
 		
 		/* info modal */
@@ -191,6 +195,7 @@
 				if($("#pass").val() != $("#pass2").val()){
 					alert("비밀번호가 일치하지 않습니다. 다시한번 확인해주세요");
 					$("#pass2").focus();
+					
 					return false;
 				}
 			} else {
@@ -613,8 +618,6 @@
 	    $('#update').setPreview(opt);
 	});
 			
-			
-		
 	 
 	 /* info drag 사진 등록 */
 		var dropBox = document.getElementById("modalImgDrop");          
@@ -644,7 +647,7 @@
 		             
 		    var reader = new FileReader();    
 		    
-		    reader.onload = (function(aFile){return function(e) {         
+		    reader.onload = (function(File){return function(e) {         
 		        var result = e.target.result;  
 		        if(isImage){
 		          dropImage.src = result;                                                                            
@@ -707,3 +710,5 @@
 		  */
 			    };
 			};
+		
+		
