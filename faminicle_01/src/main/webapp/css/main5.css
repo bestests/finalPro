@@ -9,11 +9,12 @@
 html, body, #wrap{
 	height: 100%;
 	width: 100%;
-}
+}    
 
  #wrap{
 /*  	background-color:#ccbaba; */
  	background-color: #74C3C8;
+ 	overflow: hidden;
  }
  #header{
 /*  	background:tomato; */
@@ -80,7 +81,8 @@ html, body, #wrap{
  	right: 0;
  	padding: 1%;
  	transform: rotate(-2deg);
-    margin-top: -10px;
+    margin-top: -20px;
+    z-index: 1000000;
  }
  .loginContainer{
 /* 	background:red; */

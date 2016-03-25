@@ -20,7 +20,7 @@ $("#loginForm").submit(function(){
 					console.log("로그인 실패");
 					alert("아이디 혹은 비밀번호가 일치하지 않습니다.다시한번 확인해주세요");
 				}
-				
+				    
 			},"json");
 		return false;
 });
