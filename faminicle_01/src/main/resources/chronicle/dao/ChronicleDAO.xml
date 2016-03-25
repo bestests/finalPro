@@ -36,8 +36,7 @@
 		<result column="id" property="id" />
 		<result column="pass" property="pass" />
 		<result column="e_mail" property="eMail" />
-		<result column="pic_File_Path" property="picFilePath" />
-		<result column="pic_mini_file_path" property="picMiniFilePath" />
+		<result column="mem_pic_Path" property="memFilePath" />
 		<result column="name" property="name" />
 		<result column="birthday" property="birthday" />
 		<result column="tel" property="tel" />
@@ -100,13 +99,12 @@
 	</select>
 	
 	<!-- 회원 관련 쿼리  -->
-	
 	<select id="loginCheck" parameterType="LoginCheck" resultMap="loginMap">
 		select *
 		from fam_member
 		where id= #{id} and pass=#{pass}
 	</select>
-	
+		
 	<select id="checkPass" parameterType="members" resultType="members">
 		select pass
 		  from fam_member
@@ -129,20 +127,18 @@
 	
 	<update id="updateMemberPic" parameterType="members">
 		update fam_member
-		set pic_file_path = #{picFilePath}
-			,pic_mini_file_path = #{picMiniFilePath}
+		set mem_pic_path = #{picFilePath}
 		where id = #{id}
 	</update>
 	
+
 	<!-- 기념일 설정 쿼리  -->
-	
 	
 	<!-- member 번호로 기념일 조회 -->
 	<select id="selectEventByMem" parameterType="int" resultMap="eventdayMap">
 		select *
 		  from eventday
 		 where mem_no = #{memNo} 
-		 order by ev_start
 	</select>
 	
 	<!-- 기념일 등록  -->
@@ -164,13 +160,13 @@
 		  from eventday
 		 where ev_no = #{evNo} 
 	</delete>
-	<!-- 수정 -->
+	<!-- 수정  -->
 	<update id="updateEvent" parameterType="chronicle" > 
 		update listtest
 		set  content = #{content} , reg_date = #{regDate}
 		where no= #{no} 
 	</update>
-	<!-- 사진삭제 -->
+	<!-- 사진삭제  -->
 	<delete id="deletePic" parameterType="int">
 		delete 
 		from listtest
