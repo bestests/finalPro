@@ -45,7 +45,6 @@
 			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
 			console.log(result.member.memPicPath);
 			if (result.member.memPicPath) {
-				alert(1);
 				$("#infoModalImg").attr("src", result.member.memPicPath);
 				$("#thumbnail").attr("src",result.member.picMiniFilePath);
 			}
