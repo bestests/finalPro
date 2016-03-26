@@ -43,8 +43,10 @@
 			$("#hiddenMemNo").val(result.member.memNo);
 			$("#infoId").html(result.member.name + " 님");
 			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
-			if (result.member.picFilePath) {
-				$("#infoModalImg").attr("src", result.member.picFilePath);
+			console.log(result.member.memPicPath);
+			if (result.member.memPicPath) {
+				alert(1);
+				$("#infoModalImg").attr("src", result.member.memPicPath);
 				$("#thumbnail").attr("src",result.member.picMiniFilePath);
 			}
 			$("#content").append(html);
@@ -212,10 +214,14 @@
 				return false;
 			}
 			
-			var param = $(this).serialize();
 			$.post(
 				contextRoot + "/chronicle/updateMember.do",
-				param,
+				{
+					pass: $("#pass").val(),
+					eMail: $("[name='eMail']").val(),
+					tel: $("#tel").val(),
+					id: $("#hidden").val()
+				},
 				function (resultObj) {
 					alert("수정이 완료되었습니다");
 					$("#passchk").val("");
