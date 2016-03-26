@@ -104,6 +104,11 @@
 		from fam_member
 		where id= #{id} and pass=#{pass}
 	</select>
+	
+	<insert id="insertpic" parameterType="regist">
+		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
+		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
+	</insert>
 		
 	<select id="checkPass" parameterType="members" resultType="members">
 		select pass
