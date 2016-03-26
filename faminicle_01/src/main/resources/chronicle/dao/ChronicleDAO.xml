@@ -74,8 +74,8 @@
 	</select>
 	
 	<insert id="insertMember" parameterType="members">
-		insert into fam_member(id,pass,e_mail,name,birthday,tel)
-		values(#{id},#{pass},#{eMail},#{name},#{birthday},${tel})
+		insert into fam_member(id,pass,e_mail,name,mem_pic_path,birthday,tel)
+		values(#{id},#{pass},#{eMail},#{name},#{memPicPath}#{birthday},${tel})
 	</insert>
 	
 	<select id="checkId" parameterType="members" resultType="int">
@@ -104,11 +104,6 @@
 		from fam_member
 		where id= #{id} and pass=#{pass}
 	</select>
-	
-	<insert id="insertpic" parameterType="regist">
-		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
-		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
-	</insert>
 		
 	<select id="checkPass" parameterType="members" resultType="members">
 		select pass
