@@ -43,8 +43,10 @@
 			$("#hiddenMemNo").val(result.member.memNo);
 			$("#infoId").html(result.member.name + " 님");
 			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
-			$("#infoModalImg").attr("src", result.member.picFilePath);
-			$("#thumbnail").attr("src",result.member.picMiniFilePath);
+			if (result.member.picFilePath) {
+				$("#infoModalImg").attr("src", result.member.picFilePath);
+				$("#thumbnail").attr("src",result.member.picMiniFilePath);
+			}
 			$("#content").append(html);
 			maxNum = 0;
 			
@@ -52,7 +54,7 @@
 			console.dir(items);
 		}).fail(function () {
 			alert("로그인 해주세요");
-			location.href="main2.html";
+			location.href="main5.html";
 			
 		});
 		
@@ -137,6 +139,7 @@
 		$("#modalImgDrop").click(function (){
 			$("#file").click();
 		})
+		
 		
 		/* info modal */
 		$("#infoId").on("click" , function (event) {
@@ -616,6 +619,7 @@
 	 
 	    $('#update').setPreview(opt);
 	});
+			
 	 
 	 /* info drag 사진 등록 */
 		var dropBox = document.getElementById("modalImgDrop");          
@@ -669,6 +673,7 @@
 		  }, true);          
 			  	
 		  /* thumbnail */ 
+				  
 		  var thumbFfile = document.querySelector('#infoModalImg');
 			
 		  thumbFfile.onchange = function () {
@@ -708,3 +713,5 @@
 		  */
 			    };
 			};
+		
+		
