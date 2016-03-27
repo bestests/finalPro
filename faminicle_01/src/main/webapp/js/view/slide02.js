@@ -21,6 +21,7 @@ var prev = $('#controls .prev'), next = $('#controls .next');
 var current_index = 1, translate_y = y_space * -1, translate_z = z_space * -1;
 var realCurrent_index;
 var realFlag=false;
+var doubleStopFlag=false;// 다음페이지,이전페이지 중복 방지
 //slideEvent
 var html="";
 
@@ -29,41 +30,31 @@ getList();
 
 
 function getList() {
-//	console.log("버튼체크의 메세지2");
+	
 	var root = contextRoot + "/chronicle/list.do?";
-//	console.log(arguments);
 	if(arguments.length == 0) {
 		root += "pageNo=&startDate=&endDate=";
 	} else {
 		root += "pageNo=" + arguments[0] + "&startDate=" + arguments[1] + "&endDate=" + arguments[2];
 	}
-//	console.log(root);
 	
 	maxNum = 0;	
 	minNum = 999999999999999999999;
 	
 	$.getJSON(root,function(result){
 		
-//		console.log(result);
-//		console.log("okok");
 		if(result.cList.length==0){
 			//수정해야함.
 			alert("더이상 데이터가 없습니다.");
-//			next.trigger('click');
+			doubleStopFlag=false;//더블체크 해제;
 			
 		}else{
 			current_index = 1;
-//			y_space = 30,z_space = 50;
-//			translate_y = y_space * -1;
-//			translate_z = z_space * -1;
-//			html="";
 			$("#stack").empty();//기존에 등록된값 삭제	
 			
 		for(var i=0;i < result.cList.length ; i++){
 			if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
 			if(minNum > result.cList[i].no) minNum = result.cList[i].no;
-// 			if(arguments.length != 0) {
-// 			}
 			html +=	
 			   '<li id="con_' + result.cList[i].no + '">                                                                                     '
 			+'	<div class="imgInfo">                                                          '
@@ -75,7 +66,9 @@ function getList() {
 			+'			<div class="leftContent" >                                                      '
 			+'				<p class="imgDate'+i+'">'+ result.cList[i].regDate + '</p>                                        '
 			+'				<p class="imgTitle'+i+'">'+ result.cList[i].content +'</p>                                           '
-			+'				<input type="hidden" value="'+result.cList[i].no+'" />                                                     '
+			+'				<input type="hidden" id="mId" value="'+result.cList[i].no+'" />                                                     '
+			+'				<input type="hidden" id="xPoint" value=""/>                                                     '
+			+'				<input type="hidden" id="yPoint" value="" />                                                     '
 			+'				                                                                           '
 			+'				<div class="imgIcon">                                                      '
 			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/></button>'
@@ -85,8 +78,6 @@ function getList() {
 			+'			</div>                                                                         '
 			+'			<div class="imgMap">                                                           '
 			+'				<div id="map_canvas'+i+'" class="mapclass"></div>                                                                   '
-//			+'			<iframe></iframe>                                                           '
-//			+'			<div id="loading"><img src="../images/slide/balls.svg"/><br/>Loading... </div>                                                           '
 			+'			</div>                                                                         '
 			+'		</div>                                                                             '
 			+'		                                                                                   '
@@ -108,24 +99,9 @@ function getList() {
 		view = $('#view'), lis = $('li');
 		z_index = lis.length;
 		
-		
-// 		if(arguments.length != 0) {
-// 			endNo = minNum;
-// 			minNum = 999999999999999999999;
-// 		} else {
-// 			endNo = result.cList[result.cList.length - 1].no;		
-// 		}
+		doubleStopFlag=false;//더블중복체크 해제
 		
 		console.log("현재 y : "+translate_y+"현재 x: "+translate_z);
-//		console.log("시작일자"+ startDate);
-//		console.log("끝날자 " + endDate);
-//		console.log("시작번호"+startNo);
-//		console.log("끝번호"+endNo);
-//		console.log("길이" + lis.length);
-//		console.log("최대: " + maxNum + "최소 : "+ minNum);
-//		console.log(view);
-// 		console.log(lis);
-//		console.log("현재페이지:"+current_index);
 		slideViewEvent();
 		if(slideShow==true){
 			$("#controls").hide("slow");
@@ -143,15 +119,12 @@ function getList() {
 	})
 	.fail(function(){
 		alert("로그인을 먼저 해주시기 바랍니다. 로그인 페이지로 이동합니다.");
-		location.href="../views/main2.html";
+		location.href="../views/main5.html";
 	
 	});
 	
 	}
-//		console.log("이벤트 활성");
-// 		$("div.imgView").click(imgDown);
 		$("#stack").on("click",".imgView",imgDown);
-// 		$("div.imgContent").click(imgUp);
 		$("#stack").on("click",".leftContent",imgUp);
 		$("body").on("mousewheel", wheelEvent);
 		$("#stack").on("click", "#update", updateEvent);
@@ -159,26 +132,18 @@ function getList() {
 		$("#stack").on("click", "#mapView", mapEvent);
 		$("#play").click(slideEvent);
 		$("body").dblclick(stopSlide);
-		//modalEvent
-//		$("#stack").on("click","#mUpdate",mUpdateEvent);		
-//		$("#mUpdate").click(mUpdateEvent);
 		$("#mUpdate").submit(mUpdate);
 			
 
 function imgDown(event) {
 	
-// 	var $target = $(event.target).attr('id');
-// 	console.log("타겟 : "+$target);
 	var numCk = $(event.target).attr("id");
-//	console.log(numCk);
-//	console.log($(".imgContent").attr("id"));
 	
 	if(contentFlag){
 		$("#pic"+numCk).css({				
 			opacity:"1",
 			top:"0"
 		});		
-//		$(".imgMap").append('<iframe id="sildemap" src="Sildemap.html"></iframe>');
 		
 		
 		
@@ -192,10 +157,8 @@ function imgUp() {
 			opacity:"0",
 			top:"-100%"
 		});
-		//content닫힘
 		$(".leftContent").css("left","25%");
 		contentFlag=true;
-		//mapView닫힘
 		$(".mapclass").hide();
 		mapView=false;
 	}
@@ -206,10 +169,8 @@ function wheelEvent() {
 		opacity:"0",
 		top:"-100%"
 	});
-	//Content 닫힘
 	$(".leftContent").css("left","25%");
 	contentFlag=true;
-	//Mapview 닫힘
 	$(".mapclass").hide();
 	mapView=false;
 }
@@ -220,24 +181,14 @@ function updateEvent(event) {
 	var num=$(this).parents()[1].children[2].value;  
 	event.stopPropagation();
 	
-//	console.log(date);
-//	console.log(title);
-//	console.log(num);
-	
-//	console.dir($this.parents()[1].children[0].innerHTML);
-//	console.dir($this.parents()[1].children[1].innerHTML);
-//	console.dir($this.parents()[1].children[2].value);
 	$("#myModal").modal();
 	
-//	$("#mtitle").html("<input type='text' value='"+title+"' style='width:100%;'/>");
 	$("#content").val(title);
 	$("#regDate").val(date);
 	$("#no").val(num);	
 }
-//modal update Event
 function mUpdate(){
 	var param = $(this).serialize();
-//		console.log($("#no").val());
 	console.dir(param);
 	console.log()
 	var result = confirm("수정하시겠습니까?");
@@ -249,18 +200,14 @@ function mUpdate(){
 				var $this = $("[value='"+$("#no").val()+"']");
 				console.log(resultObj);
 				alert("수정이 완료되었습니다");
-//				console.log($("[value='168']").prev());
-//				var abc = $("input[type=hidden]").val($("#no").val());
 				console.log($("#no").val());
 				console.log($("#content").val());
 				console.log($("#regDate").val());
-//				console.log($("[value='"+$("#no").val()+"']").prev()[0]);
 				$this.parent().children(":eq(0)").html($("#regDate").val());
 				$this.parent().children(":eq(1)").html($("#content").val());
 				$(".calendar").html($("#regDate").val());
 				
 				
-				//<input type="hidden" value="'+result.cList[i].no+'" /
 				
 				$("#myModal").modal("hide");
 			},"json");
@@ -274,7 +221,6 @@ function mUpdate(){
 function deleteEvent(event) {
 	var cNo = $(this).parents("[class='leftContent']").children(":eq(2)").val();
 	var result = confirm("정말 삭제하시겠습니까?");
-	//$this.parent().children(":eq(0)").html($("#regDate").val());
 	
 	if(result){
 	$.post(
@@ -290,17 +236,25 @@ function deleteEvent(event) {
 		);
 	}
 	
-//	alert(result);
 	event.stopPropagation();
 }
 
 function mapEvent(event){
+	
 	var numCk = $(this).parents()[3].children[0].children[0].id;
+	var date = $(this).parents()[1].children[0].innerHTML;
+	var content = $(this).parents()[1].children[1].innerHTML;	
+	
+	var xPoint = $(this).parents()[1].children[3].value;
+	var yPoint = $(this).parents()[1].children[4].value;
+	
+	console.log(" x : "+xPoint+" y :"+yPoint);
+	
 	if(mapView==false){
 		$(".leftContent").css("left","0");	
 		$(".mapclass").show();
 		
-		initialize(numCk);
+		initialize(numCk,date,content,xPoint,yPoint);
 		
 		mapView=true;
 	}else{
@@ -314,24 +268,17 @@ function mapEvent(event){
 
 function slideEvent(event) {
 	slideShow=true;
-//	console.log(current_index);
 	$("#controls").hide("slow");
-	//재생버튼과 다른각도에서보기 버튼 숨김적용
 	$("#view * li").hide();
-//	console.log(current_index);
 	lis.filter(':nth-child(' + (current_index) + ')').show();
 	
-	//자동재생시 이미지 크기 크게
 	
 	$(".imgContent").hide();	
 	
 	$("#stack li").css("margin-top","-5%");
 	$(".container").css("background","rgba(0,0,0,.7)");
-	//filter: alpha(opacity=50);
-//	style="background:rgba(0,0,0,0.5); "
 	
 	
-	//slide 시 hidden 짜르기를 취소
 	$(".imgInfo").css({
 		overflow:"visible"
 	});
@@ -345,41 +292,41 @@ function slideEvent(event) {
 }
 
 function stopSlide() {
-	slideShow= false;
-	//content 내려왔을때 닫게만든다.
-	if(!contentFlag){
-		$(".imgContent").css({
-			opacity:"0",
-			top:"-100%"
-		});
-		contentFlag=true;	
-	}		
 	
-	if (!controlStatus) {
-		$("#controls").show("slow");
-		$("#view * li").show();
-		clearInterval(slide);
-		controlStatus = true;
+	if(slideShow){
+		slideShow= false;
+		if(!contentFlag){
+			$(".imgContent").css({
+				opacity:"0",
+				top:"-100%"
+			});
+			contentFlag=true;	
+		}		
 		
-		$(".imgView img").css({
-					transform: "scale(1)"
-					});	
-		$(".imgContent").show();	
-		$("#stack li").css("margin-top","0");		
-
-		// imgContent 화면 숨기게
-		$(".imgInfo").css({
-			overflow:"hidden"
-		});
-		
-		
-		$(".container").removeAttr("style");
+		if (!controlStatus) {
+			$("#controls").show("slow");
+			$("#view * li").show();
+			clearInterval(slide);
+			controlStatus = true;
+			
+			$(".imgView img").css({
+						transform: "scale(1)"
+						});	
+			$(".imgContent").show();	
+			$("#stack li").css("margin-top","0");		
+	
+			$(".imgInfo").css({
+				overflow:"hidden"
+			});
+			
+			
+			$(".container").removeAttr("style");
+		}
 	}
 }
 
 function showImg(event) {
 	next.trigger('click');
-//		event.stopPropagation();
 }	
 
 
@@ -387,15 +334,12 @@ function showImg(event) {
 //3d효과적용
 function slideViewEvent(){
 
-//	console.log("li갯수 : "+lis.length);
 	lis.each(function() {
 	this.style['-webkit-transform'] = 'translate3d(0px, '+ translate_y + 'px, ' + translate_z + 'px)';
-// 	console.log("변경전"+translate_y+":"+translate_z);
 	this.style['z-index'] = z_index;
 	
 	$(this).data('translate_y', translate_y);		//스크롤 될때마다 y축 위,아래
 	$(this).data('translate_z', translate_z);		//스크롤 될때마다 z축 앞,뒤
-// 	console.log("변경후"+translate_y+":"+translate_z);
 	
 	z_index--;
 	translate_y -= y_space;
@@ -405,37 +349,24 @@ function slideViewEvent(){
 }
 
 function check_buttons() {
-	// 현재페이지 1일때 이전(앞) 버튼 비활성화 
 	if(realFlag==true){
-	if (realCurrent_index < 1) {
-//		alert("좀더 미래로 갑니다!.||  첫페이지 번호"+startNo+"|| 첫 일자 :"+startDate);
+	if (realCurrent_index < 1 && doubleStopFlag==false) {
 		alert("다음 사진을 불러옵니다.");
-		
-//		console.log(pageNo);
-//		if(pageNo == 1){
-//			alert("최신 페이지입니다.(더이상 최신자료가음슴)");
-//		}else{
-//		}
 		
 		y_space = 30,z_space = 50;
 		translate_y = y_space * -1;
 		translate_z = z_space * -1;
 		html="";
 		realFlag=false;
+		
+		doubleStopFlag=true;
 		getList(startNo,startDate,"");
 		
-//		console.log("버튼체크의 메세지");
-//			next.attr('disabled', true);
-		
-//			prev.attr('disabled', true);
 	} else {
 		prev.attr('disabled', false);
 	}
-	// ************* 현재페이지 최대일때 다음(뒤) 버튼 비활성화
-	if (realCurrent_index > lis.length) {
-//		alert("좀더 과거로 갑니다!.||  끝페이지 : "+lis.length +"끝페이지 번호"+endNo+"|| 마지막 일자 :"+endDate);
+	if (realCurrent_index > lis.length && doubleStopFlag == false) {
 		alert("이전 사진을 불러옵니다.");
-//		console.log(endNo+":"+startDate+""+endDate);
 		
 		y_space = 30,z_space = 50;
 
@@ -443,39 +374,35 @@ function check_buttons() {
 		translate_z = z_space * -1;
 		html="";
 		realFlag=false;
+		
+		
+		doubleStopFlag=true;
 		getList(endNo,"",endDate);
 		
 		console.log("버튼체크의 메세지");
-//			next.attr('disabled', true);
 	 }else {
 		next.attr('disabled', false);
 	}
 	}
 }
 
-
-
-	//next이란 요소에 click라는 이벤트를 연결시킬수있다 (bind)
 next.bind('click', function(event) {
 	if(slideShow==true){
 		lis.filter(':nth-child(' + (current_index+1) + ')').show();
 	}
+	if(doubleStopFlag=true){
+		doubleStopFlag=false; // 더블 중복효과 초기화
+	}
 	
 	
-//	console.log("최종길이"+lis.length);
 	if ($(this).attr('disabled'))
 	return false;
-//	console.log("next현재 index :"+current_index);
-	// 현재보다 클경우 체크확인
 	console.log("prev현재 index:"+current_index);
 	if((current_index+1) > lis.length){
-//		console.log("최대길이보다 크다");
 		realCurrent_index= current_index+1;
-		//버튼체크 작동할수있게.
 		realFlag=true;
 		check_buttons();
 	}else{
-//		console.log("최대길이보다 작다");
 		lis.each(function() {
 			animate_stack(this, y_space, z_space);
 		});
@@ -485,14 +412,12 @@ next.bind('click', function(event) {
 		
 		current_index++;
 		
-//		lis.filter(':nth-child(' + current_index + ')').show();
 		check_buttons();
 		
 	}
 });
 
 prev.bind('click', function() {
-//	alert("다운다운");
 	if ($(this).attr('disabled')) 
 		return false;
 	
@@ -522,24 +447,24 @@ prev.bind('click', function() {
 $(document).bind('mousewheel',
 	//deltaY 1이면 위로 스크롤 -1이면 아래로 스크롤
 	function(event, deltaY) {
-	//console.log(event);
 	if (deltaY >= 0) {
 		console.log("마우스 휠업");
-		next.trigger('click');
+		if(doubleStopFlag==false){
+			next.trigger('click');
+		}
 	} else {
 		console.log("마우스 휠 다운")
-		prev.trigger('click');
+		if(doubleStopFlag==false){
+			prev.trigger('click');
+		}
 	}
 });
 //prev:-   next:+
 function animate_stack(obj, y, z) {
-	//console.log(obj);
-//	console.log("y: "+y+"//z :"+z);
 	
 	var new_y = $(obj).data('translate_y') + y;
 	var new_z = $(obj).data('translate_z') + z;
 	
-//	console.log("new_y : "+new_y+"new_x : "+new_z);
 	
 	obj.style['-webkit-transform'] = 'translate3d(0px, ' + new_y
 	+ 'px, ' + new_z + 'px)';
@@ -548,22 +473,84 @@ function animate_stack(obj, y, z) {
 	.data('translate_z', new_z);
 
 }
-//map
-function initialize(numCk){
-	 var latlng = new google.maps.LatLng(37.5240220, 126.9265940);
-	 var myOptions = {
-	  streetViewControl: false, 
-	  mapTypeControl: false, 			 
-	  zoom: 17,
-	  center:latlng,
-	  mapTypeId: google.maps.MapTypeId.ROADMAP   
-	 };
-	 console.log("map: "+numCk);
-	 map = new google.maps.Map(document.getElementById("map_canvas"+numCk), myOptions);
-	 var marker = new google.maps.Marker({
-		 position: latlng,
-		 map : map
-	 });
-	var infowindow = new google.maps.InfoWindow();
+
+//Map Event
+function initialize(numCk,date,content,xPoint,yPoint) {
+	console.log(typeof xPoint);
+	
+	if(xPoint==""&&yPoint==""){
+		alert("위치정보 null, Default값 적용");
+			xPoint=37.544553;
+			yPoint=127.017309;
+//			return false;
 	}
+	
+	var markerTitle = "마커 테스트";
+	
+	var mapOptions = {
+			zoom:15,		// 지도의 확대 레벨 : 숫자가 클수록 확대정도가 큼
+			center : new google.maps.LatLng(xPoint, yPoint),
+			disableDefaultUI : false,
+			mapTypeId: google.maps.MapTypeId.ROADMAP ,
+			draggable : true
+	}
+	var map = new google.maps.Map(document.getElementById("map_canvas"+numCk), mapOptions); //div영역에 맵 생성
+
+	var image = "marker.png"; //마커 이미지		
+	//여러개 표시할 위치값 배열로 지정
+	 var locations = [
+//		            	['company 1', 37.5375772, 127.0062798, 2], // 1번 타이틀, 마커 좌표값, 우선순위(z-index)
+//		            	['company 3', 37.535412, 127.011081, 2], // 1번 타이틀, 마커 좌표값, 우선순위(z-index)
+		            	[content, xPoint, yPoint, 1] // 2번 타이틀, 마커 좌표값, 우선순위(z-index)
+   	];		
+	setMarkers(map, locations,date,content);
+	
+	
+	
+	
+	
+}
+
+//다중마커사용시 적용
+function setMarkers(map, locations,date,content){
+	var image = new google.maps.MarkerImage("../images/slide/marker.png", null, null, null, new google.maps.Size(40,40));
+	
+	for(var i=0; i < locations.length; i++){
+		
+		var compa = locations[i];
+		var myLatLng = new google.maps.LatLng(compa[1], compa[2]);
+		var marker = new google.maps.Marker({
+			position: myLatLng,
+			map: map,
+			title : compa[0],
+			zIndex : compa[3],
+			icon:image
+		});
+	}	
+	
+	
+	var markerMaxWidth	= 300;	//마커클릭했을때 말풍선의 최대크기
+	var contentString = 
+		"<div>               		"
+		+"<h3>"+date+	"</h3>		"
+		+"<p>"+content+"</p> 		"
+		+"</div>             		";
+	
+	
+	var infowindow = new google.maps.InfoWindow(
+			{
+				content: contentString,
+				maxWidth: markerMaxWidth
+			}
+	);
+
+	google.maps.event.addListener(marker, 'click', function() {
+		infowindow.open(map, marker);
+	});
+	
+	
+}
+
+
+
 

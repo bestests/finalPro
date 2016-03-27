@@ -70,12 +70,6 @@ time.icon strong
   box-shadow: 0 2px 0 #fd9f1b;
 }
 
-time.icon em
-{
-  position: absolute;
-  bottom: 0.3em;
-  color: #fd9f1b;
-}
 
 
 time.icon span
@@ -133,10 +127,7 @@ time.icon span
 	background: white;
 }
 
-img{
-	max-height: 100%;
-	max-width: 100%;
-}
+
 .imgInfo{
 	
 	position:absolute;
@@ -204,6 +195,11 @@ p{
 	
 /* 	background: red; */
 }
+.imgIcon img{
+	max-height: 100%;
+	max-width: 100%;
+}
+
 .imgIcon .left{
 	float:left;
 	margin: 0 1%;
