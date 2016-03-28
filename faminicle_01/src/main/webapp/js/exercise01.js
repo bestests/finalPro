@@ -10,13 +10,13 @@
 			console.dir(result);
 			var index = 1;
 			for(var i in result.cList) {	
-				if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
+				if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
 				html += "<div class='box'>"
-					  + "	<img src='" + result.cList[i].filePath + "' />"
+					  + "	<img src='" + result.cList[i].picFilePath + "' />"
 					  + "	<div class='detail' onselectstart='return false;'>"
-					  + "		<input type='hidden' value='" + result.cList[i].no + "' />" 	
+					  + "		<input type='hidden' value='" + result.cList[i].picNo + "' />" 	
 					  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-					  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+					  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
 					  + "	</div>"
 					  + "</div>";
 			};
@@ -36,7 +36,7 @@
 			startNo = maxNum;
 			
 			endDate = result.cList[result.cList.length - 1].regDate;
-			endNo = result.cList[result.cList.length - 1].no;
+			endNo = result.cList[result.cList.length - 1].picNo;
 			
 			console.log(startDate);
 			console.log(endDate);
@@ -141,6 +141,9 @@
 			$("#file").click();
 		})
 		
+		$("#modalImgDrop").change(function () {
+			$("header").location.href="exercise01.html";
+		}) 
 		
 		/* info modal */
 		$("#infoId").on("click" , function (event) {
@@ -178,6 +181,7 @@
 					if(result.ajaxResult.data) {	
 						$this.prev().html("현재 비밀번호 (비밀번호가 일치합니다.)");
 						$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", false);
+						$("#updatebt").attr('disabled', false);
 					} else {
 						$this.prev().html("현재 비밀번호 (비밀번호가 일치하지않습니다.)");
 						$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", true);
@@ -185,6 +189,8 @@
 				}
 			);
 		});
+		
+		
 		
 		/* update */
 		$("#updatebt").click(function () {
@@ -227,7 +233,8 @@
 					$("#pass").val("");
 					$("#pass2").val("");
 					$("#infoModal").modal('hide');
-				}, "json");
+				}, "json"
+				);
 			return false;
 		})
 		
@@ -346,8 +353,8 @@
 					var html = "";
 					console.dir(result.cList);
 					for(var i in result.cList) {	
-						if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
-						if(minNum > result.cList[i].no) minNum = result.cList[i].no;
+						if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
+						if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
 						html += "<div class='box'>"
 							  + "	<img src='" + result.cList[i].filePath + "' />"
 							  + "	<div class='detail' onselectstart='return false;'>"
@@ -407,7 +414,8 @@
 	 var maxNum = 0;
 	 var minNum = 999999999999999999999;
 	 var nextList = function () {
-			console.log(endDate);
+		 	console.log("호출 시 endNo : " + endNo);
+			console.log("호출 시 endDate : " + endDate);
 			$.getJSON(
 					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
 					function (result) {
@@ -419,13 +427,13 @@
 							var html = "";
 							for(var i in result.cList) {	
 								
-								if(minNum > result.cList[i].no) minNum = result.cList[i].no;
+								if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
 								
 								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].filePath + "' />"
+									  + "	<img src='" + result.cList[i].picFilePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
 									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+									  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
 									  + "	</div>"
 									  + "</div>";
 							};
@@ -460,10 +468,10 @@
 							for(var i in result.cList) {	
 								if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
 								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].filePath + "' />"
+									  + "	<img src='" + result.cList[i].picFilePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
 									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+									  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
 									  + "	</div>"
 									  + "</div>";
 							};

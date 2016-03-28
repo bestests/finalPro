@@ -58,7 +58,7 @@
 				  		 where pic_date >= #{startDate}
 				  		 order by pic_date asc
 		  		  		)as t
-		  		  where no > #{pageNo} 	
+		  		  where pic_no > #{pageNo} 	
 		  		  limit 24	
 		  		)as t1
 		 order by pic_date desc  		
@@ -68,7 +68,7 @@
 		select *
 		  from fam_pic
 		 where pic_date <![CDATA[<=]]> #{endDate}
-	 	    and no <![CDATA[<]]> #{pageNo}
+	 	    and pic_no <![CDATA[<]]> #{pageNo}
 		 order by pic_date desc
 		 limit 24 
 	</select>

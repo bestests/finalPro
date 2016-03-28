@@ -112,7 +112,7 @@
           left: 10%;
           opacity:0.3;
     }    
-    #cancel {
+    #back {
           top: 83%;
           left: 40%;
     }    
@@ -215,6 +215,7 @@
 					dropBox.appendChild(dropImage);
 					$("#upload").hide();
 					$("#check").css('opacity','1');
+					$("upload").attr("disabled" , false); //** 버튼 숨기기
 					execute=true;
 			};
 		})(file);
@@ -383,7 +384,7 @@ function registPic(){
 			<div>
 			<img id="upload" src="../images/regist.png" title="업로드할 사진을 드래그 해주세요~^^">
 			<input type="file" id="file" name="file" accept="image/*"/>
-			<input type="hidden" class="datedata" name="picDate">
+			<input type="hidden" class="datedata" name="regDate">
 			<input type="hidden" class="memNo" name="memNo" value="1">
 			<div id="data">
 				<input type="hidden" id="lat" name="lat">
@@ -393,8 +394,8 @@ function registPic(){
 			</div>
 			<img id="equal" title="이 전과 같음" src="../images/등호2.png">
 			<img id="map" title="사진 주소" src="../images/지도.png">
-			<img id="check" title="사진 등록" src="../images/확인.jpg" onclick="imageUp()">
-			<img id="cancel" title="사진등록 취소" src="../images/취소.jpg">
+			<img id="check" title="사진 등록" src="../images/확인.jpg" disabled="disabled" onclick="imageUp()">
+			<img id="back" title="메인으로 가기" src="../images/back1.jpg" onclick="location.href='exercise01.html'">
 			<div id="datepicker"></div>
 			<div id="map_canvas"></div>
 			<p id="addr"><input class="form-control" type="text" id="addr1" placeholder="search" name="address" onkeyup='codeAddress(); return false;'/></p>
