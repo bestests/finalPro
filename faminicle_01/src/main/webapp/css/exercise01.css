@@ -197,8 +197,7 @@
 		order-bottom-left-radius: 13px;
     	border-bottom-right-radius: 13px;
 		color: black;
-		transition: .3s;
-		
+		transition: .3s;	
 	}
 	
 	#fileDiv {
@@ -237,5 +236,18 @@
 		height: 0px;
 	}
 	
-	
+	.thumbs {
+		width: 50px;
+		border-radius: 25px;
+	}
+	td {
+		height: 50px;
+		line-height: 25px;
+	}
+	#thumbTd {
+		width: 50px;
+	}
+	#result {
+		width: 80%;
+	}
 	
