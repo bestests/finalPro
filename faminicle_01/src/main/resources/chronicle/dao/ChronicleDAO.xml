@@ -25,7 +25,7 @@
 		<result column="PIC_NO" property="picNo" />
 		<result column="MEM_NO" property="memNo" />
 		<result column="TITLE" property="title" />
-		<result column="PIC_DATE" property="picDate" />
+		<result column="PIC_DATE" property="regDate" />
 		<result column="PIC_FILE_PATH" property="picFilePath" />
 		<result column="lat" property="lat" />
 		<result column="lng" property="lng" />
@@ -42,40 +42,40 @@
 		<result column="tel" property="tel" />
 	</resultMap>
 	
-	<select id="selectList" resultMap="chronicleMap">
+	<select id="selectList" resultMap="picMap">
 		select *
-		  from listtest
-		 order by reg_date desc
+		  from fam_pic
+		 order by pic_date desc
 		 limit 24
 	</select>
-	<select id="selectPrevList" parameterType="page" resultMap="chronicleMap">
+	<select id="selectPrevList" parameterType="page" resultMap="picMap">
 		select t1.*
 		  from (
 		  		select t.* 
 		  		  from (
 				  		select *
-				  		  from listtest
-				  		 where reg_date >= #{startDate}
-				  		 order by reg_date asc
+				  		  from fam_pic
+				  		 where pic_date >= #{startDate}
+				  		 order by pic_date asc
 		  		  		)as t
 		  		  where no > #{pageNo} 	
 		  		  limit 24	
 		  		)as t1
-		 order by reg_date desc  		
+		 order by pic_date desc  		
 	</select>
 	
-	<select id="selectNextList" parameterType="page" resultMap="chronicleMap">
+	<select id="selectNextList" parameterType="page" resultMap="picMap">
 		select *
-		  from listtest
-		 where reg_date <![CDATA[<=]]> #{endDate}
+		  from fam_pic
+		 where pic_date <![CDATA[<=]]> #{endDate}
 	 	    and no <![CDATA[<]]> #{pageNo}
-		 order by reg_date desc
+		 order by pic_date desc
 		 limit 24 
 	</select>
 	
 	<insert id="insertMember" parameterType="members">
 		insert into fam_member(id,pass,e_mail,name,mem_pic_path,birthday,tel)
-		values(#{id},#{pass},#{eMail},#{name},#{memPicPath}#{birthday},${tel})
+		values(#{id},#{pass},#{eMail},#{name},#{memPicPath},#{birthday},${tel})
 	</insert>
 	
 	<select id="checkId" parameterType="members" resultType="int">
@@ -86,7 +86,7 @@
 	
 	<insert id="insertpic" parameterType="regist">
 		insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
-		values(#{memNo}, #{title}, #{picDate}, #{picFilePath}, #{lat}, #{lng})
+		values(#{memNo}, #{title}, #{regDate}, #{picFilePath}, #{lat}, #{lng})
 	</insert>
 	
 	<select id="seletePicByEvent" parameterType="EventDay" resultMap="picMap">
@@ -161,15 +161,15 @@
 		 where ev_no = #{evNo} 
 	</delete>
 	<!-- 수정  -->
-	<update id="updateEvent" parameterType="chronicle" > 
-		update listtest
+	<update id="updateEvent" parameterType="Regist" > 
+		update fam_pic
 		set  content = #{content} , reg_date = #{regDate}
 		where no= #{no} 
 	</update>
 	<!-- 사진삭제  -->
 	<delete id="deletePic" parameterType="int">
 		delete 
-		from listtest
+		from fam_pic
 		where no = #{no}
 	</delete>
 	
