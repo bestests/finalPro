@@ -9,7 +9,7 @@ import chronicle.domain.Members;
 import chronicle.domain.Regist;
 
 public interface ChronicleService {
-	public List<Chronicle> selectList(String startDate, String endDate, String pageNo);
+	public List<Regist> selectList(String startDate, String endDate, String pageNo);
 	public void registMember(Members members);
 	public Integer checkId(Members members);
 	public Members loginCheck(LoginCheck loginInfo);
@@ -17,7 +17,7 @@ public interface ChronicleService {
 	public EventDay registEvent(EventDay evDay);
 	public List<EventDay> selectEvent(int memNo);
 	public void deleteEvent(int evNo);
-	public void updateEvent(Chronicle chronicle);
+	public void updateEvent(Regist chronicle);
 	public void deletePic(int no);
 	public Members checkPass(Members members);
 	public Members memberInfo(Members members); 

@@ -13,9 +13,9 @@ import chronicle.domain.Regist;
 
 public interface ChronicleDAO {
 	//쿼리문에서 id값(insert) result타입을 같게해주면 자동적으로 xml에 들어가서 처리해서 반환값으로 자동 처리하게해준다.
-	public List<Chronicle> selectList();
-	public List<Chronicle> selectPrevList(Page page);
-	public List<Chronicle> selectNextList(Page page);
+	public List<Regist> selectList();
+	public List<Regist> selectPrevList(Page page);
+	public List<Regist> selectNextList(Page page);
 	public void insertMember(Members members);
 	public Integer checkId(Members members);
 	public Members loginCheck(LoginCheck loginInfo);
@@ -24,7 +24,7 @@ public interface ChronicleDAO {
 	public EventDay selectEventOne(int enNo);
 	public List<EventDay> selectEventByMem(int memNo);
 	public void deleteEvent(int evNo);
-	public void updateEvent(Chronicle chronicle);
+	public void updateEvent(Regist chronicle);
 	public void deletePic(int no);
 	public Members checkPass(Members members);
 	public void updateMember(Members members);

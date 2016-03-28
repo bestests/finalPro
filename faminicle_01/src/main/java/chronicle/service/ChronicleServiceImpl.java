@@ -21,9 +21,9 @@ public class ChronicleServiceImpl implements ChronicleService{
 	ChronicleDAO dao;
 	
 	@Override
-	public List<Chronicle> selectList(String startDate, String endDate, String pageNo) {
+	public List<Regist> selectList(String startDate, String endDate, String pageNo) {
 		System.out.println("서비스 들어 옴");
-		List<Chronicle> result = null;
+		List<Regist> result = null;
 		
 		int pageNoInt = 0;
 		
@@ -116,7 +116,7 @@ public class ChronicleServiceImpl implements ChronicleService{
 		dao.deleteEvent(evNo);
 	}
 	@Override
-	public void updateEvent(Chronicle chronicle) {
+	public void updateEvent(Regist chronicle) {
 		dao.updateEvent(chronicle);
 	}
 

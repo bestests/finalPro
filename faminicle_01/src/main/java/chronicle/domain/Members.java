@@ -10,7 +10,7 @@ public class Members {
 	private	String picMiniFilePath;
 	private String name;
 	private String birthday;
-	private int tel;
+	private String tel;
 	
 	public String getMemPicPath() {
 		return memPicPath;
@@ -30,10 +30,10 @@ public class Members {
 	public void setMemNo(int memNo) {
 		this.memNo = memNo;
 	}
-	public int getTel() {
+	public String getTel() {
 		return tel;
 	}
-	public void setTel(int tel) {
+	public void setTel(String tel) {
 		this.tel = tel;
 	}
 	public String getId() {

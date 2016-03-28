@@ -4,7 +4,7 @@ public class Regist {
 	private int picNo;
 	private String memNo;
 	private String title;
-	private String picDate;
+	private String regDate;
 	private String picFilePath;
 	private String lat;
 	private String lng;
@@ -27,11 +27,11 @@ public class Regist {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	public String getPicDate() {
-		return picDate;
+	public String getRegDate() {
+		return regDate;
 	}
-	public void setPicDate(String picDate) {
-		this.picDate = picDate;
+	public void setRegDate(String regDate) {
+		this.regDate = regDate;
 	}
 	public String getPicFilePath() {
 		return picFilePath;
