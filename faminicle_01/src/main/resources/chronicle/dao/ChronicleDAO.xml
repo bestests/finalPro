@@ -74,8 +74,8 @@
 	</select>
 	
 	<insert id="insertMember" parameterType="members">
-		insert into fam_member(id,pass,e_mail,name,mem_pic_path,birthday,tel)
-		values(#{id},#{pass},#{eMail},#{name},#{memPicPath},#{birthday},${tel})
+		insert into fam_member(id,pass,e_mail,name,birthday,tel)
+		values(#{id},#{pass},#{eMail},#{name},#{birthday},${tel})
 	</insert>
 	
 	<select id="checkId" parameterType="members" resultType="int">
@@ -163,14 +163,14 @@
 	<!-- 수정  -->
 	<update id="updateEvent" parameterType="Regist" > 
 		update fam_pic
-		set  content = #{content} , reg_date = #{regDate}
-		where no= #{no} 
+		set  title = #{title} , pic_date = #{regDate}
+		where pic_no= #{picNo} 
 	</update>
 	<!-- 사진삭제  -->
 	<delete id="deletePic" parameterType="int">
 		delete 
 		from fam_pic
-		where no = #{no}
+		where pic_no= #{picNo} 
 	</delete>
 	
 </mapper>

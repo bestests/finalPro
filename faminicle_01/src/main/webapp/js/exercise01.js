@@ -726,5 +726,77 @@
 		  */
 			    };
 			};
-		
+			$("#famId").keyup(function () {
+				$("#thumbTd").empty();
+				if(!$("#thumbTd").html()) {
+					$("#famNameLabel").hide();
+					$("#famName").hide();
+				}
+				if($("#famId").val().length < 5) {
+					$("#result").text("5자 이상 입력하세요.");
+				} else {
+					$.getJSON(
+						"http://192.168.0.14:2000/checkId?callback=?&chkId=" + $("#famId").val(),
+						function (result) {
+							console.dir(result);
+							$("#result").text(result.result);
+							if(result.thumbPic) {
+								var str = result.thumbPic;
+								var index = str.lastIndexOf(".");
+								str = str.substring(0, index) + "_mini.jpg";
+								$("#thumbTd").html($("<img>").attr("src", str)
+										                     .addClass("thumbs"));
+								if($("#thumbTd").html()) {
+									$("#famNameLabel").show();
+									$("#famName").show();
+								}
+							}
+						}		
+					);
+				}
+			});
+			
+			$("#famName").keyup(function () {
+				console.log($("#famName").val().length);
+				if($("#famName").val().length >= 3) {
+					$("#reqFamBtn").removeAttr("disabled");
+				} else {
+					$("#reqFamBtn").attr("disabled", "disabled");
+				}
+			});
+			
+			$("#reqFamBtn").click(function () {
+				var reqId   = $("#hidden").val(); // 가족 신청자
+				var resId   = $("#famId").val();	// 가족 대상자
+				var famName = $("#famName").val(); // 가족 이름
+				$.getJSON(
+					"http://192.168.0.14:2000/reqFam?callback=?&reqId=" + reqId + 
+					"&resId=" + resId + 
+					"&famName=" + famName,
+					function (result) {
+						
+					}
+				);
+				
+			});
+			
+			/*
+			 * 	node 작업
+			 * */
+			var socket = io.connect("http://192.168.0.14:2000");
+			
+			socket.on('java77', function (data) {
+				console.dir(data);
+				console.log("hidden : " + $("#hidden").val());
+				if($("#hiddenId").val() == data.id) {
+					$("<img id='fam_icon' src='../images/family_icon.png'>").prependTo("#thumbnailDiv");
+					$("<input id='reqId' type='hidden'>").val(data.reqId).prependTo("#thumbnailDiv");
+					$("<input id='reqFamName' type='hidden'>").val(data.famName).prependTo("#thumbnailDiv");
+					console.log("가족 신청 옴");
+				}
+			});
+			
+			$("#thumbnailDiv").on("click", "#fam_icon", function () {
+				alert($("#reqId").val() + " 님에게" + $("#reqFamName").val() + " 가족 신청이 왔습니다.");
+			});
 		

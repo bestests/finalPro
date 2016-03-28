@@ -19,7 +19,7 @@ var selectNo;
 var selectXpoint;
 var selectYpoint;
 var selectIndex;
-
+//regist content-> title로 변경
 
 
 //slideEvent
@@ -74,22 +74,24 @@ function getList() {
 			$("#stack").empty();//기존에 등록된값 삭제	
 			
 		for(var i=0;i < result.cList.length ; i++){
-			if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
-			if(minNum > result.cList[i].no) minNum = result.cList[i].no;
+			console.log(result.cList[i].lat);
+			
+			if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
+			if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
 			html +=	
-			   '<li id="con_' + result.cList[i].no + '">                                                                                     '
+			   '<li id="con_' + result.cList[i].picNo + '">                                                                                     '
 			+'	<div class="imgInfo">                                                          '
 			+'		<div class="imgView" id="test">                                                          '
-			+'			<img id="'+i+'" src="'+ result.cList[i].filePath+'"/>                                            '
+			+'			<img id="'+i+'" src="'+ result.cList[i].picFilePath+'"/>                                            '
 			+'		</div>                                                                             '
 			+'	                                                                                       '
 			+'		<div class="imgContent" id="pic'+i+'">                                                 '
 			+'			<div class="leftContent" >                                                      '
 			+'				<p class="imgDate'+i+'">'+ result.cList[i].regDate + '</p>                                        '
-			+'				<p class="imgTitle'+i+'">'+ result.cList[i].content +'</p>                                           '
-			+'				<input type="hidden" id="mId" value="'+result.cList[i].no+'" />                                                     '
-			+'				<input type="hidden" id="xPoint" value=""/>                                                     '
-			+'				<input type="hidden" id="yPoint" value="" />                                                     '
+			+'				<p class="imgTitle'+i+'">'+ result.cList[i].title +'</p>                                           '
+			+'				<input type="hidden" id="mId" value="'+result.cList[i].picNo+'" />                                                     '
+			+'				<input type="hidden" id="xPoint" value="'+result.cList[i].lat+'"/>                                                     '
+			+'				<input type="hidden" id="yPoint" value="'+result.cList[i].lng+'" />                                                     '
 			+'				                                                                           '
 			+'				<div class="imgIcon">                                                      '
 			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/></button>'
@@ -574,6 +576,8 @@ function animate_stack(obj, y, z) {
 //Map Event
 function initialize(numCk,date,content,xPoint,yPoint) {
 	console.log(typeof xPoint);
+	console.log(xPoint);
+	console.log(yPoint);
 	
 	if(xPoint==""&&yPoint==""){
 		swal({   
