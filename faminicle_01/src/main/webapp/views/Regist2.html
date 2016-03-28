@@ -257,7 +257,7 @@
 	   new google.maps.Point(6, 20));
 	// 녹색 마커 아이콘을 정의하는 부분
 	function initialize(lat, lng){
-		latlng = new google.maps.LatLng(37.5240220, 126.9265940);
+		latlng = new google.maps.LatLng(37.529074954649445, 126.91933572292328);
 	if(lat && lng){
 		latlng = new google.maps.LatLng(lat, lng);
 	}
@@ -343,7 +343,8 @@
 	   {
 	    infowindow.setContent(results[1].formatted_address);
 	    infowindow.open(map,marker[0]);
-	    
+	    $("#lat").attr('value',event.latLng.lat());
+	    $("#lng").attr('value',event.latLng.lng());
 	   }
 	  }
 	 });
