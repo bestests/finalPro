@@ -12,6 +12,15 @@ var slideShow=false;
 var slide;
 var mapView=false;
 
+//selete Content
+var selectDate;
+var selectContent;
+var selectNo;
+var selectXpoint;
+var selectYpoint;
+var selectIndex;
+
+
 
 //slideEvent
 var y_space = 30, z_space = 50;
@@ -45,7 +54,19 @@ function getList() {
 		
 		if(result.cList.length==0){
 			//수정해야함.
-			alert("더이상 데이터가 없습니다.");
+			
+			swal({   
+				title: "<span style='color:#FF0000'> 더이상 데이터가 없습니다!</span>",   
+				text: "휠 그만 !!!",
+				type:"error",
+//				imageUrl: "../images/slide/box.gif",
+				timer:1500,
+				html:true,
+				showConfirmButton: false 
+			});
+//			alert("더이상 데이터가 없습니다.");
+			
+			
 			doubleStopFlag=false;//더블체크 해제;
 			
 		}else{
@@ -118,9 +139,16 @@ function getList() {
 		}//end getJson
 	})
 	.fail(function(){
-		alert("로그인을 먼저 해주시기 바랍니다. 로그인 페이지로 이동합니다.");
-		location.href="../views/main5.html";
-	
+		swal({   title: "<span style='color:#FF0000'> Login Error!</span>",   
+				text: "로그인을 먼저 해주세요. 로그인 페이지로 이동합니다.",   
+				imageUrl: "../images/slide/login.png",
+				confirmButtonColor:"#DD6B55",
+				html:true
+			},
+			function(){
+				location.href="../views/main5.html";
+			}
+		);
 	});
 	
 	}
@@ -137,10 +165,22 @@ function getList() {
 
 function imgDown(event) {
 	
-	var numCk = $(event.target).attr("id");
+	var $this = $(this).siblings($(".imgContent")).children("div.leftContent");
+	
+	selectIndex = $(event.target).attr("id");
+	selectDate = $this.children(":eq(0)").html();
+	selectContent = $this.children(":eq(1)").html();
+	selectNo = $this.children(":eq(2)").val();
+	selectXpoint = $this.children(":eq(3)").val();
+	selectYpoint = $this.children(":eq(4)").val();
+	
+	console.log(selectDate);
+	console.log(selectXpoint);
+	console.log(selectNo);
+	
 	
 	if(contentFlag){
-		$("#pic"+numCk).css({				
+		$("#pic"+selectIndex).css({				
 			opacity:"1",
 			top:"0"
 		});		
@@ -176,85 +216,123 @@ function wheelEvent() {
 }
 
 function updateEvent(event) {
-	var date=$(this).parents()[1].children[0].innerHTML;  
-	var title=$(this).parents()[1].children[1].innerHTML;  
-	var num=$(this).parents()[1].children[2].value;  
-	event.stopPropagation();
+//	var date=$(this).parents()[1].children[0].innerHTML;  
+//	var title=$(this).parents()[1].children[1].innerHTML;  
+//	var num=$(this).parents()[1].children[2].value;  
 	
 	$("#myModal").modal();
 	
-	$("#content").val(title);
-	$("#regDate").val(date);
-	$("#no").val(num);	
+	$("#content").val(selectContent);
+	$("#regDate").val(selectDate);
+	$("#no").val(selectNo);	
+	event.stopPropagation();
 }
 function mUpdate(){
 	var param = $(this).serialize();
 	console.dir(param);
 	console.log()
-	var result = confirm("수정하시겠습니까?");
-	if(result){
-	$.post(
-			contextRoot + "/chronicle/update.do",
-			param,
-			function (resultObj) {	
-				var $this = $("[value='"+$("#no").val()+"']");
-				console.log(resultObj);
-				alert("수정이 완료되었습니다");
-				console.log($("#no").val());
-				console.log($("#content").val());
-				console.log($("#regDate").val());
-				$this.parent().children(":eq(0)").html($("#regDate").val());
-				$this.parent().children(":eq(1)").html($("#content").val());
-				$(".calendar").html($("#regDate").val());
-				
-				
-				
-				$("#myModal").modal("hide");
-			},"json");
-	};
 	
+	var result=false;
+	
+	swal({   title: "<span style='color:#FF0000'> 수정하시겠습니까? </span>",   
+				text: "수정시 사진의 정보가 변경됩니다.",   
+				imageUrl: "../images/slide/balls.svg",
+				confirmButtonColor:"#DD6B55",
+				showCancelButton:true,
+				closeOnConfirm:false,
+				html:true
+			},
+	function(inConfirm){
+				
+				if(inConfirm){
+					$.post(
+							contextRoot + "/chronicle/update.do",
+							param,
+							function (resultObj) {	
+								var $this = $("[value='"+$("#no").val()+"']");
+								
+								console.log(resultObj);							
+								console.log($("#no").val());
+								console.log($("#content").val());
+								console.log($("#regDate").val());
+								
+								$this.parent().children(":eq(0)").html($("#regDate").val());
+								$this.parent().children(":eq(1)").html($("#content").val());
+								$(".calendar").html($("#regDate").val());		
+								
+								$("#myModal").modal("hide");
+							},"json");
+					
+					swal({   title: "수정 완료",   
+						text: "해당 이미지의 정보가 변경되었습니다.",   
+						imageUrl: "../images/slide/success.jpg" });
+					
+				}
+			});
 	
 	return false;
 }
 
 
 function deleteEvent(event) {
-	var cNo = $(this).parents("[class='leftContent']").children(":eq(2)").val();
-	var result = confirm("정말 삭제하시겠습니까?");
+//	var cNo = $(this).parents("[class='leftContent']").children(":eq(2)").val();
+//	var result = confirm("정말 삭제하시겠습니까?");
 	
-	if(result){
-	$.post(
-			contextRoot + "/chronicle/delete.do",
-			{no: cNo},
-			function(resultObj){
-				console.log(resultObj);
-				alert("삭제 완료!");
-				$("#con_"+cNo).remove();
-				lis=$("li");
-				z_index=lis.length;
-			},"json"
-		);
-	}
+	
+	swal({   title: "<span style='color:#FF0000'> 삭제 하시겠습니까? </span>",   
+		text: "삭제시 사진의 정보가 삭제됩니다.",   
+		imageUrl: "../images/slide/balls.svg",
+		confirmButtonColor:"#DD6B55",
+		showCancelButton:true,
+		closeOnConfirm:false,
+		html:true
+	},
+	function(inConfirm){
+			
+			if(inConfirm){
+				$.post(
+						contextRoot + "/chronicle/delete.do",
+						{no: selectNo},
+						function(resultObj){
+							console.log(resultObj);
+							$("#con_"+selectNo).remove();
+							lis=$("li");
+							z_index=lis.length;
+						},"json"
+					);
+				
+				swal({   title: "삭제 완료",   
+					text: "해당 이미지의 정보가 삭제되었습니다.",   
+					imageUrl: "../images/slide/success.jpg" });
+				
+			}
+		});
 	
 	event.stopPropagation();
 }
 
 function mapEvent(event){
 	
-	var numCk = $(this).parents()[3].children[0].children[0].id;
-	var date = $(this).parents()[1].children[0].innerHTML;
-	var content = $(this).parents()[1].children[1].innerHTML;	
+//	var numCk = $(this).parents()[3].children[0].children[0].id;
+//	var date = $(this).parents()[1].children[0].innerHTML;
+//	var content = $(this).parents()[1].children[1].innerHTML;	
+//	
+//	var xPoint = $(this).parents()[1].children[3].value;
+//	var yPoint = $(this).parents()[1].children[4].value;
 	
-	var xPoint = $(this).parents()[1].children[3].value;
-	var yPoint = $(this).parents()[1].children[4].value;
-	
-	console.log(" x : "+xPoint+" y :"+yPoint);
+//	console.log(" x : "+xPoint+" y :"+yPoint);
 	
 	if(mapView==false){
 		$(".leftContent").css("left","0");	
 		$(".mapclass").show();
 		
-		initialize(numCk,date,content,xPoint,yPoint);
+//		console.log(selectNo+":"+selectDate+":"+selectContent+":"+selectXpoint+":"+selectYpoint);
+//		console.log(numCk+":"+date+":"+content+":"+xPoint+":"+yPoint);
+		
+		initialize(selectIndex,selectDate,selectContent,selectXpoint,selectYpoint);
+		
+		
+//		initialize(numCk,date,content,xPoint,yPoint);
 		
 		mapView=true;
 	}else{
@@ -351,7 +429,16 @@ function slideViewEvent(){
 function check_buttons() {
 	if(realFlag==true){
 	if (realCurrent_index < 1 && doubleStopFlag==false) {
-		alert("다음 사진을 불러옵니다.");
+		
+		swal({   
+			title: "다음 사진을 불러옵니다.",   
+			text: "자동으로 닫혀요~.",
+			imageUrl: "../images/slide/box.gif",
+			timer:1000,
+			showConfirmButton: false 
+		});
+		
+//		alert("다음 사진을 불러옵니다.");
 		
 		y_space = 30,z_space = 50;
 		translate_y = y_space * -1;
@@ -366,7 +453,17 @@ function check_buttons() {
 		prev.attr('disabled', false);
 	}
 	if (realCurrent_index > lis.length && doubleStopFlag == false) {
-		alert("이전 사진을 불러옵니다.");
+		
+		swal({   
+			title: "이전 사진을 불러옵니다.",   
+			text: "자동으로 닫혀요~.",
+			imageUrl: "../images/slide/box.gif",
+			timer:1000,
+			showConfirmButton: false 
+		});
+		
+		
+//		alert("이전 사진을 불러옵니다.");
 		
 		y_space = 30,z_space = 50;
 
@@ -479,7 +576,17 @@ function initialize(numCk,date,content,xPoint,yPoint) {
 	console.log(typeof xPoint);
 	
 	if(xPoint==""&&yPoint==""){
-		alert("위치정보 null, Default값 적용");
+		swal({   
+			title: "<span style='color:#FF0000'>사진에 위치정보가 없습니다.</span>",   
+			text: "Default값을 우선 적용시킵니다.",
+			imageUrl: "../images/slide/balls.svg",
+			timer:1500,
+			html:true,
+			showConfirmButton: false 
+		});
+		
+		
+//		alert("위치정보 null, Default값 적용");
 			xPoint=37.544553;
 			yPoint=127.017309;
 //			return false;

@@ -6,6 +6,7 @@
 
 <link rel="stylesheet" type="text/css" href="../css/slide02.css" >
 <link rel="stylesheet" type="text/css" href="../lib/bootstrap/dist/css/bootstrap.css" >
+<link rel="stylesheet" type="text/css" href="../lib/sweetalert/dist/sweetalert.css">
 
 </head>
 <body id='bbody' onselectstart="return false" >
@@ -27,15 +28,15 @@
 	<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			  <div class="modal-dialog">
 			    <div class="modal-content">
-			      <div class="modal-header">
+			      <div class="modal-header" align="center">
 			        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			        <h4 class="modal-title" id="myModalLabel">Update</h4>
+			        <h4 class="modal-title" id="myModalLabel" >Update</h4>
 			      </div>
 			      <form id="mUpdate">
 			      <div class="modal-body">
-			      	 <input id="content" name="content" type="text"/>
-<!-- 			      	 <div id="mtitle" name="content"></div> -->
 			         <input id="regDate" name="regDate" type="date" />
+			      	 <input id="content" name="content" type="text" />
+<!-- 			      	 <div id="mtitle" name="content"></div> -->
 			         <input id="no" name="no" type="hidden" value=""/>
 			      </div>
 			      <div class="modal-footer">
@@ -65,6 +66,7 @@
 		</div>
 	</div>
 	</div>
+	<script src="../lib/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="../lib/jquery/dist/jquery.js"></script>
 	<script src="../lib/bootstrap/js/modal.js"></script>
 	<script src="../js/jquery.mousewheel.min.js"></script>

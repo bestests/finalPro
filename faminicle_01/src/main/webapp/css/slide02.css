@@ -16,10 +16,33 @@ html,body{
 body{
 	
 	overflow:hidden;
-	background: url('../images/slide/slide.jpg') ;
+/* 	background: url('../images/slide/slide.jpg') ; */
+	background: url('../images/slide/simple6.jpg') ;
+/* 	background-color:aqua !important; */
 	background-repeat:no-repeat;
 	background-size: 100% 100%;
 }
+
+
+/* Modal */
+h4{
+	display: inline-block;
+	text-align: center;
+}
+#content{
+	width:100%;
+	display: block;
+	font-size: 50px;
+	text-align: center;
+}
+#regDate{
+	width:100%;
+	display: block;
+/* 	disable:disabled; */
+}
+
+
+
 
 /* calendar start*/
 time{
@@ -199,6 +222,13 @@ p{
 	max-height: 100%;
 	max-width: 100%;
 }
+.imgIcon button{
+/* 	background: red; */
+	background-color: rgba(255,255,255,0.8);
+/* 	border: none; */
+/* 	border-radius: 50%; */
+}
+
 
 .imgIcon .left{
 	float:left;
