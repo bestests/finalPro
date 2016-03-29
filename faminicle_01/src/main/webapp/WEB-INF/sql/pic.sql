@@ -11,7 +11,7 @@ CREATE TABLE fam_pic(
 
 
 insert into fam_pic(MEM_NO, TITLE, PIC_DATE, PIC_FILE_PATH, LAT, LNG)
-		values("1","test","2016-03-14","/images/1.jpg","37.4944","127.02803333333333")
+		values("1","test","2016-03-14","/images/1.jpg","37.4944","127.02803333333333");
 
 
 

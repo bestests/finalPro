@@ -104,7 +104,7 @@ public class ChronicleController {
 	@RequestMapping("login.do")
 	public AjaxResult login(LoginCheck loginInfo, HttpSession session){
 //		System.out.println(loginInfo.getId()+" : "+loginInfo.getPass());		
-		
+
 		Members member = (Members) service.loginCheck(loginInfo);
 		
 		if(member !=null){
@@ -129,6 +129,14 @@ public class ChronicleController {
 		//return 객체를 보낸다. html에서 사용시 
 		// 받을변수명.return하는객체명.객체내변수명&Object타입으로 접근
 		return new AjaxResult("success", member);
+	}
+	
+	@RequestMapping("logout.do")
+	public AjaxResult logOut(HttpSession session){
+		
+		session.invalidate();
+		
+		return new AjaxResult("logout", null);
 	}
 	
 	@RequestMapping(value="updateMember.do", method=RequestMethod.POST)

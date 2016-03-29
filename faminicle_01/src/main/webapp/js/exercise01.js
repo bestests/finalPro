@@ -132,7 +132,7 @@
 			$("#modalImg").attr("src", src);
 			$("#title").val(title);
 			$("#date").val(date);
-			$("[name='no']").val(no);
+			$("[name='picNo']").val(no);
 			$("#myModal").modal();
 		});
 		
@@ -190,7 +190,7 @@
 			);
 		});
 		
-		
+				
 		
 		/* update */
 		$("#updatebt").click(function () {
@@ -228,7 +228,10 @@
 					id: $("#hidden").val()
 				},
 				function (resultObj) {
-					alert("수정이 완료되었습니다");
+					swal({   title: "수정이 완료 되었습니다.",   
+						text: "나의 정보가 수정 되었습니다.",   
+						imageUrl: "../images/slide/success.jpg" });
+//					alert("수정이 완료되었습니다");
 					$("#passchk").val("");
 					$("#pass").val("");
 					$("#pass2").val("");
@@ -287,6 +290,13 @@
 		);
 	};
 	
+	$("#close").click (function () {
+		$("#updatebt").attr("disabled", "disabled");
+		$("#passchkLabel").html("현재 비밀번호");
+		$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", true);
+	})
+		
+		
 //	타임라인	
 	 // DOM element where the Timeline will be attached
 	  var container = document.getElementById('visualization');
@@ -420,7 +430,10 @@
 					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
 					function (result) {
 						if (result.cList.length == 0){
-							alert("마지막 페이지 입니다.");
+							swal({   title: "^^",   
+								text: "마지막 페이지 입니다.",   
+								imageUrl: "../images/slide/success.jpg" });
+//							alert("마지막 페이지 입니다.");
 						} else {
 							console.log("다음 글 로딩 완료");
 							console.dir(result);
@@ -461,7 +474,10 @@
 					contextRoot + "/chronicle/list.do?pageNo=" + startNo + "&startDate=" + startDate + "&endDate=",
 					function (result) {
 						if(result.cList.length == 0) {
-								alert("처음 페이지 입니다.");
+							swal({   title: "^^",   
+								text: "처음 페이지 입니다.",   
+								imageUrl: "../images/slide/success.jpg" });
+//								alert("처음 페이지 입니다.");
 						} else {
 							var html = "";
 							console.dir(result.cList);
@@ -514,12 +530,95 @@
 			return false;
 		});
 		
-		$("#updateCon").submit(function () {
-			alert($(this).serialize());
+		//========================= Detail 수정 ================================  
+		$("#updateform").submit(function () {
+			var param = $(this).serialize();
+			console.dir("this" + $(this))
+			$.post(
+				contextRoot + "/chronicle/update.do",
+				param, 
+				function (result) {
+					$(".form-group").children("[type=hidden]").val();
+					console.log(result);
+					swal({   title: "수정 완료",   
+						text: "해당 이미지의 정보가 수정되었습니다.",   
+						imageUrl: "../images/slide/success.jpg" });
+//					alert("수정이 완료되었습니다.");
+					$("#myModal").modal("hide");
+					
+				}, "json"
+			)
 			
 			return false;
 		});
+
+		//=========================Detail 삭제 =================================  
+		$("#deleteCon").click(function() {
+			var picNo = $("#picNo").val();
+			
+//			var param = $(this).parents("form").children("[type=hidden]").val();
+//			console.dir($("#picNo").val());
+//			console.log($("[value="+picNo+"]").parents("div.box").remove());		
+			
+			swal({   title: "<span style='color:#FF0000'> 삭제 하시겠습니까? </span>",   
+				text: "삭제시 사진의 정보가 삭제됩니다.",   
+				imageUrl: "../images/slide/balls.svg",
+				confirmButtonColor:"#DD6B55",
+				showCancelButton:true,
+				closeOnConfirm:false,
+				html:true
+			},
+			function(inConfirm){
+					
+					if(inConfirm){
+						$.post(
+								contextRoot + "/chronicle/delete.do",
+								{no: picNo},
+								function (result) {
+									$("[value="+picNo+"]").parents("div.box").remove();
+//									$(".form-group").children("[type=hidden]").val();
+//									console.log(result);
+									$("#myModal").modal("hide");
+								
+								}, "json"
+							)
+						
+						swal({   title: "삭제 완료",   
+							text: "해당 이미지의 정보가 삭제되었습니다.",   
+							imageUrl: "../images/slide/success.jpg" });
+					}
+				});
+			
+			return false;
+		})
 		
+		//======================로그아웃 세션삭제 ===============================
+		$("#logOut").click(function() {
+			swal({   title: "<span style='color:#FF0000'> 로그아웃 하시겠습니까? </span>",   
+				text: "클릭시 로그아웃 됩니다.",   
+				imageUrl: "../images/slide/balls.svg",
+				confirmButtonColor:"#DD6B55",
+				showCancelButton:true,
+				closeOnConfirm:false,
+				html:true
+			},
+		function(inConfirm) {
+				
+				if(inConfirm) {
+					$.getJSON(
+						contextRoot + "/chronicle/logout.do",
+						function(result) {
+							location.href="main5.html";
+						}
+					)
+					swal({   title: "로그 아웃",   
+						text: "Faminicle을 이용해주셔서 감사합니다.",   
+						imageUrl: "../images/slide/success.jpg" });
+				}
+			});
+			return false;
+		})
+
 		var upload = document.getElementById('file'),
 		holder = document.getElementById('modalImgDrop')
 
@@ -541,7 +640,7 @@
 			reader.readAsDataURL(file);
 			return false;
 		};	 
-		
+
 	 /* update image!! */
 		function updateMemberPic() {
 		 var form = $("#update");
