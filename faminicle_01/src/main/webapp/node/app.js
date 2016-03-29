@@ -26,7 +26,7 @@ const pool = mysql.createPool({
   host           : "localhost",
   user           : "java77",
   password       : "1111",
-  database       : "test01db",
+  database       : "faminicle_db",
   debug          : false
 });
 
@@ -49,7 +49,10 @@ app.get("/checkId", (req, res) => {
 	           }
 	           console.log(rows);
 	           if(rows.length == 1) {
-	        	  res.send(callback + "({result: '" + rows[0].ID + "', thumbPic: '" + rows[0].mem_pic_path + "'})"); 
+	        	  res.send(callback + 
+	        			   "({result: '" + rows[0].ID + 
+	        			   "', thumbPic: '" + rows[0].MEM_PIC_PATH + 
+	        			   "', resIdNo: '" + rows[0].MEM_NO + "'})"); 
 	           } else {
 	        	   res.send(callback + "({result: '해당 아이디가 존재하지 않습니다.'})");
 	           }
@@ -64,24 +67,45 @@ app.get("/checkId", (req, res) => {
 app.get("/reqFam", (req, res) => {
 	var reqId    = req.param("reqId");
 	var resId    = req.param("resId");
+	var reqIdNo  = req.param("reqIdNo");
+	var resIdNo  = req.param("resIdNo");
 	var famName  = req.param("famName");
 	var callback = req.param("callback");
 	
-	console.log(famName);
-	
 	pool.getConnection((err, connection) => {
 		connection.query(
-			"INSERT INTO FAM_REQUEST(FAMRE_REQID, FAMRE_RESID)" +
-			"VALUES(" + mysql.escape(reqId) + ", " + mysql.escape(resId) + ")",
+			"INSERT INTO FAM_REQUEST(FAM_REQ_ID_NO, FAM_RES_ID_NO, FAM_NAME)" +
+			"VALUES(" + mysql.escape(reqIdNo) + ", " + mysql.escape(resIdNo) + "," + mysql.escape(famName) + ")",
 			(err, rows) => {
 				if(!err) {
-					console.log(rows);
-					console.log(resId);
-					io.sockets.on("connection", function (socket) {
-						socket.emit('java77', {id: resId, reqId: reqId, famName: famName});
-					});
+					console.log("Query success!!");
+					res.send(callback + 
+							 "({ reqId:'"   + reqId   + 
+							 "', resId:'"   + resId   + 
+							 "', famName:'" + famName + 
+							 "', reqIdNo:'" + reqIdNo + 
+							 "', resIdNo:'" + resIdNo + "'})");
+				} else {
+					console.log(err);
+					connection.release();
 				}
 			}
 		);
+		connection.release();
 	}); 
+});
+
+// 
+
+io.sockets.on("connection", function (socket) {
+	socket.on("reqFam", (data) => {
+		console.log("reqFam socket request");
+		console.log("reqId   : " + data.reqId);
+		console.log("resId   : " + data.resId);
+		console.log("famName : " + data.famName);
+		socket.broadcast.emit("resFam", {reqId: data.reqId, resId: data.resId, famName: data.famName, reqIdNo: data.reqIdNo, resIdNo: data.resIdNo});
+		socket.emit("resFam", {reqId: data.reqId, resId: data.resId, famName: data.famName, reqIdNo: data.reqIdNo, resIdNo: data.resIdNo});
+		console.log("reqFam socket exit");
+	});
+//	socket.emit('famReq', {id: resId, reqId: reqId, famName: famName});
 });

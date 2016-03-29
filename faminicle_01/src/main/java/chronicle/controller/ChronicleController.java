@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -25,10 +26,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.google.common.util.concurrent.Service;
-
-import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
+import chronicle.domain.Family;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Regist;
@@ -104,7 +103,7 @@ public class ChronicleController {
 	@RequestMapping("login.do")
 	public AjaxResult login(LoginCheck loginInfo, HttpSession session){
 //		System.out.println(loginInfo.getId()+" : "+loginInfo.getPass());		
-
+		
 		Members member = (Members) service.loginCheck(loginInfo);
 		
 		if(member !=null){
@@ -312,6 +311,16 @@ public class ChronicleController {
 		evDay.setMemNo(member.getMemNo());
 		
 		return new AjaxResult("success", service.seletePicByEvent(evDay));
+	}
+	
+	@RequestMapping("registFam.do")
+	public AjaxResult registFam (Family fam) {
+		System.out.println("controller : " + fam.getFamReqIdNo());
+		System.out.println("controller : " + fam.getFamResIdNo());
+		
+		service.registFam(fam);
+		
+		return null;
 	}
 }
 

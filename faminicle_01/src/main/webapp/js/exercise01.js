@@ -21,8 +21,6 @@
 					  + "</div>";
 			};
 			
-			;
-			
 			for(var j in result.eventDay) {
 				if(result.eventDay[j].evEnd == '1000-01-01') {
 					items.add({id: result.eventDay[j].evNo, content: result.eventDay[j].evTitle, start: result.eventDay[j].evStart});
@@ -143,7 +141,7 @@
 		
 		$("#modalImgDrop").change(function () {
 			$("header").location.href="exercise01.html";
-		}) 
+		});
 		
 		/* info modal */
 		$("#infoId").on("click" , function (event) {
@@ -190,8 +188,6 @@
 			);
 		});
 		
-				
-		
 		/* update */
 		$("#updatebt").click(function () {
 			
@@ -231,13 +227,11 @@
 					swal({   title: "수정이 완료 되었습니다.",   
 						text: "나의 정보가 수정 되었습니다.",   
 						imageUrl: "../images/slide/success.jpg" });
-//					alert("수정이 완료되었습니다");
 					$("#passchk").val("");
 					$("#pass").val("");
 					$("#pass2").val("");
 					$("#infoModal").modal('hide');
-				}, "json"
-				);
+				}, "json");
 			return false;
 		})
 		
@@ -295,8 +289,7 @@
 		$("#passchkLabel").html("현재 비밀번호");
 		$("#pass, #pass2, [name='eMail'], #tel").attr("readonly", true);
 	})
-		
-		
+	
 //	타임라인	
 	 // DOM element where the Timeline will be attached
 	  var container = document.getElementById('visualization');
@@ -424,8 +417,6 @@
 	 var maxNum = 0;
 	 var minNum = 999999999999999999999;
 	 var nextList = function () {
-		 	console.log("호출 시 endNo : " + endNo);
-			console.log("호출 시 endDate : " + endDate);
 			$.getJSON(
 					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
 					function (result) {
@@ -433,7 +424,6 @@
 							swal({   title: "^^",   
 								text: "마지막 페이지 입니다.",   
 								imageUrl: "../images/slide/success.jpg" });
-//							alert("마지막 페이지 입니다.");
 						} else {
 							console.log("다음 글 로딩 완료");
 							console.dir(result);
@@ -474,15 +464,14 @@
 					contextRoot + "/chronicle/list.do?pageNo=" + startNo + "&startDate=" + startDate + "&endDate=",
 					function (result) {
 						if(result.cList.length == 0) {
-							swal({   title: "^^",   
+								swal({   title: "^^",   
 								text: "처음 페이지 입니다.",   
 								imageUrl: "../images/slide/success.jpg" });
-//								alert("처음 페이지 입니다.");
 						} else {
 							var html = "";
 							console.dir(result.cList);
 							for(var i in result.cList) {	
-								if(maxNum < result.cList[i].no) maxNum = result.cList[i].no;
+								if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
 								html += "<div class='box'>"
 									  + "	<img src='" + result.cList[i].picFilePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
@@ -551,7 +540,7 @@
 			
 			return false;
 		});
-
+		
 		//=========================Detail 삭제 =================================  
 		$("#deleteCon").click(function() {
 			var picNo = $("#picNo").val();
@@ -618,7 +607,7 @@
 			});
 			return false;
 		})
-
+		
 		var upload = document.getElementById('file'),
 		holder = document.getElementById('modalImgDrop')
 
@@ -640,7 +629,7 @@
 			reader.readAsDataURL(file);
 			return false;
 		};	 
-
+		
 	 /* update image!! */
 		function updateMemberPic() {
 		 var form = $("#update");
@@ -684,7 +673,7 @@
         // FileReader
         if (window.FileReader) {
             // image 파일만
-            if (!inputFile.files[0].type.match(/image\//)) return;
+    		if (!inputFile.files[0].type.match(/image\//)) return;
  
             // preview
             try {
@@ -731,7 +720,6 @@
 	 
 	    $('#update').setPreview(opt);
 	});
-			
 	 
 	 /* info drag 사진 등록 */
 		var dropBox = document.getElementById("modalImgDrop");          
@@ -785,7 +773,6 @@
 		  }, true);          
 			  	
 		  /* thumbnail */ 
-				  
 		  var thumbFfile = document.querySelector('#infoModalImg');
 			
 		  thumbFfile.onchange = function () {
@@ -825,77 +812,136 @@
 		  */
 			    };
 			};
-			$("#famId").keyup(function () {
-				$("#thumbTd").empty();
-				if(!$("#thumbTd").html()) {
-					$("#famNameLabel").hide();
-					$("#famName").hide();
-				}
-				if($("#famId").val().length < 5) {
-					$("#result").text("5자 이상 입력하세요.");
-				} else {
-					$.getJSON(
-						"http://192.168.0.14:2000/checkId?callback=?&chkId=" + $("#famId").val(),
-						function (result) {
-							console.dir(result);
-							$("#result").text(result.result);
-							if(result.thumbPic) {
-								var str = result.thumbPic;
-								var index = str.lastIndexOf(".");
-								str = str.substring(0, index) + "_mini.jpg";
-								$("#thumbTd").html($("<img>").attr("src", str)
-										                     .addClass("thumbs"));
-								if($("#thumbTd").html()) {
-									$("#famNameLabel").show();
-									$("#famName").show();
-								}
-							}
-						}		
-					);
-				}
-			});
-			
-			$("#famName").keyup(function () {
-				console.log($("#famName").val().length);
-				if($("#famName").val().length >= 3) {
-					$("#reqFamBtn").removeAttr("disabled");
-				} else {
-					$("#reqFamBtn").attr("disabled", "disabled");
-				}
-			});
-			
-			$("#reqFamBtn").click(function () {
-				var reqId   = $("#hidden").val(); // 가족 신청자
-				var resId   = $("#famId").val();	// 가족 대상자
-				var famName = $("#famName").val(); // 가족 이름
-				$.getJSON(
-					"http://192.168.0.14:2000/reqFam?callback=?&reqId=" + reqId + 
-					"&resId=" + resId + 
-					"&famName=" + famName,
-					function (result) {
-						
+	/*
+	 * 	node 작업
+	 * */
+	var socket = io.connect("http://localhost:2000");
+	
+	// 가족 아이디 찾기
+	$("#famId").keyup(function () {
+		$("#thumbTd").empty();
+		if(!$("#thumbTd").html()) {
+			$("#famNameLabel").hide();
+			$("#famName").hide();
+		}
+		if($("#famId").val().length < 5) {
+			$("#result").text("5자 이상 입력하세요.");
+		} else {
+			$.getJSON(
+				"http://localhost:2000/checkId?callback=?&chkId=" + $("#famId").val(),
+				function (result) {
+					console.dir(result);
+					$("#result").text(result.result);
+					$("#resIdNo").val(result.resIdNo);
+					if(result.thumbPic) {
+						var str = result.thumbPic;
+						var index = str.lastIndexOf(".");
+						str = str.substring(0, index) + "_mini.jpg";
+						console.log(str);
+						$("#thumbTd").html($("<img>").attr("src", str)
+								                     .addClass("thumbs"));
+						if($("#thumbTd").html()) {
+							$("#famNameLabel").show();
+							$("#famName").show();
+						}
 					}
+				}		
+			);
+		}
+	});
+	
+	// 가족 이름 input 창 이벤트
+	$("#famName").keyup(function () {
+		console.log($("#famName").val().length);
+		if($("#famName").val().length >= 3) {
+			$("#reqFamBtn").removeAttr("disabled");
+		} else {
+			$("#reqFamBtn").attr("disabled", "disabled");
+		}
+	});
+	
+	
+	// 가족 신청 버튼 처리
+	$("#reqFamBtn").click(function () {
+		var reqId   = $("#hidden").val(); 		// 가족 신청자
+		var reqIdNo = $("#hiddenMemNo").val();	// 가족 신청자 번호
+		var resId   = $("#famId").val();		// 가족 대상자
+		var resIdNo = $("#resIdNo").val();		// 가족 대상자 번호
+		var famName = $("#famName").val();		// 가족 이름
+		console.log(reqId);
+		console.log(reqIdNo);
+		console.log(resId);
+		console.log(resIdNo);
+		console.log(famName);
+		$.getJSON(
+			"http://localhost:2000/reqFam?callback=?&reqId="   + reqId   + 
+												   "&resId="   + resId   +
+												   "&reqIdNo=" + reqIdNo +
+												   "&resIdNo=" + resIdNo +
+												   "&famName=" + famName,
+			function (result) {
+				$("#infoModal").modal("hide");
+				swal(
+					"가족 신청 완료!", 
+					"'" + result.resId + "' 님에게 '" + result.famName + "' 가족 신청을 하였습니다.", 
+					"success"
 				);
-				
-			});
-			
-			/*
-			 * 	node 작업
-			 * */
-			var socket = io.connect("http://192.168.0.14:2000");
-			
-			socket.on('java77', function (data) {
-				console.dir(data);
-				console.log("hidden : " + $("#hidden").val());
-				if($("#hiddenId").val() == data.id) {
-					$("<img id='fam_icon' src='../images/family_icon.png'>").prependTo("#thumbnailDiv");
-					$("<input id='reqId' type='hidden'>").val(data.reqId).prependTo("#thumbnailDiv");
-					$("<input id='reqFamName' type='hidden'>").val(data.famName).prependTo("#thumbnailDiv");
-					console.log("가족 신청 옴");
-				}
-			});
-			
-			$("#thumbnailDiv").on("click", "#fam_icon", function () {
-				alert($("#reqId").val() + " 님에게" + $("#reqFamName").val() + " 가족 신청이 왔습니다.");
-			});
-		
+				$("#famName, #famId").val("");
+				$("#thumbTd, #result").empty();
+				$("#famNameLabel, #famName").hide();
+				$("#reqFamBtn").attr("disabled", "disabled");
+				reqFam(reqId, resId, famName, reqIdNo, resIdNo);
+			}
+		);
+	});
+	
+	var reqFam = function (reqId, resId, famName, reqIdNo, resIdNo) {
+		console.log("reqFam excute");
+		socket.emit("reqFam", {reqId: reqId, resId: resId, famName: famName, reqIdNo: reqIdNo, resIdNo: resIdNo});
+	};
+	
+	socket.on('resFam', function (data) {
+		console.log("resFam socket on");
+		console.dir(data);
+		console.log("hidden : " + $("#hidden").val());
+		console.log("resId : " + data.resId);
+		if($("#hiddenId").val() == data.resId) {
+			console.log("가족 신청 옴");
+			swal({
+					title: "가족 요청이 왔습니다.",
+					text: "'" + data.reqId + "' 님에게  '" + data.famName + "' 가족 신청이 왔습니다.",
+					type: "warning",
+					showCancelButton: true,
+					confirmButtonColor: "#556bdd",
+					cancelButtonText: "거절",
+					confirmButtonText: "수락",
+					closeOnConfirm: false,
+					closeOnCancel: false
+				},
+				function (isConfirm) {
+					alert(data.reqIdNo);
+					if (isConfirm) {
+						swal("가족 요청 수락", "'" + data.reqId + "' 님과  '" + data.famName + "' 가족이 되셨습니다.", "success");
+						$.getJSON(
+								contextRoot + "/chronicle/registFam.do",
+								{
+									famReqIdNo: data.reqIdNo,
+									famResIdNo: data.resIdNo,
+									famName: data.famName
+								},
+								function (result) {
+									console.dir(result);
+								}
+						);
+					} else {
+						swal("가족 요청 거절", "'" + data.reqId + "' 님의 요청이 거절되었습니다.", "error");
+					}
+				} 
+			);
+		}
+	});
+	
+	$("#thumbnailDiv").on("click", "#fam_icon", function () {
+		alert($("#reqId").val() + " 님에게" + $("#reqFamName").val() + " 가족 신청이 왔습니다.");
+	});
+	

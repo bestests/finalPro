@@ -1,11 +1,9 @@
 package chronicle.dao;
 
 import java.util.List;
-import java.util.Map;
 
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
+import chronicle.domain.Family;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Page;
@@ -31,4 +29,6 @@ public interface ChronicleDAO {
 	public Members memberInfo(Members members);
 	public void updateMemberPic(Members members);
 	public List<Regist> seletePicByEvent(EventDay evDay);
+	public void updateFamAfterAccept(Family fam);
+	public int selectFamByName(String famName);
 }

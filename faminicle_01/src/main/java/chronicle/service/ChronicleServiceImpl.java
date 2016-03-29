@@ -1,13 +1,14 @@
 package chronicle.service;
 
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import chronicle.dao.ChronicleDAO;
-import chronicle.domain.Chronicle;
 import chronicle.domain.EventDay;
+import chronicle.domain.Family;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
 import chronicle.domain.Page;
@@ -131,7 +132,38 @@ public class ChronicleServiceImpl implements ChronicleService{
 		return dao.seletePicByEvent(evDay);
 	}
 
+	@Override
+	public void registFam(Family fam) {
+		String famName = picFamName(fam.getFamName());
+		
+		System.out.println("처리 후 : " +famName);
+		
+		fam.setFamName(famName);
+		System.out.println(fam.getFamName());
+		System.out.println("reqNo : " + fam.getFamReqIdNo());
+		System.out.println("resNo : " + fam.getFamResIdNo());
+		dao.updateFamAfterAccept(fam);
+		
+		System.out.println("가족 신청 완료");
+	}
 	
-	
-
+	public String picFamName(String famName) {
+		while (true) {
+			int index = famName.lastIndexOf("#");
+			
+			if(index != -1) {
+				famName = famName.substring(0, index);
+			} 
+			String ranNo = Integer.toString(new Random().nextInt(9000) + 1000);
+			
+			famName += "#" + ranNo;
+			
+			System.out.println(famName);
+			
+			int count = dao.selectFamByName(famName);
+			
+			if(count == 0) break;
+		}
+		return famName;
+	}
 }
