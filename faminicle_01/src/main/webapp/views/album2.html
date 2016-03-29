@@ -19,6 +19,11 @@ body, html{
 #book > div {
 	width: 30%;
 	text-align: center;
+	background: black;
+	color:white;
+}
+#book > div:hover{
+	background: rgba(0,180,0,0.3);
 }
 #tab{
 	width: 100%;
@@ -40,6 +45,7 @@ body, html{
 	max-width: 45%;
 	max-height: 48%;
 	border: 1px solid blue;
+	margin: auto;
 	margin-left: 5px;
 	background: maroon;
 }
@@ -70,7 +76,7 @@ body, html{
 						+"</div>";
 						
 						bookHtml="<div class='page'>"
-						+"<h2>"+result.data[i].evTitle+"</h2>"
+						+"<h1>"+result.data[i].evTitle+"</h1>"
 						+"<h5>"+result.data[i].evStart+" 부터 <br/>" +result.data[i].evEnd + " 까지</h5>"
 						+ "<form id='bForm'>"
 						+"<input type='hidden' name='evStart' value='"+result.data[i].evStart+"'>"
@@ -132,7 +138,7 @@ body, html{
 				},dataType:"json"}
 			);
 			$("#tab div").css({background:'white','border-bottom-style': 'solid',color:'black'})
-			$(event.target).css({background:'sky-blue', 'border-bottom-style': 'none',color:'white',background:'maroon'})
+			$(event.target).css({background:'sky-blue',color:'white',background:'maroon'})
 		});
 		
 		$("#book").on('click',$(".page"), function(event) {

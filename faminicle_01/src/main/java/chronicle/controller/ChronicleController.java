@@ -214,6 +214,8 @@ public class ChronicleController {
 	@RequestMapping("Regist.do")
 	@ResponseBody
 	public AjaxResult register(Regist regist, MultipartHttpServletRequest mRequest) throws Exception{
+		Members member = (Members)mRequest.getSession().getAttribute("loginInfo");
+		regist.setMemNo(member.getMemNo()+"");
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd/");
 		String realPath = servletContext.getRealPath("/upload/");
 		String sdfPath = sdf.format(new Date());
