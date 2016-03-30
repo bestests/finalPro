@@ -36,11 +36,13 @@
 		<!-- 헤더 부분 Info-->
 		 <div id="header"> 
 		 	<div id="regist" onclick="location.href='Regist2.html'" >사진등록</div>
-		 	<div id="album" onclick="location.href='album2.html'" >사진앨범</div>
+		 	<div id="album" onclick="location.href='album2.html'" >사진 앨범</div>
 		 	<div id="slide" onclick="location.href='slide02.html'" >슬라이드</div>
-			<div></div><div></div><div></div><div></div><div></div>
-			<div id="thumbnailDiv"><img id="thumbnail" src="../images/유저.jpg"  ></div>
+			<div></div><div></div><div></div><div></div>
+			<div id="thumbnailDiv"><img id="thumbnail" src="../images/유저.jpg"></div>
 			<div id="infoId"></div>
+<!--  			<div id="logOut" onclick="logOut();">Log Out</div>  -->
+ 			<div id="logOut" >로그아웃</div> 
 		 </div>
 	
 	<div class="main-3d">
@@ -95,6 +97,7 @@
         <img src="../images/29.jpg" alt="3d63" />
     </div>
 	</div>
+	
 		<div id="menu" class="border-right-radius">
 			<div id="chronicle">
 				<div id="chronicleBox">
@@ -105,16 +108,20 @@
 			<div id="container">
 				<div id="content"></div>
 			</div>
-			<div id=toggleBox>
-				<img src=" ../images/menu/menu.png" >
-			</div>
-			<div id="submenuBox">
-				<div class="submenus"><img src=" ../images/menu/logout.png" ></div>
-				<div class="submenus"><img src=" ../images/menu/option.png" ></div>
-				<div class="submenus"><a href=" slide02.html"><img src=" ../images/menu/slide.png" ></a></div>
-			</div>
-		</div>		
+<!-- 			<div id=toggleBox> -->
+<!-- 				<img src=" ../images/menu/menu.png" > -->
+<!-- 			</div> -->
+<!-- 			<div id="submenuBox"> -->
+<!-- 				<div class="submenus"><img src=" ../images/menu/logout.png" ></div> -->
+<!-- 				<div class="submenus"><img src=" ../images/menu/option.png" ></div> -->
+<!-- 				<div class="submenus"><a href=" slide02.html"><img src=" ../images/menu/slide.png" ></a></div> -->
+<!-- 			</div> -->
+			<div id="angle"></div>
+		</div>
 	</div>
+	
+	
+	
 	
 	<!-- Modal -->
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -130,23 +137,23 @@
 							<img id="modalImg" style="width: 100%;">
 						</div>
 						<div class="form-group">
-							<input type="hidden" name="no">
+							<input type="hidden" id="picNo" name="picNo">
 							<label for="title" class="control-label">Title</label>
-							<input type="text" size="50" class="form-control" id="title" />
+							<input type="text" name="title" size="50" class="form-control" id="title" />
 							<label for="date" class="control-label">Date</label>
-							<input type="date" class="form-control" id="date" />
+							<input type="date" name="regDate" class="form-control" id="date" />
 						</div>
 					</div>
 					<div class="modal-footer">
 				        <button type="submit" class="btn btn-primary">Update</button>
-				        <button type="button" class="btn btn-danger">Delete</button>
+				        <button type="button" id="deleteCon" class="btn btn-danger">Delete</button>
 				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 			      	</div>
 				</form>
 			</div>
 		</div>
-  	</div>
-  	  	
+	</div>  	  	
+	
   	<!-- Info modal -->
 	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   		<div class="modal-dialog modal-lg">
@@ -159,8 +166,8 @@
 				<form id="update" method="post" enctype="multipart/form-data">
 					<iframe id="uploadResponse" name="upload_target" class="none" ></iframe>
 					<div class="modal-body">
-						<div id="modalImgDrop" ondragenter="onDragEnter(event)" ondragover="onDragOver(event)" ondrop="onDrop(event)">
-							<img src=" ../images/regist.png" id="infoModalImg" >
+						<div id="modalImgDrop" ondragenter="onDragEnter(event)" ondragover="onDragOver(event)" ondrop="onDrop(event)" >
+							<img src=" ../images/regist.png" id="infoModalImg">
 						</div>
 						<div id="fileDiv">
 							<input type="file" id="file" name="file" accept="/images/*" type="hidden">		
@@ -206,9 +213,8 @@
 				            </div>
 						</div>
 					<div class="modal-footer">
-				         <button type="button" class="btn btn-family">Family</button> 
-				        <button type="submit" class="btn btn-primary" id="updatebt" disabled="disabled">Update</button>
-				        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				        <button type="submit" class="btn btn-primary" id="updatebt" disabled="disabled" onclick="location.href='exercise01.html'">Update</button>
+				        <button type="button" class="btn btn-default" data-dismiss="modal" id="close">Close</button>
 			      	</div>
 				</form>
 			</div>
