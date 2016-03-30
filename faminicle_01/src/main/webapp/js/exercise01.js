@@ -53,10 +53,10 @@
 					left: "0%",
 					background: "white",
 					borderRadius: "0px",
-					backgroundImage: "url('../images/c_background.jpg')",
+					backgroundImage: "url('../images/배경11.jpg')",
 					backgroundSize: "100% 100%",
 					backgroundRepeat: "no-repeat"
-				});
+				});	
 				$("#toggleBox").show("slow");
 				event.stopPropagation();
 				
@@ -73,9 +73,9 @@
 		$("#all").click(function (event) {
 			if(menuStatus) {
 				$("#menu").css({
-					left: "-93%",
+					left: "-95%",
 					columnWidth: 0,
-					background: "aquamarine",
+					background: "#5f65c8",
 					borderRadius: "0px 2% 2% 0px"
 				});
 				// info 메뉴 ** 추가
