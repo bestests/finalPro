@@ -9,7 +9,8 @@ import chronicle.domain.Members;
 import chronicle.domain.Regist;
 
 public interface ChronicleService {
-	public List<Regist> selectList(String startDate, String endDate, String pageNo);
+	public List<Regist> selectList();
+	public List<Regist> selectNextList(String startDate,int pageNo);
 	public void registMember(Members members);
 	public Integer checkId(Members members);
 	public Members loginCheck(LoginCheck loginInfo);

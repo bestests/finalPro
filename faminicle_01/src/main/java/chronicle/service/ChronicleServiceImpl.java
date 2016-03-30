@@ -22,34 +22,16 @@ public class ChronicleServiceImpl implements ChronicleService{
 	ChronicleDAO dao;
 	
 	@Override
-	public List<Regist> selectList(String startDate, String endDate, String pageNo) {
-		System.out.println("서비스 들어 옴");
-		List<Regist> result = null;
-		
-		int pageNoInt = 0;
-		
-		if(!pageNo.equals("")) {
-			pageNoInt = Integer.parseInt(pageNo);
-		}
-		
-		Page page = new Page();
-		
-		//"".equals(startDate);
-		if(startDate.equals("") && endDate.equals("")) {
-			result = dao.selectList();
-		} else if(endDate.equals("") && !startDate.equals("")) {
-			System.out.println("이전 글 선택 : " + startDate);
-			page.setStartDate(startDate);
-			page.setPageNo(pageNoInt);
-			result = dao.selectPrevList(page);
-		} else if(startDate.equals("") && !endDate.equals("")) {
-			System.out.println("다음 글 선택 : " + endDate);
-			page.setEndDate(endDate);
-			page.setPageNo(pageNoInt);
-			result = dao.selectNextList(page);
-		}
-		
-		return result;
+	public List<Regist> selectList() {
+		return dao.selectList();
+	}
+	
+	@Override
+	public List<Regist> selectNextList(String startDate,int pageNo) {
+		Page page = new Page(startDate,pageNo);
+		System.out.println(page.getStartDate());
+		System.out.println(page.getPageNo());
+		return dao.selectNextList(page);
 	}
 
 	@Override
@@ -166,4 +148,6 @@ public class ChronicleServiceImpl implements ChronicleService{
 		}
 		return famName;
 	}
+
+	
 }

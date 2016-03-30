@@ -1,22 +1,18 @@
 	var startDate;
-	var endDate;
-	var startNo;
-	var endNo;
+	var pageNo=1;
  	// Create a DataSet (allows two way data-binding)
 	var items = new vis.DataSet([]);
 	$(function () {
 	 	var html = "";
-		$.getJSON(contextRoot + "/chronicle/list.do?pageNo=&startDate=&endDate=", function (result) {
+		$.getJSON(contextRoot + "/chronicle/list.do", function (result) {
 			console.dir(result);
-			var index = 1;
-			for(var i in result.cList) {	
-				if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
+			for(var i in result.registList) {	
 				html += "<div class='box'>"
-					  + "	<img src='" + result.cList[i].picFilePath + "' />"
+					  + "	<img src='" + result.registList[i].picFilePath + "' />"
 					  + "	<div class='detail' onselectstart='return false;'>"
-					  + "		<input type='hidden' value='" + result.cList[i].picNo + "' />" 	
-					  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-					  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
+					  + "		<input type='hidden' value='" + result.registList[i].picNo + "' />" 	
+					  + "		<div class='detailDate'>" + result.registList[i].regDate + "</div>"
+					  + "		<div class='detailTitle'>" + result.registList[i].title + "</div>"
 					  + "	</div>"
 					  + "</div>";
 			};
@@ -29,28 +25,18 @@
 				}
 			}
 			
+			startDate = result.registList[0].regDate;
 			
-			startDate = result.cList[0].regDate;
-			startNo = maxNum;
-			
-			endDate = result.cList[result.cList.length - 1].regDate;
-			endNo = result.cList[result.cList.length - 1].picNo;
-			
-			console.log(startDate);
-			console.log(endDate);
 			$("#hiddenMemNo").val(result.member.memNo);
 			$("#infoId").html(result.member.name + " 님");
 			$("<input type='hidden' id='hiddenId'>").val(result.member.id).appendTo(".modal-body");	
-			console.log(result.member.memPicPath);
 			if (result.member.memPicPath) {
 				$("#infoModalImg").attr("src", result.member.memPicPath);
 				$("#thumbnail").attr("src",result.member.picMiniFilePath);
 			}
 			$("#content").append(html);
-			maxNum = 0;
 			
-			console.log("items");
-			console.dir(items);
+			pageNo++;
 		}).fail(function () {
 			alert("로그인 해주세요");
 			location.href="main5.html";
@@ -354,15 +340,15 @@
 				contextRoot + "/chronicle/list.do?pageNo=&startDate=" + currDate + "&endDate=",
 				function (result) {
 					var html = "";
-					console.dir(result.cList);
-					for(var i in result.cList) {	
-						if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
-						if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
+					console.dir(result.registList);
+					for(var i in result.registList) {	
+						if(maxNum < result.registList[i].picNo) maxNum = result.registList[i].picNo;
+						if(minNum > result.registList[i].picNo) minNum = result.registList[i].picNo;
 						html += "<div class='box'>"
-							  + "	<img src='" + result.cList[i].filePath + "' />"
+							  + "	<img src='" + result.registList[i].filePath + "' />"
 							  + "	<div class='detail' onselectstart='return false;'>"
-							  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-							  + "		<div class='detailTitle'>" + result.cList[i].content + "</div>"
+							  + "		<div class='detailDate'>" + result.registList[i].regDate + "</div>"
+							  + "		<div class='detailTitle'>" + result.registList[i].content + "</div>"
 							  + "	</div>"
 							  + "</div>";
 					};
@@ -372,10 +358,10 @@
 					$("#content").masonry("reloadItems");	        
 					$("#content").masonry("layout");
 					
-					startDate = result.cList[0].regDate;
+					startDate = result.registList[0].regDate;
 					startNo = maxNum;
 					
-					endDate = result.cList[result.cList.length - 1].regDate;
+					endDate = result.registList[result.registList.length - 1].regDate;
 					endNo = minNum;
 					
 					console.log(startDate);
@@ -385,12 +371,11 @@
 					console.log("startNo : " + startNo);
 					$("#container").scrollTop(0);
 					
-					maxNum = 0;
-					minNum = 999999999999999999999;
 				}
 			
 		);
 	 });
+	 
 	 $("#container").on("mousewheel", function (event) {
 		var scrollHeight = $("#container").prop('scrollHeight'); // 컨테이너 전체 height값(스크롤 영역 포함)
 		var conHeight = $("#container").height();				 // 컨테이너 전체 height값(스크롤 영역 미포함)	
@@ -414,13 +399,15 @@
 			}
 		}
 	 });
-	 var maxNum = 0;
-	 var minNum = 999999999999999999999;
+	 
+	 //이전글(과거) 불러오기
+	 
 	 var nextList = function () {
 			$.getJSON(
-					contextRoot + "/chronicle/list.do?pageNo=" + endNo + "&startDate=&endDate=" + endDate,
+					contextRoot + "/chronicle/next.do?pageNo=" + pageNo + "&startDate=" + startDate,
 					function (result) {
-						if (result.cList.length == 0){
+						console.log(result);
+						if (result.registList.length == 0){
 							swal({   title: "^^",   
 								text: "마지막 페이지 입니다.",   
 								imageUrl: "../images/slide/success.jpg" });
@@ -428,29 +415,22 @@
 							console.log("다음 글 로딩 완료");
 							console.dir(result);
 							var html = "";
-							for(var i in result.cList) {	
-								
-								if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
+							for(var i in result.registList) {	
 								
 								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].picFilePath + "' />"
+									  + "	<img src='" + result.registList[i].picFilePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
-									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
+									  + "		<div class='detailDate'>" + result.registList[i].regDate + "</div>"
+									  + "		<div class='detailTitle'>" + result.registList[i].title + "</div>"
 									  + "	</div>"
 									  + "</div>";
 							};
 							
-							endDate = result.cList[result.cList.length - 1].regDate;
-							endNo = minNum;
-							
-							
 							$("#content").append(html).masonry("appended", html, true);	        
 							$("#content").masonry("reloadItems");	        
 							$("#content").masonry("layout");
-							console.log(endDate);
-							timeline.moveTo(new Date(result.cList[0].regDate), {animation: {duration: 1500, easingFunction: 'linear'}});
-							minNum = 999999999999999999999;
+							timeline.moveTo(new Date(result.registList[0].regDate), {animation: {duration: 1500, easingFunction: 'linear'}});
+							pageNo++;
 						}
 					}
 	 
@@ -461,22 +441,21 @@
 		 
 		var prevList = function () {
 			$.getJSON(
-					contextRoot + "/chronicle/list.do?pageNo=" + startNo + "&startDate=" + startDate + "&endDate=",
+					contextRoot + "/chronicle/list.do?pageNo=" + pageNo+ "&startDate=" + startDate,
 					function (result) {
-						if(result.cList.length == 0) {
+						if(result.registList.length == 0) {
 								swal({   title: "^^",   
 								text: "처음 페이지 입니다.",   
 								imageUrl: "../images/slide/success.jpg" });
 						} else {
 							var html = "";
-							console.dir(result.cList);
-							for(var i in result.cList) {	
-								if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
+							console.dir(result.registList);
+							for(var i in result.registList) {	
 								html += "<div class='box'>"
-									  + "	<img src='" + result.cList[i].picFilePath + "' />"
+									  + "	<img src='" + result.registList[i].picFilePath + "' />"
 									  + "	<div class='detail' onselectstart='return false;'>"
-									  + "		<div class='detailDate'>" + result.cList[i].regDate + "</div>"
-									  + "		<div class='detailTitle'>" + result.cList[i].title + "</div>"
+									  + "		<div class='detailDate'>" + result.registList[i].regDate + "</div>"
+									  + "		<div class='detailTitle'>" + result.registList[i].title + "</div>"
 									  + "	</div>"
 									  + "</div>";
 							};
@@ -485,13 +464,10 @@
 							$("#content").masonry("reloadItems");	        
 							$("#content").masonry("layout");
 							
-							startDate = result.cList[0].regDate;
-							startNo = maxNum;
 							
-							console.log(startDate);
 							timeline.moveTo(new Date(startDate), {animation: {duration: 1500, easingFunction: 'linear'}});
 							$("#container").scrollTop(0);
-							maxNum = 0;
+							pageNo--;
 						}
 					}
 			);

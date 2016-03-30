@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -43,7 +42,7 @@ public class ChronicleController {
 	private ServletContext servletContext;
 	
 	@RequestMapping("list.do")
-	public Map<String, Object> list (String startDate, String endDate, String pageNo, HttpServletRequest req) {
+	public Map<String, Object> list (HttpServletRequest req) {
 		Map<String, Object> result = new HashMap<>();
 		Members member = (Members)req.getSession().getAttribute("loginInfo");
 		
@@ -55,10 +54,18 @@ public class ChronicleController {
 		}
 		result.put("member", member);
 		result.put("eventDay", service.selectEvent(member.getMemNo()));
-		result.put("cList", service.selectList(startDate, endDate, pageNo));
+		result.put("registList", service.selectList());
 		
 		return result;
 	}
+	
+	@RequestMapping("next.do")
+	public List<Regist> nextList(String startDate, int pageNo){
+		return service.selectNextList(startDate,pageNo);
+	}
+//	@RequestMapping("prev.do")
+	
+	
 	
 	@RequestMapping("registMember.do")
 	public Map<String,Object> insertMember(Members members){	

@@ -1,11 +1,7 @@
 //처음리스트가져오기
 var startDate;
-var endDate;
 var startNo;
-var endNo;
-var pageNo =1;
-var maxNum = 0;
-var minNum = 999999999999999999999;
+var pageNo = 1;
 var contentFlag = true;
 var controlStatus = true;
 var slideShow=false;
@@ -34,25 +30,27 @@ var doubleStopFlag=false;// 다음페이지,이전페이지 중복 방지
 //slideEvent
 var html="";
 
-
 getList();
 
-
 function getList() {
+	var nextPrev = arguments[2]; // 다음글인지 이전글인지 판별
+	console.log("현재 페이지번호1 : "+pageNo);
 	
-	var root = contextRoot + "/chronicle/list.do?";
-	if(arguments.length == 0) {
-		root += "pageNo=&startDate=&endDate=";
-	} else {
-		root += "pageNo=" + arguments[0] + "&startDate=" + arguments[1] + "&endDate=" + arguments[2];
+	if(nextPrev=="next")pageNo++;
+	if(pageNo !=1 && nextPrev=="prev")pageNo--; 
+	
+	var root = contextRoot + "/chronicle/";
+	if(arguments.length != 0 ){
+			root += "next.do?pageNo=" + pageNo + "&startDate=" + arguments[1];
+	}else{
+		root += "list.do";
 	}
 	
-	maxNum = 0;	
-	minNum = 999999999999999999999;
+	console.log("현재 페이지번호2 : "+pageNo);
 	
 	$.getJSON(root,function(result){
 		
-		if(result.cList.length==0){
+		if(result.registList.length==0 ||startNo == result.registList[0].picNo){
 			//수정해야함.
 			
 			swal({   
@@ -60,12 +58,19 @@ function getList() {
 				text: "휠 그만 !!!",
 				type:"error",
 //				imageUrl: "../images/slide/box.gif",
-				timer:1500,
+				timer:2500,
 				html:true,
 				showConfirmButton: false 
 			});
-//			alert("더이상 데이터가 없습니다.");
 			
+			console.log(nextPrev+" : 변수값");
+			if(nextPrev=="next")pageNo--;
+//			if(nextPrev=="prev")pageNo++;
+			console.log("현재 페이지번호 : "+pageNo);
+			
+			
+			stopSlide();//데이터가없으므로 슬라이드쇼를했다면 중지;
+//			alert("더이상 데이터가 없습니다.");		
 			
 			doubleStopFlag=false;//더블체크 해제;
 			
@@ -73,23 +78,21 @@ function getList() {
 			current_index = 1;
 			$("#stack").empty();//기존에 등록된값 삭제	
 			
-		for(var i=0;i < result.cList.length ; i++){
-			if(maxNum < result.cList[i].picNo) maxNum = result.cList[i].picNo;
-			if(minNum > result.cList[i].picNo) minNum = result.cList[i].picNo;
+		for(var i=0;i < result.registList.length ; i++){
 			html +=	
-			   '<li id="con_' + result.cList[i].picNo + '">                                                                                     '
+			   '<li id="con_' + result.registList[i].picNo + '">                                                                                     '
 			+'	<div class="imgInfo">                                                          '
 			+'		<div class="imgView" id="test">                                                          '
-			+'			<img id="'+i+'" src="'+ result.cList[i].picFilePath+'"/>                                            '
+			+'			<img id="'+i+'" src="'+ result.registList[i].picFilePath+'"/>                                            '
 			+'		</div>                                                                             '
 			+'	                                                                                       '
 			+'		<div class="imgContent" id="pic'+i+'">                                                 '
 			+'			<div class="leftContent" >                                                      '
-			+'				<p class="imgDate'+i+'">'+ result.cList[i].regDate + '</p>                                        '
-			+'				<p class="imgTitle'+i+'">'+ result.cList[i].title +'</p>                                           '
-			+'				<input type="hidden" id="mId" value="'+result.cList[i].picNo+'" />                                                     '
-			+'				<input type="hidden" id="xPoint" value="'+result.cList[i].lat+'"/>                                                     '
-			+'				<input type="hidden" id="yPoint" value="'+result.cList[i].lng+'" />                                                     '
+			+'				<p class="imgDate'+i+'">'+ result.registList[i].regDate + '</p>                                        '
+			+'				<p class="imgTitle'+i+'">'+ result.registList[i].title +'</p>                                           '
+			+'				<input type="hidden" id="mId" value="'+result.registList[i].picNo+'" />                                                     '
+			+'				<input type="hidden" id="xPoint" value="'+result.registList[i].lat+'"/>                                                     '
+			+'				<input type="hidden" id="yPoint" value="'+result.registList[i].lng+'" />                                                     '
 			+'				                                                                           '
 			+'				<div class="imgIcon">                                                      '
 			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/></button>'
@@ -108,11 +111,10 @@ function getList() {
 		}
 		$("#stack").append(html);
 		//시작 끝 데이터 가져온다(페이징 위해서)
-		startDate = result.cList[0].regDate;
-		startNo = maxNum;
-		
-		endDate = result.cList[result.cList.length - 1].regDate;
-		endNo = minNum;
+		if(pageNo==1){
+		startDate = result.registList[0].regDate;
+		}
+		startNo = result.registList[0].picNo;
 		
 		$(".calendar").html($(".imgDate"+(current_index-1)).html());
 		
@@ -122,7 +124,7 @@ function getList() {
 		
 		doubleStopFlag=false;//더블중복체크 해제
 		
-		console.log("현재 y : "+translate_y+"현재 x: "+translate_z);
+//		console.log("현재 y : "+translate_y+"현재 x: "+translate_z);
 		slideViewEvent();
 		if(slideShow==true){
 			$("#controls").hide("slow");
@@ -136,8 +138,10 @@ function getList() {
 							transform: "scale(1.3)"
 							});
 		}
-		}//end getJson
-	})
+		
+		
+		}
+	})//end getJson
 	.fail(function(){
 		swal({   title: "<span style='color:#FF0000'> Login Error!</span>",   
 				text: "로그인을 먼저 해주세요. 로그인 페이지로 이동합니다.",   
@@ -150,7 +154,7 @@ function getList() {
 			}
 		);
 	});
-	
+		
 	}
 		$("#stack").on("click",".imgView",imgDown);
 		$("#stack").on("click",".leftContent",imgUp);
@@ -366,11 +370,11 @@ function slideEvent(event) {
 	
 	controlStatus = false;
 	slide = setInterval(showImg, $("#speed").val() * 1000);
+	
 	event.stopPropagation();
 }
 
 function stopSlide() {
-	
 	if(slideShow){
 		slideShow= false;
 		if(!contentFlag){
@@ -447,7 +451,7 @@ function check_buttons() {
 		realFlag=false;
 		
 		doubleStopFlag=true;
-		getList(startNo,startDate,"");
+		getList(pageNo,startDate,"prev");
 		
 	} else {
 		prev.attr('disabled', false);
@@ -474,9 +478,8 @@ function check_buttons() {
 		
 		
 		doubleStopFlag=true;
-		getList(endNo,"",endDate);
+		getList(pageNo,startDate,"next");
 		
-		console.log("버튼체크의 메세지");
 	 }else {
 		next.attr('disabled', false);
 	}
@@ -494,7 +497,7 @@ next.bind('click', function(event) {
 	
 	if ($(this).attr('disabled'))
 	return false;
-	console.log("prev현재 index:"+current_index);
+//	console.log("prev현재 index:"+current_index);
 	if((current_index+1) > lis.length){
 		realCurrent_index= current_index+1;
 		realFlag=true;
@@ -519,14 +522,14 @@ prev.bind('click', function() {
 		return false;
 	
 	// 현재보다 작을경우 체크확인
-	console.log("prev현재 index:"+current_index);
+//	console.log("prev현재 index:"+current_index);
 	if((current_index-1) < 1){
-		console.log("현제페이지 1보다작다");
+//		console.log("현제페이지 1보다작다");
 		realCurrent_index= current_index-1;
 		realFlag=true;
 		check_buttons();
 	}else{
-		console.log("현제페이지 1보다작지않다.");
+//		console.log("현제페이지 1보다작지않다.");
 		lis.each(function() {
 		animate_stack(this, -y_space, -z_space);
 		});
@@ -545,12 +548,12 @@ $(document).bind('mousewheel',
 	//deltaY 1이면 위로 스크롤 -1이면 아래로 스크롤
 	function(event, deltaY) {
 	if (deltaY >= 0) {
-		console.log("마우스 휠업");
+//		console.log("마우스 휠업");
 		if(doubleStopFlag==false){
 			next.trigger('click');
 		}
 	} else {
-		console.log("마우스 휠 다운")
+//		console.log("마우스 휠 다운")
 		if(doubleStopFlag==false){
 			prev.trigger('click');
 		}
