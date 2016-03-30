@@ -16,13 +16,13 @@ body, html{
 #book{
 	height: 90%;
 }
-#book > div {
+.date {
 	width: 30%;
 	text-align: center;
 	background: black;
 	color:white;
 }
-#book > div:hover{
+.date:hover{
 	background: rgba(0,180,0,0.3);
 }
 #tab{
@@ -48,6 +48,9 @@ body, html{
 	margin: auto;
 	margin-left: 5px;
 	background: maroon;
+}
+.page {
+	height: 100%;
 }
 
 
@@ -75,7 +78,7 @@ body, html{
 						+"</form>"
 						+"</div>";
 						
-						bookHtml="<div class='page'>"
+						bookHtml="<div class='date'>"
 						+"<h1>"+result.data[i].evTitle+"</h1>"
 						+"<h5>"+result.data[i].evStart+" 부터 <br/>" +result.data[i].evEnd + " 까지</h5>"
 						+ "<form id='bForm'>"
@@ -90,6 +93,9 @@ body, html{
 						$("#book").masonry("reloadItems");	        
 						$("#book").masonry("layout");
 					}
+						
+					
+					
 				}
 			},"json"
 		);
@@ -141,7 +147,7 @@ body, html{
 			$(event.target).css({background:'sky-blue',color:'white',background:'maroon'})
 		});
 		
-		$("#book").on('click',$(".page"), function(event) {
+		$("#book").on('click',$(".date"), function(event) {
 			var form = ($(event.target).siblings())[1];
 			var formData = new FormData(form);
 			$.ajax({
@@ -194,7 +200,7 @@ body, html{
 		var $container = $("#book");
 		
 		$container.masonry({
-			itemSelector: ".page",
+			itemSelector: ".date",
 			initLayout: false
 		});
 		$container.imagesLoaded(function () {
