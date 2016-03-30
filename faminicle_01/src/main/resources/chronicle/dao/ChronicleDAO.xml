@@ -170,7 +170,21 @@
 	<delete id="deletePic" parameterType="int">
 		delete 
 		from fam_pic
-		where pic_no= #{picNo} 
+		where pic_no = #{picNo}
 	</delete>
 	
+	<!-- 가족 이름 중복 체크  -->
+	<select id="selectFamByName" parameterType="string" resultType="int">
+		select count(*)
+		  from fam_request
+		 where fam_name = #{famName} 
+	</select>
+	
+	<!-- 가족 신청 수락 후 업데이트  -->
+	<update id="updateFamAfterAccept" parameterType="family">
+		update fam_request
+		   set fam_name = #{famName}, fam_status = 'Y'
+  	     where fam_req_id_no = #{famReqIdNo}
+  	       and fam_res_id_no = #{famResIdNo}
+	</update>
 </mapper>
