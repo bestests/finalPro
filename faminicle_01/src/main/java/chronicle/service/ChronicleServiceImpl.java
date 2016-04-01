@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import chronicle.dao.ChronicleDAO;
 import chronicle.domain.EventDay;
+import chronicle.domain.FamMember;
 import chronicle.domain.Family;
 import chronicle.domain.LoginCheck;
 import chronicle.domain.Members;
@@ -22,15 +23,13 @@ public class ChronicleServiceImpl implements ChronicleService{
 	ChronicleDAO dao;
 	
 	@Override
-	public List<Regist> selectList() {
-		return dao.selectList();
+	public List<Regist> selectList(Page page) {
+		return dao.selectList(page);
 	}
 	
 	@Override
-	public List<Regist> selectNextList(String startDate,int pageNo) {
-		Page page = new Page(startDate,pageNo);
-		System.out.println(page.getStartDate());
-		System.out.println(page.getPageNo());
+	public List<Regist> selectNextList(Page page) {
+		System.out.println("형식:"+page.getCall()+"페이지번호:"+page.getPageNo()+"시작일자:"+page.getStartDate()+"회원번호:"+page.getMemNo());
 		return dao.selectNextList(page);
 	}
 
@@ -124,7 +123,18 @@ public class ChronicleServiceImpl implements ChronicleService{
 		System.out.println(fam.getFamName());
 		System.out.println("reqNo : " + fam.getFamReqIdNo());
 		System.out.println("resNo : " + fam.getFamResIdNo());
+		
+		
 		dao.updateFamAfterAccept(fam);
+		
+		int reqCnt = dao.selectCountReqIdNo(fam.getFamReqIdNo());
+		// 신청자가 가족을 만들었는지 체크
+		if(reqCnt==0){
+			dao.insertFam(new FamMember(fam.getFamName(),fam.getFamReqIdNo()));
+			//신청자가 가족을 만든적이 없다면 신청자 가족에등록
+		}
+			dao.insertFam(new FamMember(fam.getFamName(),fam.getFamResIdNo()));
+			//신청받은자를 등록(신청자가 만든적있아면 받은자만등록) 
 		
 		System.out.println("가족 신청 완료");
 	}

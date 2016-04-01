@@ -1,10 +1,12 @@
 	var startDate;
 	var pageNo=1;
+	var call = "me";
+	
  	// Create a DataSet (allows two way data-binding)
 	var items = new vis.DataSet([]);
 	$(function () {
 	 	var html = "";
-		$.getJSON(contextRoot + "/chronicle/list.do", function (result) {
+		$.getJSON(contextRoot + "/chronicle/list.do?call=" + call, function (result) {
 			console.dir(result);
 			for(var i in result.registList) {	
 				html += "<div class='box'>"

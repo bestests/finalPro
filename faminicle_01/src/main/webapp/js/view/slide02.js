@@ -7,6 +7,7 @@ var controlStatus = true;
 var slideShow=false;
 var slide;
 var mapView=false;
+var slideSpeed = false;
 
 //selete Content
 var selectDate;
@@ -29,6 +30,7 @@ var realFlag=false;
 var doubleStopFlag=false;// 다음페이지,이전페이지 중복 방지
 //slideEvent
 var html="";
+var call="me";
 
 getList();
 
@@ -41,9 +43,9 @@ function getList() {
 	
 	var root = contextRoot + "/chronicle/";
 	if(arguments.length != 0 ){
-			root += "next.do?pageNo=" + pageNo + "&startDate=" + arguments[1];
+			root += "next.do?pageNo=" + pageNo + "&startDate=" + arguments[1]+"&call="+call;
 	}else{
-		root += "list.do";
+		root += "list.do?call="+call;
 	}
 	
 	console.log("현재 페이지번호2 : "+pageNo);
@@ -95,8 +97,8 @@ function getList() {
 			+'				<input type="hidden" id="yPoint" value="'+result.registList[i].lng+'" />                                                     '
 			+'				                                                                           '
 			+'				<div class="imgIcon">                                                      '
-			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/></button>'
-			+'					<button id="delete" class="left"><img src="../images/slide/delete.png"/></button>'
+			+'					<button id="update" class="left"><img src="../images/slide/modify.png"/><br>수정</button>'
+			+'					<button id="delete" class="left"><img src="../images/slide/delete.png"/><br>삭제</button>'
 			+'					<button id="mapView" class="right"><img src="../images/slide/map.png"/></button>'
 			+'				</div>                                                                     '
 			+'			</div>                                                                         '
@@ -163,9 +165,9 @@ function getList() {
 		$("#stack").on("click", "#delete", deleteEvent);
 		$("#stack").on("click", "#mapView", mapEvent);
 		$("#play").click(slideEvent);
+		$("#play").dblclick(playDouble);
 		$("body").dblclick(stopSlide);
 		$("#mUpdate").submit(mUpdate);
-			
 
 function imgDown(event) {
 	
@@ -368,8 +370,12 @@ function slideEvent(event) {
 					transform: "scale(1.3)"
 					});
 	
+	
 	controlStatus = false;
-	slide = setInterval(showImg, $("#speed").val() * 1000);
+	if(!slideSpeed){
+		slide = setInterval(showImg, $("#speed").val() * 1000);
+		slideSpeed=true;
+	}
 	
 	event.stopPropagation();
 }
@@ -403,9 +409,20 @@ function stopSlide() {
 			
 			
 			$(".container").removeAttr("style");
+			slideSpeed=false;
 		}
 	}
 }
+
+function playDouble() {
+	   swal({   title: "<span style='color:#FF0000'> 클릭 한번만 ^^</span>",   
+	      text: "클릭 한번만 플리즈~",   
+	      imageUrl: "../images/slide/014.gif",
+	      confirmButtonColor:"#DD6B55",
+	      html:true
+	   });
+}
+
 
 function showImg(event) {
 	next.trigger('click');

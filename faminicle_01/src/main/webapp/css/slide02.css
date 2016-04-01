@@ -17,7 +17,7 @@ body{
 	
 	overflow:hidden;
 /* 	background: url('../images/slide/slide.jpg') ; */
-	background: url('../images/slide/simple6.jpg') ;
+	background: url('../images/slide/slideBackground.png') ;
 /* 	background-color:aqua !important; */
 	background-repeat:no-repeat;
 	background-size: 100% 100%;
@@ -190,7 +190,7 @@ time.icon span
 	transition: .7s ease-out;
 /* 	background-color: rgba(64,255,0,0.8); */
 /* 	background-color: rgba(1,116,223,0.8); */
-	background-color: rgba(255,191,0,0.8);
+	background-color: rgba(162,162,255,0.8);
 	border-top-left-radius:5%;
 	border-bottom-left-radius:5%;
 	 
@@ -200,6 +200,7 @@ time.icon span
 	width: 50%;
 	height:100%;
 	z-index: 3;
+	
 }
 p{
 	position:relative;
@@ -226,7 +227,7 @@ p{
 /* 	background: red; */
 	background-color: rgba(255,255,255,0.8);
 /* 	border: none; */
-/* 	border-radius: 50%; */
+	border-radius: 50%;
 }
 
 
@@ -236,6 +237,11 @@ p{
 	width: 15%;
 	height: 100%;
 	border-radius:5%;
+	font-weight: bold;
+}
+.imgIcon .left img{
+	width: 70%;
+	height: 70%;
 }
 .imgIcon .right{
 	float:right;
